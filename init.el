@@ -1,3 +1,5 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; version check and preparation
 (when (< (string-to-number 
           (concat 
            (number-to-string emacs-major-version) 
@@ -6,10 +8,12 @@
          26.0)
   (error "Your version of emacs is old and must be upgraded before you can use these packages! Version >= 25.3 is required."))
 
+;; initial window frame position and size
 ;; start maximized 
 (setq frame-resize-pixelwise t
       x-frame-normalize-before-maximize t)
 (add-to-list 'initial-frame-alist '(fullscreen . fullheight))
+
 
 ;; set coding system so emacs doesn't choke on melpa file listings
 (set-language-environment 'utf-8)
@@ -32,6 +36,9 @@
 (setq save-abbrevs 'silently)
 (setq max-specpdl-size 10000
       max-lisp-eval-depth 5000)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; install useful packages
 
 ;; load the package manager
 (require 'package)
@@ -91,7 +98,8 @@
         dumb-jump
         htmlize
         dictionary
-        untitled-new-buffer))
+        untitled-new-buffer
+	monokai-theme))
 
 ;; hide compilation buffer when complete
 ;; from http://emacs.stackexchange.com/questions/62/hide-compilation-window
@@ -113,6 +121,12 @@
 
 (package-initialize)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Use dracula themey)
+(load-theme 'monokai t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; lisp
 ;; add custom lisp directory to path
 (unless
     (file-exists-p (concat user-emacs-directory "lisp"))
@@ -148,26 +162,34 @@
     (add-to-list 'exec-path-from-shell-variables var))
   (exec-path-from-shell-initialize))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; install system dependent package
 ;; Add to the list of the packages we want
 
 (when (executable-find "pdflatex")
   (add-to-list 'package-selected-packages 'auctex)
   (add-to-list 'package-selected-packages 'ivy-bibtex))
+
 (when (executable-find "git")
   (add-to-list 'package-selected-packages 'git-commit)
   (add-to-list 'package-selected-packages 'magit))
+
 (when (executable-find "julia")
   (add-to-list 'package-selected-packages 'julia-mode)
   (add-to-list 'package-selected-packages 'julia-repl))
+
 (when (or (executable-find "ghc")
           (executable-find "stack"))
   (add-to-list 'package-selected-packages 'haskell-mode)
   (add-to-list 'package-selected-packages 'intero)
   (add-to-list 'package-selected-packages 'company-ghci))
+
 (when (executable-find "jupyter")
   (add-to-list 'package-selected-packages 'ein))
+
 (when (executable-find "pandoc")
   (add-to-list 'package-selected-packages 'ox-pandoc))
+
 (when (executable-find "scala")
   (add-to-list 'package-selected-packages 'scala-mode)
   (add-to-list 'package-selected-packages 'ensime)
@@ -180,6 +202,8 @@
   (package-refresh-contents)
   (package-install-selected-packages))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Tweak default Emacs settings
 ;; ;; clean up the mode line
 (setq minions-mode-line-lighter "☰")
 (minions-mode 1)
@@ -297,7 +321,16 @@
   (show-paren-mode 1)
   (setq show-paren-delay 0)
 
-;; Use CUA mode to make life easier. We do _not__ use standard copy/paste etc. (see below).
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Make Emacs friendlier to newcomers Emacs will never to as simple as
+;; Notepad, but perhaps it can be made more consistent with the way
+;; most other programs behave. In addition to more consistent
+;; copy/paste, undo/redo, we also implement multiple cursors. Use C-c
+;; C-m to add or remove cursors.
+
+;; Use CUA mode to make life easier. We do _not__ use standard
+;; copy/paste etc. (see below).
+
 (cua-mode t)
 
 (cua-selection-mode t) ;; cua goodness without copy/paste etc.
@@ -361,6 +394,24 @@
 
 (global-set-key (kbd "C-c C-m") #'multiple-cursors-hydra/body)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Window Management windmove allows you to move point to adjacent
+;; windows; these functions are bound to C-x S-<arrow>. For example,
+;; to move to the window below, press "Control-x shift-down", and to
+;; move to the window to the right press "Control-x shift-right". If
+;; you have more than one split you can use C-x O to quickly navigate
+;; to an window arbitrary window (e.g., diagonal from the current
+;; window; see https://github.com/abo-abo/ace-window/ for details).
+;;
+;; winner-mode allows you to undo/redo window configuration changes.
+;; Use C-c <left> to undo and C-c <right> to redo. Emacs has window
+;; layout management, built-in but it's not convenient to use. We use
+;; ivy to make it easier. Store the current view with C-c v, switch
+;; with C-c V .
+;; 
+;; Finally, emacs-rotate makes arranging your windows much easier. Use
+;; C-c b to rotate buffers and C-c a to rotate the window arrangement.
+
 ;; Undo/redo window changes
 (winner-mode 1)
 
@@ -392,11 +443,25 @@
       ;;window-combination-resize t
       )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Spell checking and dictionaries
+;;
+;; Emacs comes with spell checking built-in, it just needs to be
+;; turned on. By default automatic spell checking is enabled in
+;; text-mode and prog-mode buffers. You can also spell-check on demand
+;; with ispell-word, bound to M-$. Finally, dictionaries look-up is
+;; available and bound to C-c d.
+;;
+;; More information is available at
+;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Spelling.html
+;; and https://github.com/abo-abo/define-word.
+
 ;; enable on-the-fly spell checking
 (setq flyspell-use-meta-tab nil)
 (add-hook 'text-mode-hook
           (lambda ()
             (flyspell-mode 1)))
+
 ;; prevent flyspell from finding misspellings in code
 (add-hook 'prog-mode-hook
           (lambda ()
@@ -414,6 +479,9 @@
 (global-set-key (kbd "C-c d") 'dictionary-search)
 (global-set-key (kbd "C-c D") 'dictionary-match-words)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; printing
+
 (when (eq system-type 'gnu/linux)
   (setq hfyview-quick-print-in-files-menu t)
   (require 'hfyview)
@@ -421,6 +489,10 @@
   (when mygtklp
     (setq lpr-command "gtklp")
     (setq ps-lpr-command "gtklp")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Minibuffer hints and completion
+;; More information is available at http://oremacs.com/swiper/.
 
 (when (eq system-type 'darwin)
   (setq hfyview-quick-print-in-files-menu t)
@@ -562,6 +634,14 @@
       dumb-jump-aggressive nil
       dumb-jump-default-project "./")
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Auto-complete configuration
+;;
+;; Here we configure in-buffer text completion using the company-mode
+;; package. These completions are available on-demand using TAB for
+;; in-buffer popup or C-M-S-i for search-able minibuffer list. More
+;; information is available at https://company-mode.github.io/.
+
 (require 'company)
 (company-quickhelp-mode)
 ;; cancel if input doesn't match, be patient, and don't complete automatically.
@@ -591,6 +671,7 @@
       '(:documentHighlightProvider :hoverProvider))
 (setq smart-tab-expand-eolp t
       smart-tab-user-provided-completion-function 'company-complete)
+
 ;; (add-hook 'prog-mode-hook 'smart-tab-mode-on)
 (global-smart-tab-mode)
 
@@ -600,7 +681,15 @@
  ;; not sure why this should be set in a hook, but that is how the manual says to do it.
  (add-hook 'after-init-hook 'global-company-mode)
 
-;; which-key settings taken mostly from https://github.com/aculich/.emacs.d/blob/master/init.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Which-key
+;;
+;; This mode shows a keymap when an incomplete command is
+;; entered. It is especially useful for families of commands with a
+;; prefix, e.g., C-c C-o for outline-mode commands, or C-c C-v for
+;; org-babel commands. Just start typing your command and pause if you
+;; want a hint. which-key settings taken mostly from
+;; https://github.com/aculich/.emacs.d/blob/master/init.el
 (with-eval-after-load "which-key"
   (setq which-key-sort-order 'which-key-prefix-then-key-order
         ;; Let's go unicode :)
@@ -662,7 +751,9 @@
 
 (which-key-mode t)
 
-;;; Configure outline minor modes
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Outline magic
+;; Configure line minor modes
 ;; Less crazy key bindings for outline-minor-mode
 (setq outline-minor-mode-prefix "\C-c\C-o")
 ;; load outline-magic along with outline-minor-mode
@@ -685,9 +776,14 @@
     (kbd "<backtab>")
     'outshine-cycle-buffer))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Demonstration tools (command-log-mode)
+
 (setq command-log-mode-auto-show t)
 (global-set-key (kbd "C-x cl") 'global-command-log-mode)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; General REPL (comint) config
 ;; require the main file containing common functions
 (require 'eval-in-repl)
 (setq comint-process-echoes t
@@ -703,7 +799,9 @@
 (setq comint-scroll-to-bottom-on-output t)
 (setq comint-move-point-for-output t)
 
-;;;  ESS (Emacs Speaks Statistics)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; R
+;; ESS (Emacs Speaks Statistics)
 (with-eval-after-load "ess-r-mode"
   (setq ess-use-company nil)
   (ess-toggle-underscore nil) ; Don't convert underscores to assignment
@@ -782,6 +880,9 @@
                        '(ess-mode . ("Rscript" "--slave" "-e" "languageserver::run()")))
           (add-hook 'R-mode-hook 'eglot-ensure))))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Python
+
 (defalias 'python 'run-python)
 
 (with-eval-after-load "python"
@@ -807,11 +908,20 @@
           (lambda()
             ;;(setq-local outline-regexp "[#]+")
             (outline-minor-mode t))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Julia
 
 (when (executable-find "julia")
   (require 'julia-mode)
   (require 'julia-repl)
   (add-hook 'julia-mode-hook 'julia-repl-mode))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ENSIME - sbt, scala
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; emacs lisp REPL 
 
 (with-eval-after-load "elisp-mode"
   (require 'company-elisp)
@@ -836,6 +946,14 @@
               (require 'company-elisp)
               (setq-local company-backends '((company-elisp company-files company-capf))))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Markdown mode
+;;
+;; For more information about authoring markdown in Emacs refer to
+;; http://jblevins.org/projects/markdown-mode/. For information about
+;; Markdown syntax or exporting to other formats refer to
+;; http://pandoc.org.
+
 (with-eval-after-load "haskell-mode"
   (defalias 'haskell 'haskell-interactive-bring)
   (when (or (executable-find "hie")
@@ -856,9 +974,14 @@
 (when (executable-find "pandoc")
   (add-hook 'markdown-mode-hook 'pandoc-mode))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Web
+
 (add-to-list 'auto-mode-alist `("\\.html?\\'" . web-mode))
 
-;;; AucTeX config
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; AucTeX config
+;; Math with LaTeX and more
 
 ;; Modified from https://emacs.stackexchange.com/questions/33198/how-to-get-auctex-to-automatically-generate-atex-engineluatex-file-variable-d/33204
 (with-eval-after-load "tex-site"
@@ -979,8 +1102,15 @@
               (lambda ()
                 (define-key bibtex-mode-map "\M-q" 'bibtex-fill-entry)))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Citation
+;; See https://github.com/tmalsburg/helm-bibtex
+
 (setq ivy-bibtex-default-action 'ivy-bibtex-insert-citation)
 (global-set-key (kbd "C-c r") 'ivy-bibtex)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Note taking and outlining (Org-mode)
 
 (with-eval-after-load "org"
   (setq org-replace-disputed-keys t
@@ -1025,6 +1155,8 @@
   (setq org-src-tab-acts-natively t)
   (setq org-confirm-babel-evaluate nil))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Multiple modes in one "buffer" (polymode)
 ;;; polymode
 (require 'polymode)
 (require 'poly-R)
@@ -1032,6 +1164,10 @@
     (require 'poly-markdown))
 (with-eval-after-load "org"
   (require 'poly-org))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Email
 
 (when (executable-find "mu")
   (autoload 'mu4e "mu4e" "Read your mail." t)
@@ -1061,6 +1197,9 @@
     (require 'mu4e-contrib)
     (setq mu4e-html2text-command 'mu4e-shr2text)
     (add-hook 'mu4e-view-mode-hook 'visual-line-mode)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; File Browsing
 
 ;;; Dired configuration
 (add-hook 'dired-mode-hook 
@@ -1128,8 +1267,13 @@ The app is chosen from your OS's preference."
   ;; open files from dired with "E"
   (define-key dired-mode-map (kbd "E") 'xah-open-in-external-app))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Git
 (with-eval-after-load "git-commit"
   (require 'magit))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Shell modes (term, shell and eshell)
 
 ;; term
 (with-eval-after-load "term"
@@ -1236,6 +1380,9 @@ Will prompt you shell name when you type `C-u' before this command."
             ;; git editor support
             (with-editor-export-editor)
             (with-editor-export-git-editor)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Final touches
 
 ;; save settings made using the customize interface to a sparate file
   (setq custom-file (concat user-emacs-directory "custom.el"))
