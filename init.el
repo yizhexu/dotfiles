@@ -10,9 +10,9 @@
 
 ;; initial window frame position and size
 ;; start maximized 
-(setq frame-resize-pixelwise t
-      x-frame-normalize-before-maximize t)
-(add-to-list 'initial-frame-alist '(fullscreen . fullheight))
+;;(setq frame-resize-pixelwise t
+;;      x-frame-normalize-before-maximize t)
+;;(add-to-list 'initial-frame-alist '(fullscreen . fullheight))
 
 
 ;; set coding system so emacs doesn't choke on melpa file listings
