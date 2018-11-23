@@ -184,6 +184,9 @@
   (add-to-list 'package-selected-packages 'intero)
   (add-to-list 'package-selected-packages 'company-ghci))
 
+(when (executable-find "pyvenv")
+  (add-to-list 'package-selected-packages 'pyvenv))
+
 (when (executable-find "jupyter")
   (add-to-list 'package-selected-packages 'ein))
 
@@ -882,13 +885,17 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Python
-
 (defalias 'python 'run-python)
 
 (with-eval-after-load "python"
   ;; try to get indent/completion working nicely
   ;; readline support is wonky at the moment
   (setq python-shell-completion-native-enable nil)
+
+  ;; set conda virtualenv as vurtualenvs
+
+  (setenv "WORKON_HOME" "/usr/local/anaconda3/envs")
+  
   ;; simple evaluation with C-ret
   (require 'eval-in-repl-python)
   (when (executable-find "pyls")
@@ -908,6 +915,15 @@
           (lambda()
             ;;(setq-local outline-regexp "[#]+")
             (outline-minor-mode t))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Conda
+;; (when (executable-find "conda")
+;;   (require 'anaconda-mode)
+;;   (add-hook 'python-mode-hook 'anaconda-mode)
+;;   (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Julia
 
