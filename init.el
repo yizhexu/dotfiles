@@ -99,7 +99,8 @@
         htmlize
         dictionary
         untitled-new-buffer
-	monokai-theme))
+	cherry-blossom-theme
+        pyvenv))
 
 ;; hide compilation buffer when complete
 ;; from http://emacs.stackexchange.com/questions/62/hide-compilation-window
@@ -123,7 +124,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Use dracula themey)
-(load-theme 'monokai t)
+(load-theme 'cherry-blossom t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; lisp
@@ -131,6 +132,9 @@
 (unless
     (file-exists-p (concat user-emacs-directory "lisp"))
   (make-directory (concat user-emacs-directory "lisp")))
+
+;; Probably not the best place for it
+(setenv "WORKON_HOME" ".conda/envs")
 
 ;; add custom lisp directory to path
 (let ((default-directory (concat user-emacs-directory "lisp/")))
@@ -145,6 +149,10 @@
 ;; on OSX Emacs needs help setting up the system paths
 (when (memq window-system '(mac ns))
   (require 'exec-path-from-shell)
+
+  ;; anaconda is at /usr/loca
+  (setenv "WORKON_HOME" "/usr/local/anaconda3/envs")
+  
   ;; From https://github.com/aculich/.emacs.d/blob/master/init.el
   ;; Import additional environment variables beyond just $PATH
   (dolist (var '("PYTHONPATH"         ; Python modules
@@ -162,7 +170,7 @@
     (add-to-list 'exec-path-from-shell-variables var))
   (exec-path-from-shell-initialize))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; install system dependent package
 ;; Add to the list of the packages we want
 
@@ -184,9 +192,6 @@
   (add-to-list 'package-selected-packages 'intero)
   (add-to-list 'package-selected-packages 'company-ghci))
 
-(when (executable-find "pyvenv")
-  (add-to-list 'package-selected-packages 'pyvenv))
-
 (when (executable-find "jupyter")
   (add-to-list 'package-selected-packages 'ein))
 
@@ -197,7 +202,6 @@
   (add-to-list 'package-selected-packages 'scala-mode)
   (add-to-list 'package-selected-packages 'ensime)
   (add-to-list 'package-selected-packages 'sbt-mode))
-
 
 ;; install packages if needed
 (unless (every 'package-installed-p package-selected-packages)
@@ -211,7 +215,7 @@
 (setq minions-mode-line-lighter "☰")
 (minions-mode 1)
 
-;; No, we do not need the splash screen
+;, we do not need the splash screen
 (setq inhibit-startup-screen t)
 
 (require 'better-defaults)
@@ -891,10 +895,6 @@
   ;; try to get indent/completion working nicely
   ;; readline support is wonky at the moment
   (setq python-shell-completion-native-enable nil)
-
-  ;; set conda virtualenv as vurtualenvs
-
-  (setenv "WORKON_HOME" "/usr/local/anaconda3/envs")
   
   ;; simple evaluation with C-ret
   (require 'eval-in-repl-python)
@@ -915,13 +915,6 @@
           (lambda()
             ;;(setq-local outline-regexp "[#]+")
             (outline-minor-mode t))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Conda
-;; (when (executable-find "conda")
-;;   (require 'anaconda-mode)
-;;   (add-hook 'python-mode-hook 'anaconda-mode)
-;;   (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
