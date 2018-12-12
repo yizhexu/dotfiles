@@ -1,3 +1,9 @@
+(require 'cask "~/.cask/cask.el")
+(cask-initialize)
+
+(require 'pallet)
+(pallet-mode t)
+
 (setq debug-on-error t)
 (setq debug-on-quit t)
 
@@ -70,12 +76,6 @@
 (setq-default default-tab-width 2)
 (setq-default indent-tabs-mode nil)
 
-(require 'cask "~/.cask/cask.el")
-(cask-initialize)
-
-(require 'pallet)
-(pallet-mode t)
-
 ;; clean up the mode line
 (setq minions-mode-line-lighter "☰")
 (minions-mode 1)
@@ -93,7 +93,7 @@
 
 ;; max height at start
 (custom-set-variables
- '(initial-frame-alist (quote ((fullscreen . fullheight)))))
+ '(initial-frame-alist (quote ((fullscreen . fullscreen)))))
 
 ;; syntax highlighting
 (global-font-lock-mode t)
@@ -157,6 +157,11 @@
                  ))
     (add-to-list 'exec-path-from-shell-variables var))
   (exec-path-from-shell-initialize))
+
+;; Standard key bindings
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cb" 'org-iswitchb)
 
 (add-to-list 'auto-mode-alist '("\\.sh$" . shell-script-mode))
 

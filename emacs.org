@@ -1,5 +1,4 @@
 * Start
-
 ** Shortcut List
 
 | Shortcut | What does it do?         |
@@ -7,41 +6,56 @@
 | =M$=     | Spell check the document |
 |          |                          |
 
-** Some Settings
+* Settings
 
- Enable debug, because everytime anything went wrong you'd want to see this
+** Packages
 
- #+BEGIN_SRC emacs-lisp
- (setq debug-on-error t)
- (setq debug-on-quit t)
- #+END_SRC
-
- Also, load some packages & enable =cl= at start
+ For a freshly installed Emacs, need to follow this[[https://github.com/rdallasgray/pallet][ Pallet, a package management helper for Emacs on cask]]
 
  #+BEGIN_SRC emacs-lisp
 
- ;; Keep track of loading time
- (defconst emacs-start-time (current-time))
+ (require 'cask "~/.cask/cask.el")
+ (cask-initialize)
 
- (require 'cl)
-
- ;; initalize all ELPA packages
- (require 'package)
- (package-initialize)
-
- (setq package-archives '(("melpa" . "http://melpa.org/packages/")
-                          ("melpa-stable" . "http://stable.melpa.org/packages/")
-                          ("gnu" . "http://elpa.gnu.org/packages/")))
-
-
- (let ((elapsed (float-time (time-subtract (current-time)
-                                           emacs-start-time))))
-   (message "Loaded packages in %.3fs" elapsed))
+ (require 'pallet)
+ (pallet-mode t)
 
  #+END_SRC
+
+** Always Debug
+
+  Enable debug, because everytime anything went wrong you'd want to see this
+
+  #+BEGIN_SRC emacs-lisp
+  (setq debug-on-error t)
+  (setq debug-on-quit t)
+  #+END_SRC
+
+  Also, load some packages & enable =cl= at start
+
+  #+BEGIN_SRC emacs-lisp
+
+  ;; Keep track of loading time
+  (defconst emacs-start-time (current-time))
+
+  (require 'cl)
+
+  ;; initalize all ELPA packages
+  (require 'package)
+  (package-initialize)
+
+  (setq package-archives '(("melpa" . "http://melpa.org/packages/")
+                           ("melpa-stable" . "http://stable.melpa.org/packages/")
+                           ("gnu" . "http://elpa.gnu.org/packages/")))
+
+
+  (let ((elapsed (float-time (time-subtract (current-time)
+                                            emacs-start-time))))
+    (message "Loaded packages in %.3fs" elapsed))
+
+  #+END_SRC
 
 ** Some Nice Behavior
-
 *** Like tab complete
 
  #+BEGIN_SRC emacs-lisp
@@ -135,20 +149,6 @@
  (setq-default indent-tabs-mode nil)
  #+END_SRC
 
-** Packages
-
- For a freshly installed Emacs, need to follow this[[https://github.com/rdallasgray/pallet][ Pallet, a package management helper for Emacs on cask]]
-
- #+BEGIN_SRC emacs-lisp
-
- (require 'cask "~/.cask/cask.el")
- (cask-initialize)
-
- (require 'pallet)
- (pallet-mode t)
-
- #+END_SRC
-
 ** Appearance
 *** Theme
  Hack is a nice font: [[https://github.com/source-foundry/Hack][A typeface designed for source code]]
@@ -171,7 +171,7 @@
 
     ;; max height at start
     (custom-set-variables
-     '(initial-frame-alist (quote ((fullscreen . fullheight)))))
+     '(initial-frame-alist (quote ((fullscreen . fullscreen)))))
 
     ;; syntax highlighting
     (global-font-lock-mode t)
@@ -280,6 +280,14 @@ On OSX Emacs needs help setting up system paths
 
 #+END_SRC
 
+** Org Mode
+
+#+BEGIN_SRC emacs-lisp
+;; Standard key bindings
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cb" 'org-iswitchb)
+#+END_SRC
 
 * Languages Specific Configuration
 
