@@ -1,16 +1,5 @@
-(require 'cask "~/.cask/cask.el")
-(cask-initialize)
-
-(require 'pallet)
-(pallet-mode t)
-
-(setq debug-on-error t)
-(setq debug-on-quit t)
-
-;; Keep track of loading time
-(defconst emacs-start-time (current-time))
-
-(require 'cl)
+(setq user-full-name "Yizhe Xu"
+      user-mail-address "me@yizhexu.com")
 
 ;; initalize all ELPA packages
 (require 'package)
@@ -20,10 +9,69 @@
                          ("melpa-stable" . "http://stable.melpa.org/packages/")
                          ("gnu" . "http://elpa.gnu.org/packages/")))
 
+(require 'cask "~/.cask/cask.el")
+(cask-initialize)
 
-(let ((elapsed (float-time (time-subtract (current-time)
-                                          emacs-start-time))))
-  (message "Loaded packages in %.3fs" elapsed))
+(require 'pallet)
+(pallet-mode t)
+
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+(setq use-package-verbose t)
+(setq use-package-always-ensure t)
+(require 'use-package)
+(use-package auto-compile
+  :config (auto-compile-on-load-mode))
+(setq load-prefer-newer t)
+
+(setq debug-on-error t)
+(setq debug-on-quit t)
+
+;; Keep track of loading time
+
+(require 'cl)
+
+;; backups go to where backups all go
+ (setq backup-directory-alist
+       '(("." . "~/.emacs_backups")))
+
+ ;; delete old backups
+ (setq delete-old-versions t)
+
+ ;; version control on auto save?
+ (setq version-control t)
+
+(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(setq default-buffer-file-coding-system 'utf-8)
+
+(setq
+ ;; update every 15 seconds instead of 60 seconds
+ display-time-interval 15)
+(display-time-mode 1)
+
+(setq sentence-end-double-space nil)
+
+(use-package smart-mode-line)
+
+(use-package guide-key
+  :defer t
+  :diminish guide-key-mode
+  :config
+  (progn
+  (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c"))
+  (guide-key-mode 1)))  ; Enable guide-key-mode
+
+(defun my/unfill-paragraph (&optional region)
+    "Takes a multi-line paragraph and makes it into a single line of text."
+    (interactive (progn
+                   (barf-if-buffer-read-only)
+                   (list t)))
+    (let ((fill-column (point-max)))
+      (fill-paragraph nil region)))
+(bind-key "M-Q" 'my/unfill-paragraph)
 
 (setq tab-always-indent 'complete)
 (add-to-list 'completion-styles 'initials t)
@@ -53,15 +101,6 @@
     (add-hook mode
 	      '(lambda ()
 		 (flyspell-prog-mode))))
-
-(prefer-coding-system 'utf-8)
-(set-default-coding-systems 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(setq default-buffer-file-coding-system 'utf-8)
-
-(setq user-full-name "Yizhe Xu"
-      user-mail-address "me@yizhexu.com")
 
 (line-number-mode 1)
 (column-number-mode 1)
@@ -98,25 +137,8 @@
 ;; syntax highlighting
 (global-font-lock-mode t)
 
-;; backups go to where backups all go
- (setq backup-directory-alist
-       '(("." . "~/.emacs_backups")))
-
- ;; delete old backups
- (setq delete-old-versions t)
-
- ;; version control on auto save?
- (setq version-control t)
-
 (setq split-height-threshold nil)
 (setq split-width-threshold 180)
-
-(setq
- ;; don't display info about mail
- display-time-mail-function (lambda () nil)
- ;; update every 15 seconds instead of 60 seconds
- display-time-interval 15)
-(display-time-mode 1)
 
 (setq whitespace-style '(tabs newline space-mark
                          tab-mark newline-mark

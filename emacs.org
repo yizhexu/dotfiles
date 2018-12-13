@@ -1,45 +1,64 @@
-* Start
-** Shortcut List
+* About this file
 
-| Shortcut | What does it do?         |
-|----------+--------------------------|
-| =M$=     | Spell check the document |
-|          |                          |
+This is my personal Emacs configuration. I use [[https://github.com/cask/cask][Cask]] and [[https://github.com/rdallasgray/pallet][Pallet]] to manage my
+packages. There are some prerequisites to set up the two. 
 
-* Settings
+#+BEGIN_SRC sh
+# Set up cask
+pushd ~
+git clone git@github.com:cask/cask.git
+mv cask .cask
+echo "export PATH=\"$HOME/.cask/bin:$PATH\"" > .bashrc
+popd
+#+END_SRC
 
-** Packages
+* Shortcuts
 
- For a freshly installed Emacs, need to follow this[[https://github.com/rdallasgray/pallet][ Pallet, a package management helper for Emacs on cask]]
+=M-$=: Spell check the document
 
- #+BEGIN_SRC emacs-lisp
+* Starting Up
 
- (require 'cask "~/.cask/cask.el")
- (cask-initialize)
+** My =init.el=
+ This my how my =init.el= looks like
 
- (require 'pallet)
- (pallet-mode t)
+ #+BEGIN_SRC
+ ;; initialize package.el packages
+ (package-initialize)
+
+ ;; load literal config
+ (require 'org)
+ (org-babel-load-file
+  (expand-file-name "emacs.org"
+		    user-emacs-directory))
+
+
+ (custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+  '(initial-frame-alist (quote ((fullscreen . fullheight))))
+  '(package-selected-packages (quote (multiple-cursors elpy minions pallet))))
+ (custom-set-faces
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+  )
 
  #+END_SRC
 
-** Always Debug
+*** About me
 
-  Enable debug, because everytime anything went wrong you'd want to see this
+ #+BEGIN_SRC emacs-lisp
+   (setq user-full-name "Yizhe Xu"
+	 user-mail-address "me@yizhexu.com")
+ #+END_SRC
 
-  #+BEGIN_SRC emacs-lisp
-  (setq debug-on-error t)
-  (setq debug-on-quit t)
-  #+END_SRC
+** Initialize Emacs
 
-  Also, load some packages & enable =cl= at start
-
-  #+BEGIN_SRC emacs-lisp
-
-  ;; Keep track of loading time
-  (defconst emacs-start-time (current-time))
-
-  (require 'cl)
-
+*** Package Sources
+#+BEGIN_SRC emacs-lisp
   ;; initalize all ELPA packages
   (require 'package)
   (package-initialize)
@@ -47,16 +66,167 @@
   (setq package-archives '(("melpa" . "http://melpa.org/packages/")
                            ("melpa-stable" . "http://stable.melpa.org/packages/")
                            ("gnu" . "http://elpa.gnu.org/packages/")))
+#+END_SRC
 
+*** Packages
 
-  (let ((elapsed (float-time (time-subtract (current-time)
-                                            emacs-start-time))))
-    (message "Loaded packages in %.3fs" elapsed))
+  #+BEGIN_SRC emacs-lisp
+
+  (require 'cask "~/.cask/cask.el")
+  (cask-initialize)
+
+  (require 'pallet)
+  (pallet-mode t)
 
   #+END_SRC
 
-** Some Nice Behavior
-*** Like tab complete
+*** Use Package
+#+BEGIN_SRC emacs-lisp
+  (unless (package-installed-p 'use-package)
+    (package-install 'use-package))
+  (setq use-package-verbose t)
+  (setq use-package-always-ensure t)
+  (require 'use-package)
+  (use-package auto-compile
+    :config (auto-compile-on-load-mode))
+  (setq load-prefer-newer t)
+#+END_SRC
+*** Theme
+  #+BEGIN_SRC emacs-lisp
+    ;; clean up the mode line
+    (setq minions-mode-line-lighter "☰")
+    (minions-mode 1)
+
+    ;; maximize the text window?
+    (menu-bar-mode -1)
+    (tool-bar-mode -1)
+
+
+    ;; set theme
+    (load-theme 'material t)
+
+    ;; set font
+    (set-default-font "Hack-12")
+
+    ;; max height at start
+    (custom-set-variables
+     '(initial-frame-alist (quote ((fullscreen . fullscreen)))))
+
+    ;; syntax highlighting
+    (global-font-lock-mode t)
+
+
+  #+END_SRC
+
+*** Font
+
+ Hack is a nice font: [[https://github.com/source-foundry/Hack][A typeface designed for source code]]
+
+  #+BEGIN_SRC emacs-lisp
+    ;; set font
+    (set-default-font "Hack-12")
+  #+END_SRC
+
+*** Always Debug
+
+Always enable debug, because everytime anything went wrong you'd want to see this
+
+   #+BEGIN_SRC emacs-lisp
+   (setq debug-on-error t)
+   (setq debug-on-quit t)
+   #+END_SRC
+
+** General Configuration
+
+  Also, load some packages & enable =cl= at start
+
+  #+BEGIN_SRC emacs-lisp
+
+  ;; Keep track of loading time
+
+  (require 'cl)
+
+  #+END_SRC
+
+*** Backups
+
+ File backups move to it's seperate location
+
+ #+BEGIN_SRC emacs-lisp
+   ;; backups go to where backups all go
+    (setq backup-directory-alist
+	  '(("." . "~/.emacs_backups")))
+
+    ;; delete old backups
+    (setq delete-old-versions t)
+
+    ;; version control on auto save?
+    (setq version-control t)
+
+ #+END_SRC
+
+*** UTF-8
+
+ #+BEGIN_SRC emacs-lisp
+
+ (prefer-coding-system 'utf-8)
+ (set-default-coding-systems 'utf-8)
+ (set-terminal-coding-system 'utf-8)
+ (set-keyboard-coding-system 'utf-8)
+ (setq default-buffer-file-coding-system 'utf-8)
+
+ #+END_SRC
+
+*** Time
+
+ Display the time!
+
+ #+BEGIN_SRC emacs-lisp
+ (setq
+  ;; update every 15 seconds instead of 60 seconds
+  display-time-interval 15)
+ (display-time-mode 1)
+ #+END_SRC
+
+*** End sentence with a single space
+
+I'd like to end sentence with a single space.
+
+#+BEGIN_SRC emacs-lisp
+(setq sentence-end-double-space nil)
+#+END_SRC
+
+*** Mode Line
+
+#+BEGIN_SRC emacs-lisp
+  (use-package smart-mode-line)
+#+END_SRC
+
+*** Help with guide key
+
+#+BEGIN_SRC emacs-lisp
+  (use-package guide-key
+    :defer t
+    :diminish guide-key-mode
+    :config
+    (progn
+    (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c"))
+    (guide-key-mode 1)))  ; Enable guide-key-mode
+#+END_SRC
+
+*** Unfill Paragraph
+#+BEGIN_SRC emacs-lisp
+    (defun my/unfill-paragraph (&optional region)
+      "Takes a multi-line paragraph and makes it into a single line of text."
+      (interactive (progn
+                     (barf-if-buffer-read-only)
+                     (list t)))
+      (let ((fill-column (point-max)))
+        (fill-paragraph nil region)))
+  (bind-key "M-Q" 'my/unfill-paragraph)
+#+END_SRC
+
+*** Tab complete
 
  #+BEGIN_SRC emacs-lisp
  (setq tab-always-indent 'complete)
@@ -92,25 +262,6 @@
 		    (flyspell-prog-mode))))
  #+END_SRC
 
-*** UTF-8
-
- #+BEGIN_SRC emacs-lisp
-
- (prefer-coding-system 'utf-8)
- (set-default-coding-systems 'utf-8)
- (set-terminal-coding-system 'utf-8)
- (set-keyboard-coding-system 'utf-8)
- (setq default-buffer-file-coding-system 'utf-8)
-
- #+END_SRC
-
-*** About me
-
- #+BEGIN_SRC emacs-lisp
-   (setq user-full-name "Yizhe Xu"
-	 user-mail-address "me@yizhexu.com")
- #+END_SRC
-
 *** Line Number
  I wanna know the line number and column
 
@@ -121,27 +272,26 @@
 
  #+END_SRC
 
-*** Misc
+*** Delete Highlighted Region
  When I selected region and start typing, jsut delete that region
 
  #+BEGIN_SRC emacs-lisp
  (delete-selection-mode 1)
  #+END_SRC
 
-
- Ignore case when using completion for file names:
+*** Ignore case when using completion for file names
 
  #+BEGIN_SRC emacs-lisp
  (setq read-file-name-completion-ignore-case t)
  #+END_SRC
 
- Hide the mouse while typing:
+*** Hide the mouse while typing
 
  #+BEGIN_SRC emacs-lisp
  (setq make-pointer-invisible t)
  #+END_SRC
 
- Set up the fill-column to 80 characters and set tab width to 2
+*** Fill Column Width
 
  #+BEGIN_SRC emacs-lisp
  (setq-default fill-column 80)
@@ -149,73 +299,7 @@
  (setq-default indent-tabs-mode nil)
  #+END_SRC
 
-** Appearance
-*** Theme
- Hack is a nice font: [[https://github.com/source-foundry/Hack][A typeface designed for source code]]
-
-  #+BEGIN_SRC emacs-lisp
-    ;; clean up the mode line
-    (setq minions-mode-line-lighter "☰")
-    (minions-mode 1)
-
-    ;; maximize the text window?
-    (menu-bar-mode -1)
-    (tool-bar-mode -1)
-
-
-    ;; set theme
-    (load-theme 'material t)
-
-    ;; set font
-    (set-default-font "Hack-12")
-
-    ;; max height at start
-    (custom-set-variables
-     '(initial-frame-alist (quote ((fullscreen . fullscreen)))))
-
-    ;; syntax highlighting
-    (global-font-lock-mode t)
-
-
-  #+END_SRC
-*** Backups
-
- File backups move to it's seperate location
-
- #+BEGIN_SRC emacs-lisp
-   ;; backups go to where backups all go
-    (setq backup-directory-alist
-	  '(("." . "~/.emacs_backups")))
-
-    ;; delete old backups
-    (setq delete-old-versions t)
-
-    ;; version control on auto save?
-    (setq version-control t)
-
- #+END_SRC
-
-*** Window Split
- Prefer split window to do it vertically
-
- #+BEGIN_SRC emacs-lisp
- (setq split-height-threshold nil)
- (setq split-width-threshold 180)
- #+END_SRC
-
-*** Time
- Display the time and load on the modeline
-
- #+BEGIN_SRC emacs-lisp
- (setq
-  ;; don't display info about mail
-  display-time-mail-function (lambda () nil)
-  ;; update every 15 seconds instead of 60 seconds
-  display-time-interval 15)
- (display-time-mode 1)
- #+END_SRC
-
-*** Whitespace-mode
+*** White-space mode
 
  Here are the things that whitespace-mode should highlight
 
@@ -253,7 +337,7 @@
  (setq-default show-trailing-whitespace t)
  #+END_SRC
 
-** Set up $PATH and other vars 
+** Set up $PATH and other vars
 
 On OSX Emacs needs help setting up system paths
 
@@ -280,7 +364,7 @@ On OSX Emacs needs help setting up system paths
 
 #+END_SRC
 
-** Org Mode
+* Org Mode
 
 #+BEGIN_SRC emacs-lisp
 ;; Standard key bindings
