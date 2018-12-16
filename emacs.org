@@ -56,7 +56,6 @@ popd
  #+END_SRC
 
 ** Initialize Emacs
-
 *** Package Sources
 #+BEGIN_SRC emacs-lisp
   ;; initalize all ELPA packages
@@ -91,7 +90,11 @@ popd
     :config (auto-compile-on-load-mode))
   (setq load-prefer-newer t)
 #+END_SRC
-*** Theme
+*** Appearance
+Hack is a nice font: [[https://github.com/source-foundry/Hack][A typeface
+designed for source code] ]
+
+
   #+BEGIN_SRC emacs-lisp
     ;; clean up the mode line
     (setq minions-mode-line-lighter "☰")
@@ -100,7 +103,6 @@ popd
     ;; maximize the text window?
     (menu-bar-mode -1)
     (tool-bar-mode -1)
-
 
     ;; set theme
     (load-theme 'material t)
@@ -115,16 +117,6 @@ popd
     ;; syntax highlighting
     (global-font-lock-mode t)
 
-
-  #+END_SRC
-
-*** Font
-
- Hack is a nice font: [[https://github.com/source-foundry/Hack][A typeface designed for source code]]
-
-  #+BEGIN_SRC emacs-lisp
-    ;; set font
-    (set-default-font "Hack-12")
   #+END_SRC
 
 *** Always Debug
@@ -408,7 +400,6 @@ On OSX Emacs needs help setting up system paths
 
 #+END_SRC
 
-
 ** Git
 
 
@@ -418,3 +409,6 @@ On OSX Emacs needs help setting up system paths
 
 
 #+END_SRC
+** Go
+Enable =go-mode=
+

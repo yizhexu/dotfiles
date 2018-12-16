@@ -1,12 +1,17 @@
 ;; initialize package.el packages
 (package-initialize)
 
-;; load literal config
-(require 'org)
-(org-babel-load-file
- (expand-file-name "emacs.org"
-		   user-emacs-directory))
+;; Use cask & pallet to manage packages
+(require 'cask "~/.cask/cask.el")
+(cask-initialize)
 
+(require 'pallet)
+(pallet-mode t)
+
+;; load literal configuration
+(org-babel-load-file
+ (expand-file-name "configuration.org"
+                   user-emacs-directory))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -15,8 +20,8 @@
  ;; If there is more than one, they won't work right.
  '(initial-frame-alist (quote ((fullscreen . fullheight))))
  '(package-selected-packages
-   (quote
-    (guide-key auto-compile use-package smart-mode-line multiple-cursors elpy minions pallet))))
+	 (quote
+		(org-bullets diff-hl multi-term ensime scala-mode jedi py-autopep8 evil-magit rainbow-delimiters paredit nord-theme go-eldoc auto-complete-config go-autocomplete auto-complete go-mode ess guide-key auto-compile use-package smart-mode-line multiple-cursors elpy minions pallet))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

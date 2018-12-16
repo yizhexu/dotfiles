@@ -24,6 +24,27 @@
   :config (auto-compile-on-load-mode))
 (setq load-prefer-newer t)
 
+;; clean up the mode line
+(setq minions-mode-line-lighter "☰")
+(minions-mode 1)
+
+;; maximize the text window?
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+
+;; set theme
+(load-theme 'material t)
+
+;; set font
+(set-default-font "Hack-12")
+
+;; max height at start
+(custom-set-variables
+ '(initial-frame-alist (quote ((fullscreen . fullscreen)))))
+
+;; syntax highlighting
+(global-font-lock-mode t)
+
 (setq debug-on-error t)
 (setq debug-on-quit t)
 
@@ -114,31 +135,6 @@
 (setq-default fill-column 80)
 (setq-default default-tab-width 2)
 (setq-default indent-tabs-mode nil)
-
-;; clean up the mode line
-(setq minions-mode-line-lighter "☰")
-(minions-mode 1)
-
-;; maximize the text window?
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-
-
-;; set theme
-(load-theme 'material t)
-
-;; set font
-(set-default-font "Hack-12")
-
-;; max height at start
-(custom-set-variables
- '(initial-frame-alist (quote ((fullscreen . fullscreen)))))
-
-;; syntax highlighting
-(global-font-lock-mode t)
-
-(setq split-height-threshold nil)
-(setq split-width-threshold 180)
 
 (setq whitespace-style '(tabs newline space-mark
                          tab-mark newline-mark
