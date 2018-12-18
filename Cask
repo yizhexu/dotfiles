@@ -37,4 +37,5 @@
 (depends-on "scala-mode")
 (depends-on "shut-up")
 (depends-on "smart-mode-line")
+(depends-on "tramp-term")
 (depends-on "use-package")

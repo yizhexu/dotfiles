@@ -1,5 +1,13 @@
 * Emacs Configuration
 
+** Start-up Message
+
+Disable this
+
+#+BEGIN_SRC emacs-lisp
+(setq inhibit-startup-screen t)
+#+END_SRC
+
 ** Utility Functions
 
 Resume to original size
@@ -55,7 +63,6 @@ Store backups and auto-saved files in a fixed location rather in the same direct
 
 #+RESULTS:
 : 2
-
 
 ** White Spaces
 
@@ -191,6 +198,7 @@ Search keys
 (global-set-key (kbd "C-M-s") 'isearch-forward)
 (global-set-key (kbd "C-M-r") 'isearch-backward)
 #+END_SRC
+
 
 * About me
 
@@ -552,7 +560,12 @@ Some hooks to =term-mode=:
 
 #+END_SRC
 
-#+RESULTS:
+And mute the start-up message
+
+#+BEGIN_SRC emacs-lisp
+(setq ensime-startup-notification nil)
+#+END_SRC
+
 * =org-mode=
 ** Display Preferences
 
