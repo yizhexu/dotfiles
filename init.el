@@ -21,7 +21,7 @@
  '(initial-frame-alist (quote ((fullscreen . fullheight))))
  '(package-selected-packages
 	 (quote
-		(org-bullets diff-hl multi-term ensime scala-mode jedi py-autopep8 evil-magit rainbow-delimiters paredit nord-theme go-eldoc auto-complete-config go-autocomplete auto-complete go-mode ess guide-key auto-compile use-package smart-mode-line multiple-cursors elpy minions pallet))))
+		(neotree org-bullets diff-hl multi-term ensime scala-mode jedi py-autopep8 evil-magit rainbow-delimiters paredit nord-theme go-eldoc auto-complete-config go-autocomplete auto-complete go-mode ess guide-key auto-compile use-package smart-mode-line multiple-cursors elpy minions pallet))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

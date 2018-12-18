@@ -25,6 +25,7 @@
 (depends-on "minions")
 (depends-on "multi-term")
 (depends-on "multiple-cursors")
+(depends-on "neotree")
 (depends-on "nord-theme")
 (depends-on "org-bullets")
 (depends-on "package-build")
