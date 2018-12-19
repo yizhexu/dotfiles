@@ -19,6 +19,7 @@
 (depends-on "go-autocomplete")
 (depends-on "go-mode")
 (depends-on "guide-key")
+(depends-on "htmlize")
 (depends-on "jedi")
 (depends-on "magit")
 (depends-on "material-theme")

@@ -199,6 +199,28 @@ Search keys
 (global-set-key (kbd "C-M-r") 'isearch-backward)
 #+END_SRC
 
+** TODO Spell Checking
+
+#+BEGIN_SRC emacs-lisp
+		(setq-default ispell-program-name "hunspell")
+		(use-package ispell
+		 :init
+		 (setq ispell-dictionary-alist
+			'(
+				("en_US"
+				 "[[:alpha:]]"
+				 "[^[:alpha:]]"
+				 "[']"
+				 t
+				 ("-d" "en_US" "-p" "/usr/share/hunspell/en_US")
+				 nil
+				 iso-8859-1)
+				))
+		 (setq ispell-dictionary "en_US")
+		)
+#+END_SRC
+
+#+RESULTS:
 
 * About me
 
@@ -269,7 +291,7 @@ Use =neotree= to give a nice tree view of project directory
     "use the theme and make frame a bit transparent"
     (interactive)
     (load-theme 'material t)
-    (transparency 90))
+    (transparency 93))
 #+END_SRC
 
 #+RESULTS:
@@ -569,6 +591,24 @@ And mute the start-up message
 ** R
 
 * =org-mode=
+
+** Keyboard shortcuts
+
+These are the shortcuts I'm trying to use
+
+#+BEGIN_SRC emacs-lisp
+	(global-set-key (kbd "C-c o")
+										(lambda () (interactive) (find-file org-index-file))) ;; access to my index-org everywhere
+
+	(bind-key "C-c r" 'org-capture)
+	(bind-key "C-c a" 'org-agenda)
+	(bind-key "<f9> <f9>" 'org-agenda-list)
+	(bind-key "<f9> <f8>" (lambda () (interactive) (org-capture nil "r")))
+#+END_SRC
+
+#+RESULTS:
+| lambda | nil | (interactive) | (org-capture nil r) |
+
 ** Display Preferences
 
 Pretty bullet, outline, etc
@@ -604,13 +644,6 @@ Make TAB act as if it were issued in a buffer of the language's major mode.
   (setq org-src-tab-acts-natively t)
 #+END_SRC
 
-When editing a code snippet, use the current window rather than popping open a
-new one (which shows the same information).
-
-#+BEGIN_SRC emacs-lisp
-  (setq org-src-window-setup 'current-window)
-#+END_SRC
-
 Quickly insert a block of elisp:
 
 #+BEGIN_SRC emacs-lisp
@@ -622,4 +655,94 @@ Enable spell-checking in Org-mode.
 
 #+BEGIN_SRC emacs-lisp
   (add-hook 'org-mode-hook 'flyspell-mode)
+#+END_SRC
+
+#+RESULTS:
+| flyspell-mode | org-bullets-mode | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-show-block-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes |
+** Task Management
+
+My org file is stored in =~/Documents/org=, finished tasks will be archived in
+=~/Documents/org/archive.org=, and all the tasks stores in
+=~/Documents/org/index.org=
+
+| index.org | Main org file. Inbox for org-capture |
+| yizhe.org | My knowledge management              |
+
+#+BEGIN_SRC emacs-lisp
+	(setq org-directory "~/Documents/org")
+
+	(defun org-file-path (filename)
+		"Return the absolute address of an org file, given its relative name."
+		(concat (file-name-as-directory org-directory) filename))
+
+	(setq org-index-file (org-file-path "index.org"))
+	(setq org-archive-location
+				(concat (org-file-path "archive.org") "::* From %s"))
+#+END_SRC
+
+Agenda should be derived from =index.org=
+
+#+BEGIN_SRC emacs-lisp
+(setq org-agenda-files (list org-index-file))
+#+END_SRC
+
+#+RESULTS:
+| ~/Documents/org/index.org |
+
+Hitting =C-c C-x C-s= will mark a todo as done and move it to an appropriate
+place in the archive.
+
+#+BEGIN_SRC emacs-lisp
+(defun mark-done-and-archive ()
+  "Mark the state of an org-mode item as DONE and archive it."
+  (interactive)
+  (org-todo 'done)
+  (org-archive-subtree))
+
+(define-key org-mode-map (kbd "C-c C-x C-s") 'mark-done-and-archive)
+#+END_SRC
+
+#+RESULTS:
+: mark-done-and-archive
+
+Record the time that a todo was archived.
+
+#+BEGIN_SRC emacs-lisp
+(setq org-log-done 'time)
+#+END_SRC
+
+*** Capturing Tasks
+
+Probably would need to quickly capture:
+
+- List of todo in =~/Documents/index.org=
+
+#+BEGIN_SRC emacs-lisp
+	(setq org-capture-templates
+				'(
+					("t" "Todo" entry (file+headline org-index-file "Inbox")
+					 "* TODO %? %U" :empty-lines 1)
+
+					("s" "Scheduled Todo" entry (file+headline org-index-file "Inbox")
+					 "* TODO %? %^G \nSCHEDULED: %^t\n  %U" :empty-lines 1)
+
+	))
+#+END_SRC
+
+#+RESULTS:
+| t | Todo | entry | (file+headline org-index-file Inbox) | basic-task-template |
+** Exporting
+
+Allow =babel= to evaluate Emacs lisp code
+
+#+BEGIN_SRC emacs-lisp
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)))
+#+END_SRC
+
+Don’t ask before evaluating code blocks.
+
+#+BEGIN_SRC emacs-lisp
+(setq org-confirm-babel-evaluate nil)
 #+END_SRC
