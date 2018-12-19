@@ -79,6 +79,23 @@ selected text and start inserting your typed text."
 (global-set-key (kbd "C-M-s") 'isearch-forward)
 (global-set-key (kbd "C-M-r") 'isearch-backward)
 
+(setq-default ispell-program-name "hunspell")
+(use-package ispell
+ :init
+ (setq ispell-dictionary-alist
+	'(
+		("en_US"
+		 "[[:alpha:]]"
+		 "[^[:alpha:]]"
+		 "[']"
+		 t
+		 ("-d" "en_US" "-p" "/usr/share/hunspell/en_US")
+		 nil
+		 iso-8859-1)
+		))
+ (setq ispell-dictionary "en_US")
+)
+
 (setq user-full-name "Yizhe Xu"
       user-mail-address "me@yizhexu.com"
       calendar-latitude 39.7
@@ -108,7 +125,7 @@ selected text and start inserting your typed text."
   "use the theme and make frame a bit transparent"
   (interactive)
   (load-theme 'material t)
-  (transparency 90))
+  (transparency 93))
 
 (if (daemonp)
     (add-hook 'after-make-frame-functions
@@ -216,6 +233,14 @@ selected text and start inserting your typed text."
   ("scala" . scala-mode))
 (use-package sbt-mode)
 
+(global-set-key (kbd "C-c o")
+									(lambda () (interactive) (find-file org-index-file))) ;; access to my index-org everywhere
+
+(bind-key "C-c r" 'org-capture)
+(bind-key "C-c a" 'org-agenda)
+(bind-key "<f9> <f9>" 'org-agenda-list)
+(bind-key "<f9> <f8>" (lambda () (interactive) (org-capture nil "r")))
+
 (use-package org-bullets
   :init
   (add-hook 'org-mode-hook #'org-bullets-mode))
@@ -226,9 +251,45 @@ selected text and start inserting your typed text."
 
 (setq org-src-tab-acts-natively t)
 
-(setq org-src-window-setup 'current-window)
-
 (add-to-list 'org-structure-template-alist
              '("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC"))
 
 (add-hook 'org-mode-hook 'flyspell-mode)
+
+(setq org-directory "~/Documents/org")
+
+(defun org-file-path (filename)
+	"Return the absolute address of an org file, given its relative name."
+	(concat (file-name-as-directory org-directory) filename))
+
+(setq org-index-file (org-file-path "index.org"))
+(setq org-archive-location
+			(concat (org-file-path "archive.org") "::* From %s"))
+
+(setq org-agenda-files (list org-index-file))
+
+(defun mark-done-and-archive ()
+  "Mark the state of an org-mode item as DONE and archive it."
+  (interactive)
+  (org-todo 'done)
+  (org-archive-subtree))
+
+(define-key org-mode-map (kbd "C-c C-x C-s") 'mark-done-and-archive)
+
+(setq org-log-done 'time)
+
+(setq org-capture-templates
+			'(
+				("t" "Todo" entry (file+headline org-index-file "Inbox")
+				 "* TODO %? %U" :empty-lines 1)
+
+				("s" "Scheduled Todo" entry (file+headline org-index-file "Inbox")
+				 "* TODO %? %^G \nSCHEDULED: %^t\n  %U" :empty-lines 1)
+
+))
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)))
+
+(setq org-confirm-babel-evaluate nil)

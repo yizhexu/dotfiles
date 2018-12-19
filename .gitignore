@@ -1,5 +1,5 @@
 *
 !.gitignore
-!*.el
+!init.el
 !*.org
 !Cask
