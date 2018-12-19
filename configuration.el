@@ -1,3 +1,5 @@
+(setq inhibit-startup-screen t)
+
 (defun sensible-defaults/reset-text-size ()
   (interactive)
   (text-scale-set 0))
@@ -98,6 +100,9 @@ selected text and start inserting your typed text."
 (set-window-scroll-bars (minibuffer-window) nil nil)
 
 (setq frame-title-format '((:eval (projectile-project-name))))
+
+(use-package neotree
+	:bind ([f8] . neotree-toggle))
 
 (defun transparency (alpha)
   "set transparency of the frame window. 0=transparent/ 100=opaque"
@@ -215,6 +220,8 @@ selected text and start inserting your typed text."
   :interpreter
   ("scala" . scala-mode))
 (use-package sbt-mode)
+
+(setq ensime-startup-notification nil)
 
 (use-package org-bullets
   :init

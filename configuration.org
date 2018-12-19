@@ -568,8 +568,6 @@ And mute the start-up message
 
 ** R
 
-
-
 * =org-mode=
 ** Display Preferences
 
