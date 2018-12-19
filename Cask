@@ -26,6 +26,7 @@
 (depends-on "minions")
 (depends-on "multi-term")
 (depends-on "multiple-cursors")
+(depends-on "neotree")
 (depends-on "nord-theme")
 (depends-on "org-bullets")
 (depends-on "package-build")
@@ -37,4 +38,5 @@
 (depends-on "scala-mode")
 (depends-on "shut-up")
 (depends-on "smart-mode-line")
+(depends-on "tramp-term")
 (depends-on "use-package")

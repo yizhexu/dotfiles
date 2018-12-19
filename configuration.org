@@ -1,5 +1,13 @@
 * Emacs Configuration
 
+** Start-up Message
+
+Disable this
+
+#+BEGIN_SRC emacs-lisp
+(setq inhibit-startup-screen t)
+#+END_SRC
+
 ** Utility Functions
 
 Resume to original size
@@ -254,10 +262,19 @@ Hide this and that to maximize screen area
 
 #+RESULTS:
 
-** Frame Name
+** Window
+
+Change frame name to something more helpful
 
 #+BEGIN_SRC emacs-lisp
 (setq frame-title-format '((:eval (projectile-project-name))))
+#+END_SRC
+
+Use =neotree= to give a nice tree view of project directory
+
+#+BEGIN_SRC emacs-lisp
+	(use-package neotree
+		:bind ([f8] . neotree-toggle))
 #+END_SRC
 
 ** Theme
@@ -565,7 +582,12 @@ Some hooks to =term-mode=:
 
 #+END_SRC
 
-#+RESULTS:
+And mute the start-up message
+
+#+BEGIN_SRC emacs-lisp
+(setq ensime-startup-notification nil)
+#+END_SRC
+
 * =org-mode=
 
 ** Keyboard shortcuts
