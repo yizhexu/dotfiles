@@ -402,7 +402,7 @@ Some configuration for =emacs-lisp=
 #+RESULTS:
 | eldoc-mode | (lambda nil (setq show-paren-style (quote expression)) (paredit-mode) (rainbow-delimiters-mode)) | (lambda nil (flyspell-prog-mode)) |
 
-** Magi
+** Magittt
 
 Quickly view git status with =C-x g=
 
@@ -565,6 +565,10 @@ And mute the start-up message
 #+BEGIN_SRC emacs-lisp
 (setq ensime-startup-notification nil)
 #+END_SRC
+
+** R
+
+
 
 * =org-mode=
 ** Display Preferences
