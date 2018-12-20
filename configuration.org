@@ -590,6 +590,22 @@ And mute the start-up message
 
 ** R
 
+Use ESS
+#+BEGIN_SRC emacs-lisp
+(setq ess-ask-for-ess-directory nil)
+(setq inferior-R-program-name "/usr/local/bin/R")
+(setq ess-local-process-name "R")
+(setq ansi-color-for-comint-mode 'filter)
+(setq comint-scroll-to-bottom-on-input t)
+(setq comint-scroll-to-bottom-on-output t)
+(setq comint-move-point-for-output t)
+(setq ess-eval-visibly-p nil)
+(require 'ess-site)
+#+END_SRC
+
+#+RESULTS:
+: ess-site
+
 * =org-mode=
 
 ** Keyboard shortcuts
@@ -746,3 +762,22 @@ Don’t ask before evaluating code blocks.
 #+BEGIN_SRC emacs-lisp
 (setq org-confirm-babel-evaluate nil)
 #+END_SRC
+** Source Code
+
+Source code that =org-babel= wants to evaluate
+
+#+BEGIN_SRC emacs-lisp
+(org-babel-do-load-languages
+     'org-babel-load-languages
+     '((R . t)
+       (emacs-lisp . t)
+       (python . t)
+       (shell . t)
+       (latex . t)
+       (gnuplot . t)
+       (sql . t)
+       ))
+#+END_SRC
+
+#+RESULTS:
+: t
