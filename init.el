@@ -22,7 +22,11 @@
  '(org-agenda-files (quote ("~/Documents/org/index.org")))
  '(package-selected-packages
 	 (quote
+<<<<<<< HEAD
 		(tramp-term neotree org-bullets diff-hl multi-term ensime scala-mode jedi py-autopep8 evil-magit rainbow-delimiters paredit nord-theme go-eldoc auto-complete-config go-autocomplete auto-complete go-mode ess guide-key auto-compile use-package smart-mode-line multiple-cursors elpy minions pallet))))
+=======
+		(htmlize org-bullets diff-hl multi-term ensime scala-mode jedi py-autopep8 evil-magit rainbow-delimiters paredit nord-theme go-eldoc auto-complete-config go-autocomplete auto-complete go-mode ess guide-key auto-compile use-package smart-mode-line multiple-cursors elpy minions pallet))))
+>>>>>>> c30b8e9cd2b599d6115bef6313d2d441f3bc36cb
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
