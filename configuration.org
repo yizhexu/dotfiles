@@ -1,4 +1,4 @@
-* Emacs Configuration
+n* Emacs Configuration
 
 ** Start-up Message
 
@@ -158,9 +158,12 @@ If I highlighted some text and just started typing onto it, just delete that tex
 #+BEGIN_SRC emacs-lisp
 	"If some text is selected, and you type some text, delete the
 	selected text and start inserting your typed text."
-	(delete-selection-mode t)
+	(delete-selection-mode 1)
 
 #+END_SRC
+
+#+RESULTS:
+: t
 
 y/n instead of yes/no
 
@@ -171,7 +174,7 @@ y/n instead of yes/no
 #+RESULTS:
 : y-or-n-p
 
-** Key Binding
+** Key Bindings
 
 Make <home> and <end> move point to the beginning and end of the line, respectively.
 
@@ -185,8 +188,6 @@ Zoom! =C-+= and =C--= makes sense
 #+BEGIN_SRC emacs-lisp
   (define-key global-map (kbd "C-)") 'sensible-defaults/reset-text-size)
   (define-key global-map (kbd "C-+") 'text-scale-increase)
-  (define-key global-map (kbd "C-=") 'text-scale-increase)
-  (define-key global-map (kbd "C-_") 'text-scale-decrease)
   (define-key global-map (kbd "C--") 'text-scale-decrease)
 #+END_SRC
 
@@ -636,7 +637,7 @@ Pretty bullet, outline, etc
 
 #+END_SRC
 
-If there's content under a header, show a little downward pointing arrow
+If there's content under a header, show a little downward pointing arrow from [[https://github.com/hrs/dotfiles][hrs's dotfiles]]
 
 #+BEGIN_SRC emacs-lisp
 (setq org-ellipsis "⤵")
