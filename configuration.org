@@ -1,47 +1,46 @@
 * Emacs Configuration
-
 ** Start-up Message
 
-Disable this
-
-#+BEGIN_SRC emacs-lisp
-(setq inhibit-startup-screen t)
-#+END_SRC
-
-#+RESULTS:
-: t
-
-** Utility Functions
-
-Resume to original size
-
-#+BEGIN_SRC emacs-lisp
-  (interactive)
-  (text-scale-set 0)
-#+END_SRC
-
-#+RESULTS:
-
-** Performance
-
-Allow 20MB of memory (instead of 0.76MB) before calling garbage collection. This
-means GC runs less often, which speeds up some operations.
+ Disable this
 
  #+BEGIN_SRC emacs-lisp
-   (setq gc-cons-threshold 20000000)
+ (setq inhibit-startup-screen t)
  #+END_SRC
 
  #+RESULTS:
- : 20000000
+ : t
 
-When you perform a problematic operation, flash the screen instead of ringing the terminal bell.
+** Utility Functions
 
-#+BEGIN_SRC emacs-lisp
-  (setq visible-bell t)
-#+END_SRC
+ Resume to original size
 
-#+RESULTS:
-: t
+ #+BEGIN_SRC emacs-lisp
+   (interactive)
+   (text-scale-set 0)
+ #+END_SRC
+
+ #+RESULTS:
+
+** Performance
+
+ Allow 20MB of memory (instead of 0.76MB) before calling garbage collection. This
+ means GC runs less often, which speeds up some operations.
+
+	#+BEGIN_SRC emacs-lisp
+		(setq gc-cons-threshold 20000000)
+	#+END_SRC
+
+	#+RESULTS:
+	: 20000000
+
+ When you perform a problematic operation, flash the screen instead of ringing the terminal bell.
+
+ #+BEGIN_SRC emacs-lisp
+   (setq visible-bell t)
+ #+END_SRC
+
+ #+RESULTS:
+ : t
 
 ** Backups
 
@@ -219,7 +218,7 @@ Zoom! =C-+= and =C--= makes sense
 #+BEGIN_SRC emacs-lisp
   (define-key global-map (kbd "C-)") 'sensible-defaults/reset-text-size)
   (define-key global-map (kbd "C-+") 'text-scale-increase)
-  (define-key global-map (kbd "C--") 'text-scale-decrease)
+  (define-key global-map (kbd "C-_") 'text-scale-decrease)
 #+END_SRC
 
 #+RESULTS:
@@ -353,14 +352,14 @@ Use =neotree= to give a nice tree view of project directory
 #+BEGIN_SRC emacs-lisp
 	(with-system gnu/linux
 		(if (daemonp)
-					(add-hook 'after-make-frame-functions
+				(add-hook 'after-make-frame-functions
+									(lambda (frame)
+										(with-selected-frame frame (apply-theme))))
+			(apply-theme)))
+	(add-hook 'after-make-frame-functions
 										(lambda (frame)
 											(with-selected-frame frame (apply-theme))))
-			(apply-theme))
-		(add-hook 'after-make-frame-functions
-										(lambda (frame)
-											(with-selected-frame frame (apply-theme))))
-		(apply-theme))
+	(apply-theme)
 #+END_SRC
 
 
@@ -455,6 +454,7 @@ When open a Go source code:
 
 #+END_SRC
 
+
 #+RESULTS:
 | lambda | nil | (set (make-local-variable (quote company-backends)) (quote (company-go))) | (company-mode) | (if (not (string-match go compile-command)) (set (make-local-variable (quote compile-command)) go build -v && go test -v && go vet)) | (flycheck-mode) |
 
@@ -485,7 +485,7 @@ Some configuration for =emacs-lisp=
 #+RESULTS:
 | eldoc-mode | (lambda nil (setq show-paren-style (quote expression)) (paredit-mode) (rainbow-delimiters-mode)) | (lambda nil (flyspell-prog-mode)) |
 
-** Magittt
+** Magit
 
 Quickly view git status with =C-x g=
 
@@ -518,18 +518,20 @@ Highlight uncommited changes
 Add =/opt/anaconda/bin= to load path.
 
 #+BEGIN_SRC emacs-lisp
-  (yizhe/append-to-path "/opt/anaconda/bin")
+(with-system gnu/linux (yizhe/append-to-path "/opt/anaconda/bin"))
+(with-system darwin (yizhe/append-to-path "/usr/local/anaconda3/bin"))
 #+END_SRC
 
 #+RESULTS:
-| /opt/anaconda/bin | /home/yizhe/Go/bin | /usr/local/bin | /usr/local/sbin | /usr/bin | /opt/cuda/bin | /usr/bin/site_perl | /usr/bin/vendor_perl | /usr/bin/core_perl | /usr/lib/emacs/26.1/x86_64-pc-linux-gnu |
+| /usr/local/anaconda3/bin | /opt/anaconda/bin | /home/yizhe/Go/bin | /usr/bin | /bin | /usr/sbin | /sbin | /usr/local/Cellar/emacs/26.1_1/libexec/emacs/26.1/x86_64-apple-darwin17.7.0 |
 
 Configure my coda environments
 
 #+BEGIN_SRC emacs-lisp
   ; where to look for environments
-  (setenv "WORKON_HOME" "/home/yizhe/.conda/envs")
-  (pyvenv-mode 1)
+(with-system gnu/linux (setenv "WORKON_HOME" "/home/yizhe/.conda/envs"))
+(with-system darwin (setenv "WORKON_HOME" "/usr/local/anaconda3/envs"))
+(pyvenv-mode 1)
 #+END_SRC
 
 #+RESULTS:
@@ -546,7 +548,6 @@ Use =ipython= interpreter with elpy
 
 #+BEGIN_SRC emacs-lisp
 ;; ipython interpreter
-
   (setq python-shell-interpreter "jupyter"
         python-shell-interpreter-args "console --simple-prompt"
         python-shell-prompt-detect-failure-warning nil)
