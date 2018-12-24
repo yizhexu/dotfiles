@@ -15,11 +15,26 @@
  Resume to original size
 
  #+BEGIN_SRC emacs-lisp
+(defun yizhe/reset-text-size ()
    (interactive)
    (text-scale-set 0)
+)
  #+END_SRC
 
  #+RESULTS:
+ : yizhe/reset-text-size
+
+#+BEGIN_SRC emacs-lisp
+
+  (defun yizhe/append-to-path (path)
+    "Add a path both to the $PATH variable and Emacs's path"
+    (setenv "PATH" (concat (getenv "PATH") ":" path))
+    (add-to-list 'exec-path path))
+
+#+END_SRC
+
+#+RESULTS:
+: yizhe/append-to-path
 
 ** Performance
 
@@ -216,9 +231,9 @@ Make <home> and <end> move point to the beginning and end of the line, respectiv
 Zoom! =C-+= and =C--= makes sense
 
 #+BEGIN_SRC emacs-lisp
-  (define-key global-map (kbd "C-)") 'sensible-defaults/reset-text-size)
-  (define-key global-map (kbd "C-+") 'text-scale-increase)
-  (define-key global-map (kbd "C-_") 'text-scale-decrease)
+	(define-key global-map (kbd "C-)") 'yizhe/reset-text-size)
+	(define-key global-map (kbd "C-+") 'text-scale-increase)
+	(define-key global-map (kbd "C-_") 'text-scale-decrease)
 #+END_SRC
 
 #+RESULTS:
@@ -270,20 +285,6 @@ Search keys
 
  #+RESULTS:
  : -104.9
-
-* Define Functions
-
-#+BEGIN_SRC emacs-lisp
-
-  (defun yizhe/append-to-path (path)
-    "Add a path both to the $PATH variable and Emacs's path"
-    (setenv "PATH" (concat (getenv "PATH") ":" path))
-    (add-to-list 'exec-path path))
-
-#+END_SRC
-
-#+RESULTS:
-: yizhe/append-to-path
 
 * UI
 ** Maximize Screen
@@ -669,23 +670,22 @@ Use ESS
 : ess-site
 
 * =org-mode=
-
 ** Keyboard shortcuts
 
- These are the shortcuts I'm trying to use
+	These are the shortcuts I'm trying to use
 
- #+BEGIN_SRC emacs-lisp
-	 (global-set-key (kbd "C-c o")
-										 (lambda () (interactive) (find-file org-index-file))) ;; access to my index-org everywhere
+	#+BEGIN_SRC emacs-lisp
+		(global-set-key (kbd "C-c o")
+											(lambda () (interactive) (find-file org-index-file))) ;; access to my index-org everywhere
 
-	 (bind-key "C-c r" 'org-capture)
-	 (bind-key "C-c a" 'org-agenda)
-	 (bind-key "<f9> <f9>" 'org-agenda-list)
-	 (bind-key "<f9> <f8>" (lambda () (interactive) (org-capture nil "r")))
- #+END_SRC
+		(bind-key "C-c r" 'org-capture)
+		(bind-key "C-c a" 'org-agenda)
+		(bind-key "<f9> <f9>" 'org-agenda-list)
+		(bind-key "<f9> <f8>" (lambda () (interactive) (org-capture nil "r")))
+	#+END_SRC
 
- #+RESULTS:
- | lambda | nil | (interactive) | (org-capture nil r) |
+	#+RESULTS:
+	| lambda | nil | (interactive) | (org-capture nil r) |
 
 ** Display Preferences
 
@@ -829,17 +829,15 @@ Don’t ask before evaluating code blocks.
 Source code that =org-babel= wants to evaluate
 
 #+BEGIN_SRC emacs-lisp
-(org-babel-do-load-languages
-     'org-babel-load-languages
-     '((R . t)
-       (emacs-lisp . t)
-       (python . t)
-       (shell . t)
-       (latex . t)
-       (gnuplot . t)
-       (sql . t)
-       ))
+	(org-babel-do-load-languages
+			 'org-babel-load-languages
+			 '((R . t)
+				 (emacs-lisp . t)
+				 (python . t)
+				 (shell . t)
+				 (latex . t)
+				 (gnuplot . t)
+				 (sql . t)))
 #+END_SRC
 
 #+RESULTS:
-: t
