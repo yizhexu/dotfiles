@@ -23,6 +23,7 @@
 (depends-on "guide-key")
 (depends-on "htmlize")
 (depends-on "jedi")
+(depends-on "julia-repl")
 (depends-on "magit")
 (depends-on "material-theme")
 (depends-on "minions")

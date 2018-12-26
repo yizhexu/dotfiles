@@ -20,7 +20,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
 	 (quote
-		(company htmlize use-package tramp-term smart-mode-line rainbow-delimiters py-autopep8 paredit pallet org-bullets nord-theme neotree multiple-cursors multi-term minions material-theme jedi guide-key go-mode go-autocomplete flycheck evil-magit ess ensime elpy diff-hl auto-compile)))
+		(julia-repl company htmlize use-package tramp-term smart-mode-line rainbow-delimiters py-autopep8 paredit pallet org-bullets nord-theme neotree multiple-cursors multi-term minions material-theme jedi guide-key go-mode go-autocomplete flycheck evil-magit ess ensime elpy diff-hl auto-compile)))
  '(tramp-default-host "sphynx.enwd.co.sa.charterlab.com" nil (tramp))
  '(tramp-default-method "ssh" nil (tramp))
  '(tramp-default-user "yxu" nil (tramp)))

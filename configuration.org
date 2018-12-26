@@ -1,14 +1,28 @@
 * Emacs Configuration
-** Start-up Message
+** Start-up
 
- Disable this
+ Disable this start-up message
 
  #+BEGIN_SRC emacs-lisp
  (setq inhibit-startup-screen t)
  #+END_SRC
 
- #+RESULTS:
- : t
+Load path to custom lisp code
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path "~/.emacs.d/resources/")
+#+END_SRC
+
+#+RESULTS:
+| ~/.emacs.d/resources/ | /Users/p2762265/.emacs.d/.cask/26.1/elpa/ess-20181217.2000/obsolete/ | /Users/p2762265/.emacs.d/.cask/26.1/elpa/ess-20181217.2000/ | /Users/p2762265/.emacs.d/.cask/26.1/elpa/auto-compile-20180321.1507 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/company-jedi-20151217.321 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/diff-hl-20181209.17 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/elpy-20181214.2233 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/ensime-20180615.1330 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/company-20181221.1538 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/ess-20181217.2000 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/evil-magit-20181127.1501 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/evil-20181206.1209 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/find-file-in-project-20181217.246 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/flycheck-20181214.1048 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/go-autocomplete-20150904.240 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/go-mode-20181012.329 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/goto-chg-20181208.2300 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/guide-key-20150108.635 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/highlight-indentation-20181204.839 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/htmlize-20180923.1829 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/ivy-20181217.2037 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/jedi-20160426.456 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/auto-complete-20170125.245 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/jedi-core-20181207.1 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/epc-20140610.534 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/ctable-20171006.11 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/concurrent-20161229.330 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/julia-mode-20180816.2117 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/magit-20181216.1220 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/git-commit-20181206.2347 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/ghub-20181211.1827 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/graphql-20180912.31 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/magit-popup-20181204.2031 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/material-theme-20171123.1840 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/minions-20181030.2101 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/multi-term-20160619.933 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/multiple-cursors-20180913.1237 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/neotree-20181121.2026 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/nord-theme-20180913.1749 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/org-bullets-20180208.2343 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/packed-20180318.1729 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/pallet-20150512.702 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/cask-20181107.942 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/paredit-20171127.205 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/pkg-info-20150517.1143 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/popup-20160709.1429 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/popwin-20150315.1300 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/py-autopep8-20160925.1052 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/python-environment-20150310.853 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/deferred-20170901.1330 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/pyvenv-20181202.1607 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/rainbow-delimiters-20170929.1132 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/sbt-mode-20180511.1622 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/scala-mode-20170802.1132 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/smart-mode-line-20180926.1036 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/rich-minority-20170813.1322 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/tramp-term-20180223.1527 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/treepy-20180724.656 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/undo-tree-0.6.5 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/use-package-20181119.2350 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/bind-key-20180513.430 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/with-editor-20181113.1845 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/async-20180527.1730 | /Users/p2762265/.emacs.d/.cask/26.1/elpa/yasnippet-20181015.1212 | /usr/local/share/emacs/site-lisp | /usr/local/share/emacs/site-lisp/autoconf | /usr/local/share/emacs/site-lisp/cask | /usr/local/share/emacs/site-lisp/cmake | /usr/local/share/emacs/site-lisp/pass | /usr/local/share/emacs/site-lisp/ruby | /usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp | /usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp/vc | /usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp/url | /usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp/textmodes | /usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp/progmodes | /usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp/play | /usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp/org | /usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp/nxml | /usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp/net | /usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp/mh-e | /usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp/mail | /usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp/leim | /usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp/language | /usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp/international | /usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp/image | /usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp/gnus | /usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp/eshell | /usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp/erc | /usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp/emulation | /usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp/emacs-lisp | /usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp/cedet | /usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp/calendar | /usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp/calc | /usr/local/Cellar/emacs/26.1_1/share/emacs/26.1/lisp/obsolete |
+
+When load =use-package=, always ensure so don't need to type every time
+
+#+BEGIN_SRC emacs-lisp
+(setq use-package-always-ensure t)
+#+END_SRC
+
+#+RESULTS:
+: t
 
 ** Utility Functions
 
@@ -302,27 +316,6 @@ If mac, use command key as meta instead of option
 #+END_SRC
 
 #+RESULTS:
-** TODO Yesnippet
-
-http://www.totherme.org/configs/gds.html#orgheadline14
-
-** Comapny Mode
-
-Complete everything when type
-
-#+BEGIN_SRC emacs-lisp
-	(use-package company
-		:ensure t
-		:defer 5
-		:diminish company-mode
-		:config
-		(use-package company-yasnippet))
-
-#+END_SRC
-
-#+RESULTS:
-: t
-
 * About me
 
  #+BEGIN_SRC emacs-lisp
@@ -493,6 +486,18 @@ Compilation be more obvious
 #+BEGIN_SRC emacs-lisp
 (setq compilaton-scroll-output t)
 #+END_SRC
+
+Enable =company-mode=
+
+#+BEGIN_SRC emacs-lisp
+	(use-package company
+		:defer 5
+		:diminish company-mode
+		:config)
+
+#+END_SRC
+
+#+RESULTS:
 
 ** Tramp
 
@@ -783,8 +788,6 @@ And mute the start-up message
 
 ** R
 
-*** ESS - Emacs Speaks Statistics
-
 Enable ess
 
 #+BEGIN_SRC emacs-lisp
@@ -816,7 +819,6 @@ Enable ess
 #+RESULTS:
 | turn-on-pretty-mode | ess-S-mouse-me-menu-commands | ess-r-setup-flymake |
 
-*** =company-mode=
 
 Activate company mode with ESS
 
@@ -875,8 +877,6 @@ Bind =M-,= as next in auto-complete, =M-k= as previous.
 			 geom_abline
  #+END_SRC
 
-*** Use R with  =org-mode=
-
  When use R with =org-mode=, Don't need to double check before evaluate with =C-c C-c=
 
  #+BEGIN_SRC emacs-lisp
@@ -895,18 +895,23 @@ Bind =M-,= as next in auto-complete, =M-k= as previous.
 
  Some inline example SRC_R[:exports results]{round(pi, 2)}
 
- Autocomplete with =tab=
+** Julia
 
- #+BEGIN_SRC emacs-lisp
- ;; start auto-complete with emacs
- (setq ess-use-company 'script-only)
- #+END_SRC
+#+RESULTS:
 
- #+RESULTS:
- : script-only
+On mac, my julia is installed at weird place
 
- #+RESULTS:
- : company-select-previous
+#+BEGIN_SRC emacs-lisp
+(with-system darwin (yizhe/append-to-path "/Applications/Julia-1.0.app/Contents/Resources/julia/bin"))
+#+END_SRC
+
+Julia repl
+
+#+BEGIN_SRC emacs-lisp
+	(use-package julia-repl)
+#+END_SRC
+
+#+RESULTS:
 
 * =org-mode=
 ** Keyboard shortcuts
@@ -1089,19 +1094,31 @@ Don’t ask before evaluating code blocks.
 Source code that =org-babel= wants to evaluate
 
 #+BEGIN_SRC emacs-lisp
-	(org-babel-do-load-languages
-			 'org-babel-load-languages
-			 '((emacs-lisp . t)
-				 (R . t)
-				 (latex . t)
-				 (python . t)
-				 (shell . t)
-				 (latex . t)
-				 (gnuplot . t)
-				 (sql . t)))
+		(org-babel-do-load-languages
+				 'org-babel-load-languages
+				 '((emacs-lisp . t)
+					 (R . t)
+					 (julia . t)
+					 (latex . t)
+					 (python . t)
+					 (shell . t)
+					 (latex . t)
+					 (gnuplot . t)
+					 (sql . t)))
+#+END_SRC
+
+#+RESULTS
+
+And syntax
+
+#+BEGIN_SRC emacs-lisp
+	(setq org-src-fontify-natively t
+				org-src-tab-acts-natively t)
+
 #+END_SRC
 
 #+RESULTS:
+: t
 
 When editing a code snippet, use the current window rather than popping open a new one (which shows the same information).
 
@@ -1130,5 +1147,17 @@ When editing a code snippet, use the current window rather than popping open a n
 								'("r" "#+BEGIN_SRC R :session *R*\n?\n#+END_SRC"))
  #+END_SRC
 
- #+RESULTS:
- | r | #+BEGIN_SRC R :session *R* |
+*** Julia
+
+=org-babel= functions for julia code evaluation
+
+#+BEGIN_SRC sh
+curl -o ~/.emacs.d/resources/ob-julia.el https://code.orgmode.org/bzg/org-mode/raw/master/contrib/lisp/ob-julia.el
+#+END_SRC
+
+Load =ob-julia= from file
+
+#+BEGIN_SRC emacs-lisp
+	(use-package ob-julia
+		:load-path "~/.emacs.d/resources/ob-julia.el")
+#+END_SRC
