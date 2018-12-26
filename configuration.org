@@ -36,6 +36,16 @@
 #+RESULTS:
 : yizhe/append-to-path
 
+Check OS type
+
+#+BEGIN_SRC emacs-lisp
+(defmacro with-system (type &rest body)
+  "Evaluate BODY if `system-type' equals TYPE."
+  (declare (indent defun))
+  `(when (eq system-type ',type)
+     ,@body))
+#+END_SRC
+
 ** Performance
 
  Allow 20MB of memory (instead of 0.76MB) before calling garbage collection. This
@@ -83,7 +93,7 @@ Store backups and auto-saved files in a fixed location rather in the same direct
 #+RESULTS:
 : 2
 
-** White Spaces
+** Whitespaces
 
 Clean up whitespace when saving
 
@@ -120,7 +130,6 @@ If you save a file that doesn't end with a newline, automatically append one.
 When saving a file that starts with `#!', make it executable.
 
 #+BEGIN_SRC emacs-lisp
-
 	(add-hook 'after-save-hook
 						'executable-make-buffer-file-executable-if-script-p)
 #+END_SRC
@@ -251,7 +260,27 @@ Search keys
 #+RESULTS:
 : isearch-backward
 
+If mac, use command key as meta instead of option
+
+#+BEGIN_SRC emacs-lisp
+; set command key to be meta instead of option
+(with-system darwin
+    (setq mac-command-modifier 'meta))
+#+END_SRC
+
+#+RESULTS:
+: meta
+
 ** TODO Spell Checking
+** TODO Lots of Cursors (configure this)
+
+#+BEGIN_SRC emacs-lisp
+(use-package multiple-cursors
+  :ensure t)
+#+END_SRC
+
+#+RESULTS:
+: mc/mark-all-like-this
 
 #+BEGIN_SRC emacs-lisp
 		(setq-default ispell-program-name "hunspell")
@@ -273,6 +302,26 @@ Search keys
 #+END_SRC
 
 #+RESULTS:
+** TODO Yesnippet
+
+http://www.totherme.org/configs/gds.html#orgheadline14
+
+** Comapny Mode
+
+Complete everything when type
+
+#+BEGIN_SRC emacs-lisp
+	(use-package company
+		:ensure t
+		:defer 5
+		:diminish company-mode
+		:config
+		(use-package company-yasnippet))
+
+#+END_SRC
+
+#+RESULTS:
+: t
 
 * About me
 
@@ -292,8 +341,8 @@ Search keys
 Hide this and that to maximize screen area
 
 #+BEGIN_SRC emacs-lisp
-(menu-bar-mode -1)
-(tool-bar-mode -1)
+(menu-bar-mode 0)
+(tool-bar-mode 0)
 (scroll-bar-mode -1)
 (horizontal-scroll-bar-mode -1)
 
@@ -340,11 +389,6 @@ Use =neotree= to give a nice tree view of project directory
 		(load-theme 'material t)
 		(transparency 93))
 
-(defmacro with-system (type &rest body)
-  "Evaluate BODY if `system-type' equals TYPE."
-  (declare (indent defun))
-  `(when (eq system-type ',type)
-     ,@body))
 #+END_SRC
 
 #+RESULTS:
@@ -352,17 +396,18 @@ Use =neotree= to give a nice tree view of project directory
 
 #+BEGIN_SRC emacs-lisp
 	(with-system gnu/linux
-		(if (daemonp)
-				(add-hook 'after-make-frame-functions
-									(lambda (frame)
-										(with-selected-frame frame (apply-theme))))
-			(apply-theme)))
-	(add-hook 'after-make-frame-functions
+			(if (daemonp)
+					(add-hook 'after-make-frame-functions
 										(lambda (frame)
 											(with-selected-frame frame (apply-theme))))
-	(apply-theme)
-#+END_SRC
+				(apply-theme)))
 
+	(with-system darwin
+		(add-hook 'after-make-frame-functions
+											(lambda (frame)
+												(with-selected-frame frame (apply-theme))))
+		(apply-theme))
+#+END_SRC
 
 #+RESULTS:
 
@@ -394,7 +439,42 @@ Less when hit the key so I can find stuff
 #+RESULTS:
 : 100
 
-* Programming Environments
+** Time
+
+Show a clock
+
+#+BEGIN_SRC emacs-lisp
+(setq display-time-24hr-format t)
+(display-time-mode 1)
+#+END_SRC
+
+#+RESULTS:
+: t
+
+** Minibuffer
+
+Sometimes cursor get stuck in minibuffer is annoying
+
+#+BEGIN_SRC emacs-lisp
+	(setq minibuffer-prompt-properties
+				(quote
+				 (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
+#+END_SRC
+
+#+RESULTS:
+| read-only | t | point-entered | minibuffer-avoid-prompt | face | minibuffer-prompt |
+
+* Programming Languages
+
+Append path of my programs
+
+#+BEGIN_SRC emacs-lisp
+(yizhe/append-to-path "/usr/bin")
+(yizhe/append-to-path "/usr/local/bin")
+#+END_SRC
+
+#+RESULTS:
+| /usr/local/bin | /usr/local/anaconda3/bin | /home/yizhe/Go/bin | /usr/bin | /bin | /usr/sbin | /sbin | /usr/local/Cellar/emacs/26.1_1/libexec/emacs/26.1/x86_64-apple-darwin17.7.0 |
 
 Change tab width to 2 characters
 
@@ -413,6 +493,57 @@ Compilation be more obvious
 #+BEGIN_SRC emacs-lisp
 (setq compilaton-scroll-output t)
 #+END_SRC
+
+** Tramp
+
+Parse =.ssh/config= to figure out users and hosts.
+
+#+BEGIN_SRC
+ (tramp-set-completion-function "ssh"
+           '((tramp-parse-sconfig "/etc/ssh_config")
+             (tramp-parse-sconfig "~/.ssh/config")))
+#+END_SRC
+
+ #+RESULTS:
+ | ssh     | (tramp-parse-sconfig ~/.ssh/config)   |                                         |                                     |
+ | fcp     | (tramp-parse-rhosts /etc/hosts.equiv) | (tramp-parse-shosts ~/.ssh/known_hosts) | (tramp-parse-sconfig ~/.ssh/config) |
+ | psftp   | (tramp-parse-rhosts /etc/hosts.equiv) | (tramp-parse-shosts ~/.ssh/known_hosts) | (tramp-parse-sconfig ~/.ssh/config) |
+ | pscp    | (tramp-parse-rhosts /etc/hosts.equiv) | (tramp-parse-shosts ~/.ssh/known_hosts) | (tramp-parse-sconfig ~/.ssh/config) |
+ | plink   | (tramp-parse-rhosts /etc/hosts.equiv) | (tramp-parse-shosts ~/.ssh/known_hosts) | (tramp-parse-sconfig ~/.ssh/config) |
+ | krlogin | (tramp-parse-rhosts /etc/hosts.equiv) |                                         |                                     |
+ | sg      | (tramp-parse-etc-group /etc/group)    |                                         |                                     |
+ | ksu     | (tramp-parse-passwd /etc/passwd)      |                                         |                                     |
+ | doas    | (tramp-parse-passwd /etc/passwd)      |                                         |                                     |
+ | sudo    | (tramp-parse-passwd /etc/passwd)      |                                         |                                     |
+ | su      | (tramp-parse-passwd /etc/passwd)      |                                         |                                     |
+ | nc      | (tramp-parse-hosts /etc/hosts)        |                                         |                                     |
+ | telnet  | (tramp-parse-hosts /etc/hosts)        |                                         |                                     |
+ | sshx    | (tramp-parse-rhosts /etc/hosts.equiv) | (tramp-parse-shosts ~/.ssh/known_hosts) | (tramp-parse-sconfig ~/.ssh/config) |
+ | remsh   | (tramp-parse-rhosts /etc/hosts.equiv) |                                         |                                     |
+ | rsh     | (tramp-parse-rhosts /etc/hosts.equiv) |                                         |                                     |
+ | rsync   | (tramp-parse-rhosts /etc/hosts.equiv) | (tramp-parse-shosts ~/.ssh/known_hosts) | (tramp-parse-sconfig ~/.ssh/config) |
+ | scpx    | (tramp-parse-rhosts /etc/hosts.equiv) | (tramp-parse-shosts ~/.ssh/known_hosts) | (tramp-parse-sconfig ~/.ssh/config) |
+ | scp     | (tramp-parse-rhosts /etc/hosts.equiv) | (tramp-parse-shosts ~/.ssh/known_hosts) | (tramp-parse-sconfig ~/.ssh/config) |
+ | remcp   | (tramp-parse-rhosts /etc/hosts.equiv) |                                         |                                     |
+ | rcp     | (tramp-parse-rhosts /etc/hosts.equiv) |                                         |                                     |
+ | adb     | (tramp-adb-parse-device-names )       |                                         |                                     |
+
+#+BEGIN_SRC sh /ssh:sphynx:/
+pwd
+#+END_SRC
+
+#+RESULTS:
+: /Users/p2762265/.emacs.d
+
+ Use =tramp= to start a process on remote machine, requires config as below in =.ssh=
+
+ #+BEGIN_EXAMPLE
+	 Host sphynx
+				Hostname sphynx.lab.com
+				User yxu
+				IdentityFile ~/.ssh/my_amazon_key.pem
+				ForwardX11 yes
+ #+END_EXAMPLE
 
 ** Golang
 
@@ -454,7 +585,6 @@ When open a Go source code:
             (flycheck-mode)))
 
 #+END_SRC
-
 
 #+RESULTS:
 | lambda | nil | (set (make-local-variable (quote company-backends)) (quote (company-go))) | (company-mode) | (if (not (string-match go compile-command)) (set (make-local-variable (quote compile-command)) go build -v && go test -v && go vet)) | (flycheck-mode) |
@@ -653,71 +783,130 @@ And mute the start-up message
 
 ** R
 
-Use ESS
+*** ESS - Emacs Speaks Statistics
+
+Enable ess
+
 #+BEGIN_SRC emacs-lisp
-(require 'ess-site)
-;;(setq ess-ask-for-ess-directory nil)
-;;(setq inferior-R-program-name "/usr/local/bin/R")
-(setq ess-local-process-name "R")
-(setq ansi-color-for-comint-mode 'filter)
-(setq comint-scroll-to-bottom-on-input t)
-(setq comint-scroll-to-bottom-on-output t)
-(setq comint-move-point-for-output t)
-(setq ess-eval-visibly-p nil)
+ (use-package ess
+  :ensure t
+  :init (require 'ess-site))
 #+END_SRC
 
 #+RESULTS:
 
-Use R with =org-mode=
+#+BEGIN_SRC
+(setq ess-R-font-lock-keywords
+    '((ess-R-fl-keyword:modifiers . t)
+     (ess-R-fl-keyword:fun-defs . t)
+     (ess-R-fl-keyword:keywords . t)
+     (ess-R-fl-keyword:assign-ops)
+     (ess-R-fl-keyword:constants . t)
+     (ess-fl-keyword:fun-calls . t)
+     (ess-fl-keyword:numbers)
+     (ess-fl-keyword:operators)
+     (ess-fl-keyword:delimiters)
+     (ess-fl-keyword:=)
+     (ess-R-fl-keyword:F&T)
+     (ess-R-fl-keyword:%op%)))
 
-Don't need to double check before evaluate with =C-c C-c=
-
-#+BEGIN_SRC emacs-lisp
-(setq org-confirm-babel-evaluate nil)
-#+END_SRC
-
-Enable graphical output
-
-#+BEGIN_SRC emacs-lisp
-(add-hook 'org-babel-after-execute-hook 'org-display-inline-images)
-(add-hook 'org-mode-hook 'org-display-inline-images)
-#+END_SRC
-
-#+RESULTS:
-| org-display-inline-images | flyspell-mode | org-bullets-mode | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-show-block-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes |
-
-An example is like:
-
-#+BEGIN_SRC R :session *R* :results output graphics :file diamonds.png :bg "transparent"
-library(ggplot2)
-
-ggplot(mpg, aes(displ, hwy, colour = class)) +
-  geom_point()
-#+END_SRC
-
-Some inline example SRC_R[:exports results]{round(pi, 2)}
-
-Autocomplete with =tab=
-
-#+BEGIN_SRC emacs-lisp
-;; start auto-complete with emacs
-(setq ess-use-company 'script-only)
+(add-hook 'ess-mode-hook 'turn-on-pretty-mode)
 #+END_SRC
 
 #+RESULTS:
-: script-only
+| turn-on-pretty-mode | ess-S-mouse-me-menu-commands | ess-r-setup-flymake |
 
-Ac binds M-n, and M-p for navigation in the completion menu, which might be inconvenient if you want it to use in the inferior R. Bind it to something else:
+*** =company-mode=
+
+Activate company mode with ESS
 
 #+BEGIN_SRC emacs-lisp
-(define-key company-active-map (kbd "M-n") nil)
-(define-key company-active-map (kbd "M-p") nil)
-(define-key company-active-map (kbd "M-,") 'company-select-next)
-(define-key company-active-map (kbd "M-k") 'company-select-previous)
+	(setq ess-use-company t
+				company-selection-wrap-around t
+				company-tooltip-align-annotations t
+				company-idle-delay 0.36
+				company-show-numbers t
+				company-tooltip-flip-when-above t
+				company-minimum-prefix-length 2
+				company-tooltip-limit 10)
+
 #+END_SRC
 
 #+RESULTS:
-: company-select-previous
+: 10
+
+Display quick help
+
+#+BEGIN_SRC emacs-lisp
+(define-key company-active-map (kbd "M-h") 'company-show-doc-buffer)
+#+END_SRC
+
+#+RESULTS:
+: company-show-doc-buffer
+
+Completion keys
+
+#+BEGIN_SRC emacs-lisp
+(define-key company-active-map [return] nil)
+(define-key company-active-map [tab] 'company-complete-common)
+(define-key company-active-map (kbd "TAB") 'company-complete-common)
+(define-key company-active-map (kbd "M-TAB") 'company-complete-selection)
+#+End_Src
+
+#+RESULTS:
+: company-complete-selection
+
+Bind =M-,= as next in auto-complete, =M-k= as previous.
+
+ #+BEGIN_SRC emacs-lisp
+ (define-key company-active-map (kbd "M-n") nil)
+ (define-key company-active-map (kbd "M-p") nil)
+ (define-key company-active-map (kbd "M-,") 'company-select-next)
+ (define-key company-active-map (kbd "M-k") 'company-select-previous)
+ #+END_SRC
+
+ An example is like:
+
+ #+BEGIN_SRC R
+	 library(ggplot2)
+
+	 ggplot(mpg, aes(displ, hwy, Colour = class)) +
+			 geom_point() +
+			 geom_abline
+ #+END_SRC
+
+*** Use R with  =org-mode=
+
+ When use R with =org-mode=, Don't need to double check before evaluate with =C-c C-c=
+
+ #+BEGIN_SRC emacs-lisp
+ (setq org-confirm-babel-evaluate nil)
+ #+END_SRC
+
+ Enable graphical output
+
+ #+BEGIN_SRC emacs-lisp
+ (add-hook 'org-babel-after-execute-hook 'org-display-inline-images)
+ (add-hook 'org-mode-hook 'org-display-inline-images)
+ #+END_SRC
+
+ #+RESULTS:
+ | org-display-inline-images | flyspell-mode | org-bullets-mode | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-show-block-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes |
+
+ Some inline example SRC_R[:exports results]{round(pi, 2)}
+
+ Autocomplete with =tab=
+
+ #+BEGIN_SRC emacs-lisp
+ ;; start auto-complete with emacs
+ (setq ess-use-company 'script-only)
+ #+END_SRC
+
+ #+RESULTS:
+ : script-only
+
+ #+RESULTS:
+ : company-select-previous
 
 * =org-mode=
 ** Keyboard shortcuts
@@ -894,21 +1083,22 @@ Don’t ask before evaluating code blocks.
 #+BEGIN_SRC emacs-lisp
 (setq org-confirm-babel-evaluate nil)
 #+END_SRC
+
 ** Source Code
 
 Source code that =org-babel= wants to evaluate
 
 #+BEGIN_SRC emacs-lisp
-(org-babel-do-load-languages
-		 'org-babel-load-languages
-		 '((R . t)
-			 (latex . t)
-			 (emacs-lisp . t)
-			 (python . t)
-			 (shell . t)
-			 (latex . t)
-			 (gnuplot . t)
-			 (sql . t)))
+	(org-babel-do-load-languages
+			 'org-babel-load-languages
+			 '((emacs-lisp . t)
+				 (R . t)
+				 (latex . t)
+				 (python . t)
+				 (shell . t)
+				 (latex . t)
+				 (gnuplot . t)
+				 (sql . t)))
 #+END_SRC
 
 #+RESULTS:

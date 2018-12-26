@@ -20,7 +20,10 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
 	 (quote
-		(htmlize use-package tramp-term smart-mode-line rainbow-delimiters py-autopep8 paredit pallet org-bullets nord-theme neotree multiple-cursors multi-term minions material-theme jedi guide-key go-mode go-autocomplete flycheck evil-magit ess ensime elpy diff-hl auto-compile))))
+		(company htmlize use-package tramp-term smart-mode-line rainbow-delimiters py-autopep8 paredit pallet org-bullets nord-theme neotree multiple-cursors multi-term minions material-theme jedi guide-key go-mode go-autocomplete flycheck evil-magit ess ensime elpy diff-hl auto-compile)))
+ '(tramp-default-host "sphynx.enwd.co.sa.charterlab.com" nil (tramp))
+ '(tramp-default-method "ssh" nil (tramp))
+ '(tramp-default-user "yxu" nil (tramp)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

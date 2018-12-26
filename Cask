@@ -7,6 +7,8 @@
 (depends-on "auto-compile")
 (depends-on "auto-complete")
 (depends-on "cask")
+(depends-on "company")
+(depends-on "company-jedi")
 (depends-on "dash")
 (depends-on "diff-hl")
 (depends-on "elpy")
