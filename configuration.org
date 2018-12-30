@@ -151,6 +151,16 @@ When saving a file that starts with `#!', make it executable.
 #+RESULTS:
 | executable-make-buffer-file-executable-if-script-p | rmail-after-save-hook |
 
+Append path of my programs
+
+#+BEGIN_SRC emacs-lisp
+(yizhe/append-to-path "/usr/bin")
+(yizhe/append-to-path "/usr/local/bin")
+#+END_SRC
+
+#+RESULTS:
+| /usr/local/bin | /usr/bin | /bin | /usr/sbin | /sbin | /usr/local/Cellar/emacs/26.1_1/libexec/emacs/26.1/x86_64-apple-darwin17.7.0 |
+
 ** Files & Directories
 
 Refresh buffer when file had changed
@@ -350,11 +360,10 @@ Hide this and that to maximize screen area
 Change frame name to something more helpful
 
 #+BEGIN_SRC emacs-lisp
-(setq frame-title-format '((:eval (projectile-project-name))))
+;(setq frame-title-format '((:eval (projectile-project-name))))
 #+END_SRC
 
 #+RESULTS:
-| :eval | (projectile-project-name) |
 
 Use =neotree= to give a nice tree view of project directory
 
@@ -457,47 +466,38 @@ Sometimes cursor get stuck in minibuffer is annoying
 #+RESULTS:
 | read-only | t | point-entered | minibuffer-avoid-prompt | face | minibuffer-prompt |
 
-* Programming Languages
+* Programming
+** General
 
-Append path of my programs
+ Change tab width to 2 characters
 
-#+BEGIN_SRC emacs-lisp
-(yizhe/append-to-path "/usr/bin")
-(yizhe/append-to-path "/usr/local/bin")
-#+END_SRC
-
-#+RESULTS:
-| /usr/local/bin | /usr/local/anaconda3/bin | /home/yizhe/Go/bin | /usr/bin | /bin | /usr/sbin | /sbin | /usr/local/Cellar/emacs/26.1_1/libexec/emacs/26.1/x86_64-apple-darwin17.7.0 |
-
-Change tab width to 2 characters
-
-#+BEGIN_SRC emacs-lisp
+ #+BEGIN_SRC emacs-lisp
 (setq-default tab-width 2)
-#+END_SRC
+ #+END_SRC
 
-For camelCase words, move through them as one word
+ For camelCase words, move through them as one word
 
-#+BEGIN_SRC emacs-lisp
+ #+BEGIN_SRC emacs-lisp
 (global-subword-mode 1)
-#+END_SRC
+ #+END_SRC
 
-Compilation be more obvious
+ Compilation be more obvious
 
-#+BEGIN_SRC emacs-lisp
+ #+BEGIN_SRC emacs-lisp
 (setq compilaton-scroll-output t)
-#+END_SRC
+ #+END_SRC
 
-Enable =company-mode=
+ Enable =company-mode=
 
-#+BEGIN_SRC emacs-lisp
+ #+BEGIN_SRC emacs-lisp
 	(use-package company
 		:defer 5
 		:diminish company-mode
 		:config)
 
-#+END_SRC
+ #+END_SRC
 
-#+RESULTS:
+ #+RESULTS:
 
 ** Tramp
 
@@ -549,6 +549,15 @@ pwd
 				IdentityFile ~/.ssh/my_amazon_key.pem
 				ForwardX11 yes
  #+END_EXAMPLE
+
+** Lisp
+
+ Quickly insert a block of elisp:
+
+ #+BEGIN_SRC emacs-lisp
+   (add-to-list 'org-structure-template-alist
+								'("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC"))
+ #+END_SRC
 
 ** Golang
 
@@ -628,14 +637,17 @@ Quickly view git status with =C-x g=
 Enable spellchecking for commit messages.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package magit
-    :bind ("C-x g" . magit-status)
-
-    :config
-    (use-package evil-magit)
-    (setq git-commit-summary-max-length 50)
-    (add-hook 'git-commit-mode-hook 'turn-on-flyspell))
+(use-package magit
+  :pin melpa-stable
+  :commands magit-status magit-blame
+  :init
+  (setq magit-auto-revert-mode nil)
+  (setq magit-last-seen-setup-instructions "1.4.0")
+  :bind ("C-x g" . magit-status))
 #+END_SRC
+
+#+RESULTS:
+: magit-status
 
 Highlight uncommited changes
 
@@ -684,15 +696,12 @@ Use =ipython= interpreter with elpy
 
 #+BEGIN_SRC emacs-lisp
 ;; ipython interpreter
-  (setq python-shell-interpreter "jupyter"
-        python-shell-interpreter-args "console --simple-prompt"
-        python-shell-prompt-detect-failure-warning nil)
-  (add-to-list 'python-shell-completion-native-disabled-interpreters
-               "jupyter")
+(setq python-shell-interpreter "ipython"
+      python-shell-interpreter-args "-i --simple-prompt")
 #+END_SRC
 
 #+RESULTS:
-| jupyter | pypy | ipython |
+: -i --simple-prompt
 
 #+BEGIN_SRC emacs-lisp
 ;; syntax check on the fly
@@ -724,6 +733,17 @@ Format code according to =PEP8= when save:
 
 #+RESULTS:
 : t
+
+#+BEGIN_SRC python :results output
+import numpy
+#+END_SRC
+
+ Quickly insert a block of Python:
+
+ #+BEGIN_SRC emacs-lisp
+   (add-to-list 'org-structure-template-alist
+								'("py" "#+BEGIN_SRC python :results output\n?\n#+END_SRC"))
+ #+END_SRC
 
 ** Shell
 
@@ -773,18 +793,84 @@ Some hooks to =term-mode=:
 =scala-mode= and =sbt-mode= needs to be installed
 
 #+BEGIN_SRC emacs-lisp
-  (use-package scala-mode
-    :interpreter
-    ("scala" . scala-mode))
-  (use-package sbt-mode)
+  (use-package sbt-mode
+    :pin melpa
+    :commands sbt-start sbt-command)
 
+  (use-package scala-mode
+    :pin melpa
+    :interpreter ("scala" . scala-mode))
 #+END_SRC
+
+#+RESULTS:
+: ((scala . scala-mode) (r . ess-r-mode) (Rscript . ess-r-mode) (ruby1.8 . ruby-mode) (ruby1.9 . ruby-mode) (jruby . ruby-mode) (rbx . ruby-mode) (ruby . ruby-mode) (python[0-9.]* . python-mode) (rhino . js-mode) (gjs . js-mode) (nodejs . js-mode) (node . js-mode) (gawk . awk-mode) (nawk . awk-mode) (mawk . awk-mode) (awk . awk-mode) (pike . pike-mode) (\(mini\)?perl5? . perl-mode) (wishx? . tcl-mode) (tcl\(sh\)? . tcl-mode) (expect . tcl-mode) (octave . octave-mode) (scm . scheme-mode) ([acjkwz]sh . sh-mode) (r?bash2? . sh-mode) (dash . sh-mode) (mksh . sh-mode) (\(dt\|pd\|w\)ksh . sh-mode) (es . sh-mode) (i?tcsh . sh-mode) (oash . sh-mode) (rc . sh-mode) (rpm . sh-mode) (sh5? . sh-mode) (tail . text-mode) (more . text-mode) (less . text-mode) (pg . text-mode) (make . makefile-gmake-mode) (guile . scheme-mode) (clisp . lisp-mode) (emacs . emacs-lisp-mode))
 
 And mute the start-up message
 
 #+BEGIN_SRC emacs-lisp
-(setq ensime-startup-notification nil)
+(use-package ensime
+  :init
+  (put 'ensime-auto-generate-config 'safe-local-variable #'booleanp)
+  (setq
+    ensime-startup-snapshot-notification nil
+    ensime-startup-notification nil))
+
 #+END_SRC
+
+#+RESULTS:
+
+*** SBT
+#+BEGIN_SRC emacs-lisp
+;(sbt-command "gen-ensime")
+#+End_Src
+
+Need to tell Sbt to use ensime plugin
+
+ #+BEGIN_SRC scala :tangle (prog1 ".sbt/1.0/plugins/plugins.sbt" (make-directory ".sbt/1.0/plugins" "."))
+addSbtPlugin("org.ensime" % "sbt-ensime" % "2.5.1")
+ #+END_SRC
+
+Also add some sbt global
+
+#+BEGIN_SRC scala :tangle  (prog1 ".sbt/1.0/globals.sbt" (make-directory ".sbt/1.0" "."))
+import org.ensime.EnsimeKeys._
+import org.ensime.EnsimeCoursierKeys._
+
+libraryDependencies += "org.scalatest" % "scalatest_2.12" % "3.0.5" % "test"
+
+// if this isn't set then ensime will create 2.11 and 2.12 specific
+// directories for you in your tree :(
+ensimeIgnoreMissingDirectories in ThisBuild := true
+
+// allow C-c to interrupt the running app NOT kill sbt
+cancelable in Global := true
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+/var/folders/zl/vyy040cj78g3gbtzgml6m_15yggvr0/T/scala-evalh2AdN6:28: [31merror: [0mobject ensime is not a member of package org
+import org.ensime.EnsimeKeys._
+           ^
+/var/folders/zl/vyy040cj78g3gbtzgml6m_15yggvr0/T/scala-evalh2AdN6:28: [31merror: [0mobject ensime is not a member of package org
+import org.ensime.EnsimeCoursierKeys._
+           ^
+/var/folders/zl/vyy040cj78g3gbtzgml6m_15yggvr0/T/scala-evalh2AdN6:29: [31merror: [0mnot found: value ensimeIgnoreMissingDirectories
+ensimeIgnoreMissingDirectories in ThisBuild := true
+^
+/var/folders/zl/vyy040cj78g3gbtzgml6m_15yggvr0/T/scala-evalh2AdN6:29: [31merror: [0mnot found: value ThisBuild
+ensimeIgnoreMissingDirectories in ThisBuild := true
+                                  ^
+/var/folders/zl/vyy040cj78g3gbtzgml6m_15yggvr0/T/scala-evalh2AdN6:29: [31merror: [0mnot found: value cancelable
+cancelable in Global := true
+^
+/var/folders/zl/vyy040cj78g3gbtzgml6m_15yggvr0/T/scala-evalh2AdN6:29: [31merror: [0mnot found: value Global
+cancelable in Global := true
+              ^
+
+ob_scala_eol[35m
+scala> [0m[35m
+scala> [0m
+#+end_example
 
 ** R
 
@@ -895,6 +981,14 @@ Bind =M-,= as next in auto-complete, =M-k= as previous.
 
  Some inline example SRC_R[:exports results]{round(pi, 2)}
 
+
+ Quickly insert a block of R:
+
+ #+BEGIN_SRC emacs-lisp
+   (add-to-list 'org-structure-template-alist
+								'("r" "#+BEGIN_SRC R :session *R*\n?\n#+END_SRC"))
+ #+END_SRC
+
 ** Julia
 
 #+RESULTS:
@@ -905,14 +999,32 @@ On mac, my julia is installed at weird place
 (with-system darwin (yizhe/append-to-path "/Applications/Julia-1.0.app/Contents/Resources/julia/bin"))
 #+END_SRC
 
+#+RESULTS:
+| /Applications/Julia-1.0.app/Contents/Resources/julia/bin | /usr/local/bin | /usr/bin | /bin | /usr/sbin | /sbin | /usr/local/Cellar/emacs/26.1_1/libexec/emacs/26.1/x86_64-apple-darwin17.7.0 |
+
 Julia repl
 
 #+BEGIN_SRC emacs-lisp
-	(use-package julia-repl)
+(use-package julia-repl)
 #+END_SRC
 
 #+RESULTS:
 
+=org-babel= functions for julia code evaluation
+
+#+BEGIN_SRC shell
+curl -o ~/.emacs.d/resources/ob-julia.el https://code.orgmode.org/bzg/org-mode/raw/master/contrib/lisp/ob-julia.el
+#+END_SRC
+
+Load =ob-julia= from file
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ob-julia
+    :load-path "~/.emacs.d/resources/ob-julia.el")
+#+END_SRC
+
+#+RESULTS:
+: t
 * =org-mode=
 ** Keyboard shortcuts
 
@@ -984,6 +1096,13 @@ Quickly visit =configuration.org= file
 
  #+RESULTS:
  | flyspell-mode | org-bullets-mode | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-show-block-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes |
+
+
+Redisplay inline image from [[https://emacs.stackexchange.com/questions/30520/org-mode-c-c-c-c-to-display-inline-image][here]]
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
+#+END_SRC
 
 ** Task Management
 
@@ -1094,18 +1213,21 @@ Don’t ask before evaluating code blocks.
 Source code that =org-babel= wants to evaluate
 
 #+BEGIN_SRC emacs-lisp
-		(org-babel-do-load-languages
-				 'org-babel-load-languages
-				 '((emacs-lisp . t)
-					 (R . t)
-					 (julia . t)
-					 (latex . t)
-					 (python . t)
-					 (shell . t)
-					 (latex . t)
-					 (gnuplot . t)
-					 (sql . t)))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (R . t)
+     (julia . t)
+     (scala . t)
+     (latex . t)
+     (python . t)
+     (shell . t)
+     (latex . t)
+     (gnuplot . t)
+     (sql . t)))
 #+END_SRC
+
+#+RESULTS:
 
 #+RESULTS
 
@@ -1113,8 +1235,7 @@ And syntax
 
 #+BEGIN_SRC emacs-lisp
 	(setq org-src-fontify-natively t
-				org-src-tab-acts-natively t)
-
+				org-src-preserve-indentation t)
 #+END_SRC
 
 #+RESULTS:
@@ -1124,40 +1245,4 @@ When editing a code snippet, use the current window rather than popping open a n
 
 #+BEGIN_SRC emacs-lisp
 (setq org-src-window-setup 'current-window)
-#+END_SRC
-
-#+RESULTS:
-: current-window
-
-*** Emacs Lisp
-
- Quickly insert a block of elisp:
-
- #+BEGIN_SRC emacs-lisp
-   (add-to-list 'org-structure-template-alist
-								'("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC"))
- #+END_SRC
-
-*** R
-
- Quickly insert a block of R:
-
- #+BEGIN_SRC emacs-lisp
-   (add-to-list 'org-structure-template-alist
-								'("r" "#+BEGIN_SRC R :session *R*\n?\n#+END_SRC"))
- #+END_SRC
-
-*** Julia
-
-=org-babel= functions for julia code evaluation
-
-#+BEGIN_SRC sh
-curl -o ~/.emacs.d/resources/ob-julia.el https://code.orgmode.org/bzg/org-mode/raw/master/contrib/lisp/ob-julia.el
-#+END_SRC
-
-Load =ob-julia= from file
-
-#+BEGIN_SRC emacs-lisp
-	(use-package ob-julia
-		:load-path "~/.emacs.d/resources/ob-julia.el")
 #+END_SRC
