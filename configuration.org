@@ -722,6 +722,19 @@ Format code according to =PEP8= when save:
 #+RESULTS:
 | py-autopep8-enable-on-save | flycheck-mode |
 
+=elpy= fix indentation
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'elpy-mode-hook
+	    (lambda ()
+		    (setq-default indent-tabs-mode t)
+		    (setq-default tab-width 2)
+		    (setq-default py-indent-tabs-mode t)
+	    (add-to-list 'write-file-functions 'delete-trailing-whitespace)))
+#+END_SRC
+
+#+RESULTS:
+| (lambda nil (setq-default indent-tabs-mode t) (setq-default tab-width 2) (setq-default py-indent-tabs-mode t) (add-to-list (quote write-file-functions) (quote delete-trailing-whitespace))) | (lambda nil (setq-default indent-tabs-mode t) (setq-default tab-width 4) (setq-default py-indent-tabs-mode t) (add-to-list (quote write-file-functions) (quote delete-trailing-whitespace))) | py-autopep8-enable-on-save | flycheck-mode |
 
 =Jedi= for auto-completion
 
@@ -733,10 +746,6 @@ Format code according to =PEP8= when save:
 
 #+RESULTS:
 : t
-
-#+BEGIN_SRC python :results output
-import numpy
-#+END_SRC
 
  Quickly insert a block of Python:
 
