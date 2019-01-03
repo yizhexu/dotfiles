@@ -27,6 +27,7 @@
 (depends-on "magit")
 (depends-on "material-theme")
 (depends-on "minions")
+(depends-on "moody")
 (depends-on "multi-term")
 (depends-on "multiple-cursors")
 (depends-on "neotree")

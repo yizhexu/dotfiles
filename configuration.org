@@ -393,25 +393,28 @@ Use =neotree= to give a nice tree view of project directory
 
 #+END_SRC
 
-#+RESULTS:
-: with-system
-
 #+BEGIN_SRC emacs-lisp
-	(with-system gnu/linux
-			(if (daemonp)
-					(add-hook 'after-make-frame-functions
-										(lambda (frame)
-											(with-selected-frame frame (apply-theme))))
-				(apply-theme)))
+(use-package material-theme
+  :config
+  (load-theme 'material t)
+	(transparency 93)
+  (let ((line (face-attribute 'mode-line :underline)))
+    (set-face-attribute 'mode-line          nil :overline   line)
+    (set-face-attribute 'mode-line-inactive nil :overline   line)
+    (set-face-attribute 'mode-line-inactive nil :underline  line)
+    (set-face-attribute 'mode-line          nil :box        nil)
+    (set-face-attribute 'mode-line-inactive nil :box        nil)
+    (set-face-attribute 'mode-line-inactive nil :background "#f9f2d9")))
 
-	(with-system darwin
-		(add-hook 'after-make-frame-functions
-											(lambda (frame)
-												(with-selected-frame frame (apply-theme))))
-		(apply-theme))
+(use-package moody
+  :config
+  (setq x-underline-at-descent-line t)
+  (moody-replace-mode-line-buffer-identification)
+  (moody-replace-vc-mode))
 #+END_SRC
 
 #+RESULTS:
+: t
 
 ** Font
 
@@ -466,7 +469,7 @@ Sometimes cursor get stuck in minibuffer is annoying
 #+RESULTS:
 | read-only | t | point-entered | minibuffer-avoid-prompt | face | minibuffer-prompt |
 
-* Programming
+* Language
 ** General
 
  Change tab width to 2 characters
@@ -498,6 +501,42 @@ Sometimes cursor get stuck in minibuffer is annoying
  #+END_SRC
 
  #+RESULTS:
+** Latex
+
+https://emacs.stackexchange.com/questions/18619/org-mode-any-keyboard-shortcut-for-latex-code
+
+Here's my latex
+
+#+BEGIN_SRC emacs-lisp
+(with-system darwin (yizhe/append-to-path "/Library/TeX/texbin/"))
+#+END_SRC
+
+#+RESULTS:
+
+Previous after press space after a dollar sign:
+
+#+BEGIN_SRC emacs-lisp
+(defun krofna-hack ()
+  (when (looking-back (rx "$ "))
+    (save-excursion
+      (backward-char 1)
+      (org-toggle-latex-fragment))))
+
+(add-hook 'org-mode-hook
+          (lambda ()
+            (org-cdlatex-mode)
+            (add-hook 'post-self-insert-hook #'krofna-hack 'append 'local)))
+#+END_SRC
+
+#+RESULTS:
+
+Make it a bit bigger
+
+#+BEGIN_SRC emacs-lisp
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
+#+END_SRC
+
+#+RESULTS:
 
 ** Tramp
 
@@ -533,7 +572,7 @@ Parse =.ssh/config= to figure out users and hosts.
  | rcp     | (tramp-parse-rhosts /etc/hosts.equiv) |                                         |                                     |
  | adb     | (tramp-adb-parse-device-names )       |                                         |                                     |
 
-#+BEGIN_SRC sh /ssh:sphynx:/
+#+BEGIN_SRC shell /ssh:sphynx:/ :results output
 pwd
 #+END_SRC
 
