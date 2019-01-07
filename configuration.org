@@ -62,7 +62,7 @@ Check OS type
 
 ** Performance
 
- Allow 20MB of memory (instead of 0.76MB) before calling garbage collection. This
+ Allow 20M of memory (instead of 0.76MB) before calling garbage collection. This
  means GC runs less often, which speeds up some operations.
 
 	#+BEGIN_SRC emacs-lisp
@@ -286,7 +286,7 @@ Search keys
 
 If mac, use command key as meta instead of option
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC
 ; set command key to be meta instead of option
 (with-system darwin
     (setq mac-command-modifier 'meta))
@@ -393,12 +393,7 @@ Use =neotree= to give a nice tree view of project directory
 
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
-(use-package material-theme
-  :config
-  (load-theme 'material t)
-	(transparency 93)
-  (let ((line (face-attribute 'mode-line :underline)))
+ (let ((line (face-attribute 'mode-line :underline)))
     (set-face-attribute 'mode-line          nil :overline   line)
     (set-face-attribute 'mode-line-inactive nil :overline   line)
     (set-face-attribute 'mode-line-inactive nil :underline  line)
@@ -406,11 +401,18 @@ Use =neotree= to give a nice tree view of project directory
     (set-face-attribute 'mode-line-inactive nil :box        nil)
     (set-face-attribute 'mode-line-inactive nil :background "#f9f2d9")))
 
-(use-package moody
+
+#+BEGIN_SRC emacs-lisp
+(use-package material-theme
   :config
-  (setq x-underline-at-descent-line t)
-  (moody-replace-mode-line-buffer-identification)
-  (moody-replace-vc-mode))
+  (load-theme 'material t)
+	(transparency 93)
+	(let ((line (face-attribute 'mode-line :underline)))
+    (set-face-attribute 'mode-line          nil :overline   line)
+    (set-face-attribute 'mode-line-inactive nil :overline   line)
+    (set-face-attribute 'mode-line-inactive nil :underline  line)
+    (set-face-attribute 'mode-line          nil :box        nil)
+    (set-face-attribute 'mode-line-inactive nil :box        nil)))
 #+END_SRC
 
 #+RESULTS:
@@ -533,7 +535,7 @@ Previous after press space after a dollar sign:
 Make it a bit bigger
 
 #+BEGIN_SRC emacs-lisp
-(setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
 #+END_SRC
 
 #+RESULTS:
@@ -1145,12 +1147,23 @@ Quickly visit =configuration.org= file
  #+RESULTS:
  | flyspell-mode | org-bullets-mode | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-show-block-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes |
 
-
 Redisplay inline image from [[https://emacs.stackexchange.com/questions/30520/org-mode-c-c-c-c-to-display-inline-image][here]]
 
 #+BEGIN_SRC emacs-lisp
 (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
 #+END_SRC
+
+Just show the markup result *bold*, /italic/, -underlined-, =verbatic=,
+#+BEGIN_SRC emacs-lisp
+(setq org-hide-emphasis-markers t)
+#+END_SRC
+
+#+RESULTS:
+: t
+
+** Knowledge Management
+
+Change color for certain text
 
 ** Task Management
 
@@ -1267,17 +1280,12 @@ Source code that =org-babel= wants to evaluate
      (R . t)
      (julia . t)
      (scala . t)
-     (latex . t)
      (python . t)
      (shell . t)
      (latex . t)
      (gnuplot . t)
      (sql . t)))
 #+END_SRC
-
-#+RESULTS:
-
-#+RESULTS
 
 And syntax
 
