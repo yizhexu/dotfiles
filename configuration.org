@@ -458,6 +458,16 @@ Show a clock
 #+RESULTS:
 : t
 
+** Power
+
+#+BEGIN_SRC emacs-lisp
+(with-system darwin
+	(display-battery-mode 1))
+#+END_SRC
+
+#+RESULTS:
+: t
+
 ** Minibuffer
 
 Sometimes cursor get stuck in minibuffer is annoying
