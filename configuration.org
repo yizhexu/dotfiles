@@ -1,3 +1,18 @@
+
+* System Configuration
+
+Nvidia Drivers
+
+#+BEGIN_SRC shell
+pacman -S nvidia nvidia-utils
+#+END_SRC
+
+CUDA - cuDNN
+
+#+BEGIN_SRC shell
+pacman -S cuda cudnn
+#+END_SRC
+
 * Emacs Configuration
 ** Start-up
 
@@ -530,27 +545,10 @@ Here's my latex
 
 #+RESULTS:
 
-Previous after press space after a dollar sign:
-
-#+BEGIN_SRC emacs-lisp
-(defun krofna-hack ()
-  (when (looking-back (rx "$ "))
-    (save-excursion
-      (backward-char 1)
-      (org-toggle-latex-fragment))))
-
-(add-hook 'org-mode-hook
-          (lambda ()
-            (org-cdlatex-mode)
-            (add-hook 'post-self-insert-hook #'krofna-hack 'append 'local)))
-#+END_SRC
-
-#+RESULTS:
-
 Make it a bit bigger
 
 #+BEGIN_SRC emacs-lisp
-(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 2))
 #+END_SRC
 
 #+RESULTS:
@@ -744,24 +742,30 @@ Configure my coda environments
 Use =elpy=, it is nice!
 
 #+BEGIN_SRC emacs-lisp
-;; enable elpy
-(use-package python
-  :ensure t
-  :defer t
-  :mode ("\\.py\\'" . python-mode))
+	;; enable elpy
+	(use-package python
+		:ensure t
+		:defer t
+		:mode ("\\.py\\'" . python-mode)
 
-(use-package elpy
-  :ensure t
-  :after python
-  :config (elpy-enable))
+		:interpreter ("python" . python-mode)
+
+		:init
+		(setq-default indent-tabs-mode nil)
+
+		:config
+		(elpy-enable)
+		(setq python-indent-offset 4)
+		(add-hook 'python-mode-hook 'smartparens-mode)
+		(add-hook 'python-mode-hook 'color-identifiers-mode))
 #+END_SRC
 
 #+RESULTS:
-: t
+: ((python . python-mode) (r . R-mode) (Rscript . R-mode) (ruby1.8 . ruby-mode) (ruby1.9 . ruby-mode) (jruby . ruby-mode) (rbx . ruby-mode) (ruby . ruby-mode) (python[0-9.]* . python-mode) (rhino . js-mode) (gjs . js-mode) (nodejs . js-mode) (node . js-mode) (gawk . awk-mode) (nawk . awk-mode) (mawk . awk-mode) (awk . awk-mode) (pike . pike-mode) (\(mini\)?perl5? . perl-mode) (wishx? . tcl-mode) (tcl\(sh\)? . tcl-mode) (expect . tcl-mode) (octave . octave-mode) (scm . scheme-mode) ([acjkwz]sh . sh-mode) (r?bash2? . sh-mode) (dash . sh-mode) (mksh . sh-mode) (\(dt\|pd\|w\)ksh . sh-mode) (es . sh-mode) (i?tcsh . sh-mode) (oash . sh-mode) (rc . sh-mode) (rpm . sh-mode) (sh5? . sh-mode) (tail . text-mode) (more . text-mode) (less . text-mode) (pg . text-mode) (make . makefile-gmake-mode) (guile . scheme-mode) (clisp . lisp-mode) (emacs . emacs-lisp-mode))
 
 Use =ipython= interpreter with elpy
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC
 ;; ipython interpreter
 (setq python-shell-interpreter "ipython"
       python-shell-interpreter-args "-i --simple-prompt")
@@ -769,16 +773,6 @@ Use =ipython= interpreter with elpy
 
 #+RESULTS:
 : -i --simple-prompt
-
-#+BEGIN_SRC emacs-lisp
-;; syntax check on the fly
-(when (require 'flycheck nil t)
-    (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
-    (add-hook 'elpy-mode-hook 'flycheck-mode))
-#+END_SRC
-
-#+RESULTS:
-| flycheck-mode |
 
 Format code according to =PEP8= when save:
 #+BEGIN_SRC emacs-lisp
@@ -790,6 +784,29 @@ Format code according to =PEP8= when save:
 | py-autopep8-enable-on-save | flycheck-mode |
 
 =elpy= fix indentation
+
+#+BEGIN_SRC emacs-lisp
+(use-package elpy
+  :ensure t
+  :commands elpy-enable
+  :init (with-eval-after-load 'python (elpy-enable))
+
+  :config
+  (electric-indent-local-mode -1)
+  (delete 'elpy-module-highlight-indentation elpy-modules)
+  (delete 'elpy-module-flymake elpy-modules)
+
+  (defun ha/elpy-goto-definition ()
+    (interactive)
+    (condition-case err
+        (elpy-goto-definition)
+      ('error (xref-find-definitions (symbol-name (symbol-at-point))))))
+
+  :bind (:map elpy-mode-map ([remap elpy-goto-definition] .
+                             ha/elpy-goto-definition)))
+#+END_SRC
+
+#+RESULTS:
 
 #+BEGIN_SRC emacs-lisp
 (add-hook 'elpy-mode-hook
@@ -806,9 +823,16 @@ Format code according to =PEP8= when save:
 =Jedi= for auto-completion
 
 #+BEGIN_SRC emacs-lisp
-(add-to-list 'company-backends 'company-jedi)
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:complete-on-dot t)
+(use-package jedi
+  :ensure t
+  :init
+  (add-to-list 'company-backends 'company-jedi)
+  :config
+  (use-package company-jedi
+    :ensure t
+    :init
+    (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi)))
+    (setq company-jedi-python-bin "python")))
 #+END_SRC
 
 #+RESULTS:
