@@ -306,6 +306,8 @@ If mac, use command key as meta instead of option
 #+RESULTS:
 : mc/mark-all-like-this
 
+Dictionary could be downloaded via: [[http://wordlist.aspell.net/dicts/][SCOWL]]
+
 #+BEGIN_SRC emacs-lisp
 		(setq-default ispell-program-name "hunspell")
 		(use-package ispell
@@ -317,7 +319,10 @@ If mac, use command key as meta instead of option
 				 "[^[:alpha:]]"
 				 "[']"
 				 t
-				 ("-d" "en_US" "-p" "/usr/share/hunspell/en_US")
+				 (with-system darwin
+					 ("-d" "en_US" "-p" "/Library/Spelling/en_US"))
+				 (with-system gnu/linux
+					 ("-d" "en_US" "-p" "/usr/share/hunspell/en_US"))
 				 nil
 				 iso-8859-1)
 				))
@@ -740,8 +745,19 @@ Use =elpy=, it is nice!
 
 #+BEGIN_SRC emacs-lisp
 ;; enable elpy
-(elpy-enable)
+(use-package python
+  :ensure t
+  :defer t
+  :mode ("\\.py\\'" . python-mode))
+
+(use-package elpy
+  :ensure t
+  :after python
+  :config (elpy-enable))
 #+END_SRC
+
+#+RESULTS:
+: t
 
 Use =ipython= interpreter with elpy
 
@@ -802,8 +818,10 @@ Format code according to =PEP8= when save:
 
  #+BEGIN_SRC emacs-lisp
    (add-to-list 'org-structure-template-alist
-								'("py" "#+BEGIN_SRC python :results output\n?\n#+END_SRC"))
+								'("py" "#+BEGIN_SRC python :session *Python* :results output\n?\n#+END_SRC"))
  #+END_SRC
+
+ #+RESULTS:
 
 ** Shell
 
@@ -1296,6 +1314,8 @@ Source code that =org-babel= wants to evaluate
      (gnuplot . t)
      (sql . t)))
 #+END_SRC
+
+#+RESULTS:
 
 And syntax
 
