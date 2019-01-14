@@ -1,4 +1,3 @@
-
 * System Configuration
 
 Nvidia Drivers
@@ -825,8 +824,6 @@ Format code according to =PEP8= when save:
 #+BEGIN_SRC emacs-lisp
 (use-package jedi
   :ensure t
-  :init
-  (add-to-list 'company-backends 'company-jedi)
   :config
   (use-package company-jedi
     :ensure t
