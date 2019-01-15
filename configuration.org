@@ -547,7 +547,7 @@ Here's my latex
 Make it a bit bigger
 
 #+BEGIN_SRC emacs-lisp
-(setq org-format-latex-options (plist-put org-format-latex-options :scale 2))
+(setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
 #+END_SRC
 
 #+RESULTS:
@@ -764,7 +764,7 @@ Use =elpy=, it is nice!
 
 Use =ipython= interpreter with elpy
 
-#+BEGIN_SRC
+#+BEGIN_SRC emacs-lisp
 ;; ipython interpreter
 (setq python-shell-interpreter "ipython"
       python-shell-interpreter-args "-i --simple-prompt")
