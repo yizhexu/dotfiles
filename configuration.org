@@ -762,6 +762,23 @@ Use =elpy=, it is nice!
 #+RESULTS:
 : ((python . python-mode) (r . R-mode) (Rscript . R-mode) (ruby1.8 . ruby-mode) (ruby1.9 . ruby-mode) (jruby . ruby-mode) (rbx . ruby-mode) (ruby . ruby-mode) (python[0-9.]* . python-mode) (rhino . js-mode) (gjs . js-mode) (nodejs . js-mode) (node . js-mode) (gawk . awk-mode) (nawk . awk-mode) (mawk . awk-mode) (awk . awk-mode) (pike . pike-mode) (\(mini\)?perl5? . perl-mode) (wishx? . tcl-mode) (tcl\(sh\)? . tcl-mode) (expect . tcl-mode) (octave . octave-mode) (scm . scheme-mode) ([acjkwz]sh . sh-mode) (r?bash2? . sh-mode) (dash . sh-mode) (mksh . sh-mode) (\(dt\|pd\|w\)ksh . sh-mode) (es . sh-mode) (i?tcsh . sh-mode) (oash . sh-mode) (rc . sh-mode) (rpm . sh-mode) (sh5? . sh-mode) (tail . text-mode) (more . text-mode) (less . text-mode) (pg . text-mode) (make . makefile-gmake-mode) (guile . scheme-mode) (clisp . lisp-mode) (emacs . emacs-lisp-mode))
 
+Python indents
+
+#+BEGIN_SRC emacs-lisp
+(setq python-indent-guess-indent-offset t)
+(setq python-indent-guess-indent-offset-verbose nil)
+#+END_SRC
+
+Have been getting this: Warning (python): Your ‘python-shell-interpreter’
+doesn’t seem to support readline, yet ‘python-shell-completion-native’ was t and
+"ipython" is not part of the
+‘python-shell-completion-native-disabled-interpreters’ list. Native completions
+have been disabled locally.
+
+#+BEGIN_SRC emacs-lisp
+(setq python-shell-completion-native-enable nil)
+#+END_SRC
+
 Use =ipython= interpreter with elpy
 
 #+BEGIN_SRC emacs-lisp
