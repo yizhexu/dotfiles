@@ -33,6 +33,7 @@
 (depends-on "neotree")
 (depends-on "nord-theme")
 (depends-on "org-bullets")
+(depends-on "org-plus-contrib")
 (depends-on "package-build")
 (depends-on "pallet")
 (depends-on "paredit")
