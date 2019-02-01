@@ -1468,13 +1468,6 @@ Shortcuts for templates
 
 ** Drill
 
-#+begin_src emacs-lisp
-(use-package anki-editor
-  :ensure t)
-#+end_src
-
-#+RESULTS:
-
 #+BEGIN_SRC emacs-lisp
 (require 'cl)
 #+END_SRC
