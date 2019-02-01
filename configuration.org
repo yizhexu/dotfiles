@@ -1133,7 +1133,7 @@ Bei Dou. It is a Taoist deity known as the God of Culture and Literature. This
 is my directory name for all my org files.
 
 #+BEGIN_SRC emacs-lisp
-	(setq org-directory "~/Documents/megrez")
+	(setq org-directory "~/Documents/megrez/")
 
 	(defun org-file-path (filename)
 		"Return the absolute address of an org file, given its relative name."
@@ -1182,7 +1182,7 @@ Capture todos to inbox.
 
 #+begin_src emacs-lisp
 (setq org-capture-templates '(("t" "Todo [inbox]" entry
-                               (file+headline	(org-file-path "index.org") "Tasks")
+                               (file+headline	org-index-file "Tasks")
                                "* TODO %i%?")
                               ("T" "Tickler" entry
                                (file+headline (org-file-path "tickler.org") "Tickler")
@@ -1190,7 +1190,7 @@ Capture todos to inbox.
 #+end_src
 
 #+RESULTS:
-| t | Todo [inbox] | entry | (file+headline (org-file-path index.org) Tasks)     | * TODO %i%? |
+| t | Todo [inbox] | entry | (file+headline org-index-file Tasks)                | * TODO %i%? |
 | T | Tickler      | entry | (file+headline (org-file-path tickler.org) Tickler) | * %i%?      |
 
 *** Refile Templates
@@ -1203,7 +1203,6 @@ Capture todos to inbox.
 
 #+RESULTS:
 : ((org-file-path projects.org :maxlevel . 3) (org-file-path later.org :level . 1))
-
 
 *** Agenda Categorization
 
@@ -1329,37 +1328,6 @@ Just show the markup result *bold*, /italic/, -underlined-, =verbatic=,
 
 #+RESULTS:
 
-** Task Management
-
-My org file is stored in =~/Documents/org=, finished tasks will be archived in
-=~/Documents/org/archive.org=, and all the tasks stores in
-=~/Documents/org/index.org=
-
-| index.org | Main org file. Inbox for org-capture |
-| yizhe.org | My knowledge management              |
-
-
-Agenda should be derived from =index.org=
-
-#+BEGIN_SRC emacs-lisp
-(setq org-agenda-files (list org-index-file))
-#+END_SRC
-
-#+RESULTS:
-| ~/Documents/org/index.org |
-
-=C-c i= quickly open up todo list
-
-#+BEGIN_SRC emacs-lisp
-(defun open-index-file ()
-  "Open the master org TODO list."
-  (interactive)
-  (find-file org-index-file)
-  (flycheck-mode -1)
-  (end-of-buffer))
-
-(global-set-key (kbd "C-c i") 'open-index-file)
-#+END_SRC
 
 #+RESULTS:
 : open-index-file
@@ -1386,26 +1354,19 @@ Record the time that a todo was archived.
 (setq org-log-done 'time)
 #+END_SRC
 
-*** Capturing Tasks
-
-Probably would need to quickly capture:
-
-- List of todo in =~/Documents/index.org=
+=C-c i= quickly open up todo list
 
 #+BEGIN_SRC emacs-lisp
-	(setq org-capture-templates
-				'(
-					("t" "Todo" entry (file+headline org-index-file "Inbox")
-					 "* TODO %? %U" :empty-lines 1)
+(defun open-index-file ()
+  "Open the master org TODO list."
+  (interactive)
+  (find-file org-index-file)
+  (flycheck-mode -1)
+  (end-of-buffer))
 
-					("s" "Scheduled Todo" entry (file+headline org-index-file "Inbox")
-					 "* TODO %? %^G \nSCHEDULED: %^t\n  %U" :empty-lines 1)
-
-	))
+(global-set-key (kbd "C-c i") 'open-index-file)
 #+END_SRC
 
-#+RESULTS:
-| t | Todo | entry | (file+headline org-index-file Inbox) | basic-task-template |
 ** Exporting
 
 Allow =babel= to evaluate Emacs lisp code
