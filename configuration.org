@@ -1488,3 +1488,10 @@ Shortcuts for templates
 #+END_SRC
 
 #+RESULTS:
+
+Anki editor to use org mode manage my flashcards
+
+#+BEGIN_SRC emacs-lisp
+(use-package anki-editor
+  :ensure t)
+#+END_SRC
