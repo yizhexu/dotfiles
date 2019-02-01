@@ -604,14 +604,6 @@ pwd
  #+END_EXAMPLE
 
 ** Lisp
-
- Quickly insert a block of elisp:
-
- #+BEGIN_SRC emacs-lisp
-   (add-to-list 'org-structure-template-alist
-								'("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC"))
- #+END_SRC
-
 ** Golang
 
 Configure my =$GOPATH= and tell Emacs where my Go binaries are at
@@ -852,16 +844,6 @@ Format code according to =PEP8= when save:
 #+RESULTS:
 : t
 
- Quickly insert a block of Python:
-
- #+BEGIN_SRC emacs-lisp
-   (add-to-list 'org-structure-template-alist
-								'("py" "#+BEGIN_SRC python \n?\n#+END_SRC"))
- #+END_SRC
-
- #+RESULTS:
- | py | #+BEGIN_SRC python |
-
 ** Shell
 
 Indent with 2 spaces.
@@ -1098,14 +1080,6 @@ Bind =M-,= as next in auto-complete, =M-k= as previous.
 
  Some inline example SRC_R[:exports results]{round(pi, 2)}
 
-
- Quickly insert a block of R:
-
- #+BEGIN_SRC emacs-lisp
-   (add-to-list 'org-structure-template-alist
-								'("r" "#+BEGIN_SRC R :session *R*\n?\n#+END_SRC"))
- #+END_SRC
-
 ** Julia
 
 Julia setup on my Arch Linux machine
@@ -1147,9 +1121,118 @@ Load =ob-julia= from file
 #+RESULTS:
 : t
 * =org-mode=
+
+Heavily influenced by [[https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html][this]]
+
+** General Set-up
+
+*** Utility Functions
+
+In China, [[http://www.astronomytrek.com/star-facts-megrez/][Megrez]], along with 6 other stars, forms part of an asterism known as
+Bei Dou. It is a Taoist deity known as the God of Culture and Literature. This
+is my directory name for all my org files.
+
+#+BEGIN_SRC emacs-lisp
+	(setq org-directory "~/Documents/megrez")
+
+	(defun org-file-path (filename)
+		"Return the absolute address of an org file, given its relative name."
+		(concat (file-name-as-directory org-directory) filename))
+#+END_SRC
+
+#+RESULTS:
+: org-file-path
+
+*** Org Files
+
+I use =index.org= to collect everything. =projects.org= to manage projects and
+related tasks. =later.org= to record stuff I might do some other time, like when
+I'm really free. =tickler.org= has all the stuff that's time sensitive.
+
+#+begin_src emacs-lisp
+(setq org-index-file (org-file-path "index.org"))
+#+end_src
+
+#+RESULTS:
+: ~/Documents/megrez/index.org
+
+#+begin_src emacs-lisp
+(setq org-agenda-files
+			'(org-index-file
+				org-file-path "projects.org"
+				org-file-path "tickler.org"))
+#+end_src
+
+#+RESULTS:
+| org-index-file | org-file-path | projects.org | org-file-path | tickler.org |
+
+Archive file record completed tasks =C-c C-x C-a=
+
+#+begin_src emacs-lisp
+(setq org-archive-location
+			(concat (org-file-path "archive.org") "::* From %s"))
+#+end_src
+
+#+RESULTS:
+: ~/Documents/megrez/archive.org::* From %s
+
+*** Capture Templates
+
+Capture todos to inbox.
+
+#+begin_src emacs-lisp
+(setq org-capture-templates '(("t" "Todo [inbox]" entry
+                               (file+headline	(org-file-path "index.org") "Tasks")
+                               "* TODO %i%?")
+                              ("T" "Tickler" entry
+                               (file+headline (org-file-path "tickler.org") "Tickler")
+                               "* %i%? \n %U")))
+#+end_src
+
+#+RESULTS:
+| t | Todo [inbox] | entry | (file+headline (org-file-path index.org) Tasks)     | * TODO %i%? |
+| T | Tickler      | entry | (file+headline (org-file-path tickler.org) Tickler) | * %i%?      |
+
+*** Refile Templates
+
+#+begin_src emacs-lisp
+    (setq org-refile-targets '((org-file-path "projects.org" :maxlevel . 3)
+                               (org-file-path "later.org" :level . 1)
+                               (org-file-path "tickler.org" :maxlevel . 2)))
+#+end_src
+
+#+RESULTS:
+: ((org-file-path projects.org :maxlevel . 3) (org-file-path later.org :level . 1))
+
+
+*** Agenda Categorization
+
+At work
+
+#+begin_src emacs-lisp
+(setq org-agenda-custom-commands
+      '(("o" "At work" tags-todo "@work"
+         ((org-agenda-overriding-header "Work")))))
+#+end_src
+
+Studying
+
+#+begin_src emacs-lisp
+(setq org-agenda-custom-commands
+      '(("s" "Studying" tags-todo "@study"
+         ((org-agenda-overriding-header "Study")))))
+
+#+end_src
+
 ** Keyboard shortcuts
 
 	These are the shortcuts I'm trying to use
+
+- Refile shortcut =C-c C-w=
+- To set a tag =C-c C-c=
+- To schedule =C-c C-s= and enter date or time; =C-c C-d= to add deadline.
+- To set to do key word =C-c C-t=
+
 
 	#+BEGIN_SRC emacs-lisp
 		(global-set-key (kbd "C-c o")
@@ -1160,6 +1243,9 @@ Load =ob-julia= from file
 		(bind-key "<f9> <f9>" 'org-agenda-list)
 		(bind-key "<f9> <f8>" (lambda () (interactive) (org-capture nil "r")))
 	#+END_SRC
+
+	#+RESULTS:
+  | lambda | nil | (interactive) | (org-capture nil r) |
 
 Quickly visit =configuration.org= file
 
@@ -1232,9 +1318,16 @@ Just show the markup result *bold*, /italic/, -underlined-, =verbatic=,
 #+RESULTS:
 : t
 
-** Knowledge Management
+** Table of Content
 
-Change color for certain text
+#+begin_src emacs-lisp
+(use-package toc-org
+    :ensure t
+    :init
+    (add-hook 'org-mode-hook 'toc-org-mode))
+#+end_src
+
+#+RESULTS:
 
 ** Task Management
 
@@ -1245,17 +1338,6 @@ My org file is stored in =~/Documents/org=, finished tasks will be archived in
 | index.org | Main org file. Inbox for org-capture |
 | yizhe.org | My knowledge management              |
 
-#+BEGIN_SRC emacs-lisp
-	(setq org-directory "~/Documents/org")
-
-	(defun org-file-path (filename)
-		"Return the absolute address of an org file, given its relative name."
-		(concat (file-name-as-directory org-directory) filename))
-
-	(setq org-index-file (org-file-path "index.org"))
-	(setq org-archive-location
-				(concat (org-file-path "archive.org") "::* From %s"))
-#+END_SRC
 
 Agenda should be derived from =index.org=
 
@@ -1376,7 +1458,22 @@ When editing a code snippet, use the current window rather than popping open a n
 (setq org-src-window-setup 'current-window)
 #+END_SRC
 
+Shortcuts for templates
+
+ #+BEGIN_SRC emacs-lisp
+;   (add-to-list 'org-structure-template-alist)
+ #+END_SRC
+
+ #+RESULTS:
+
 ** Drill
+
+#+begin_src emacs-lisp
+(use-package anki-editor
+  :ensure t)
+#+end_src
+
+#+RESULTS:
 
 #+BEGIN_SRC emacs-lisp
 (require 'cl)

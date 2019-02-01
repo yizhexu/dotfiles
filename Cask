@@ -3,6 +3,7 @@
 (source "melpa-stable" "http://stable.melpa.org/packages/")
 (source "org" "https://orgmode.org/elpa/")
 
+(depends-on "anki-editor")
 (depends-on "ansi")
 (depends-on "auto-compile")
 (depends-on "auto-complete")
@@ -44,5 +45,6 @@
 (depends-on "shut-up")
 (depends-on "smart-mode-line")
 (depends-on "smartparens")
+(depends-on "toc-org")
 (depends-on "tramp-term")
 (depends-on "use-package")
