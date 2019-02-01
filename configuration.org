@@ -13,6 +13,18 @@ pacman -S cuda cudnn
 #+END_SRC
 
 * Emacs Configuration
+
+** Package
+
+ #+BEGIN_SRC emacs-lisp
+
+(require 'package)
+(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
+#+END_SRC
+
+#+RESULTS:
+: ((gnu . http://elpa.gnu.org/packages/) (melpa . http://melpa.org/packages/) (melpa-stable . http://stable.melpa.org/packages/) (org . https://orgmode.org/elpa/))
+
 ** Start-up
 
  Disable this start-up message
@@ -1446,15 +1458,9 @@ Shortcuts for templates
 : cl
 
 #+BEGIN_SRC emacs-lisp
-  (use-package org-drill
+(use-package org-learn
+    :load-path "~/.emacs.d/resources/org-learn.el")
+
+ (use-package org-drill
     :load-path "~/.emacs.d/resources/org-drill.el")
-#+END_SRC
-
-#+RESULTS:
-
-Anki editor to use org mode manage my flashcards
-
-#+BEGIN_SRC emacs-lisp
-(use-package anki-editor
-  :ensure t)
 #+END_SRC

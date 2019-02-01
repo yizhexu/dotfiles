@@ -3,7 +3,6 @@
 (source "melpa-stable" "http://stable.melpa.org/packages/")
 (source "org" "https://orgmode.org/elpa/")
 
-(depends-on "anki-editor")
 (depends-on "ansi")
 (depends-on "auto-compile")
 (depends-on "auto-complete")
