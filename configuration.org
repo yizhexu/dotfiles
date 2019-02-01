@@ -1367,6 +1367,15 @@ Record the time that a todo was archived.
 (global-set-key (kbd "C-c i") 'open-index-file)
 #+END_SRC
 
+** Reference
+
+#+begin_src emacs-lisp
+(use-package org-ref
+  :ensure t)
+#+end_src
+
+#+RESULTS:
+
 ** Exporting
 
 Allow =babel= to evaluate Emacs lisp code
