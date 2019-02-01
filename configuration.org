@@ -1159,12 +1159,12 @@ I'm really free. =tickler.org= has all the stuff that's time sensitive.
 #+begin_src emacs-lisp
 (setq org-agenda-files
 			'(org-index-file
-				org-file-path "projects.org"
-				org-file-path "tickler.org"))
+				(org-file-path "projects.org")
+				(org-file-path "tickler.org")))
 #+end_src
 
 #+RESULTS:
-| org-index-file | org-file-path | projects.org | org-file-path | tickler.org |
+| org-index-file | (org-file-path projects.org) | (org-file-path tickler.org) |
 
 Archive file record completed tasks =C-c C-x C-a=
 
@@ -1196,13 +1196,13 @@ Capture todos to inbox.
 *** Refile Templates
 
 #+begin_src emacs-lisp
-    (setq org-refile-targets '((org-file-path "projects.org" :maxlevel . 3)
-                               (org-file-path "later.org" :level . 1)
-                               (org-file-path "tickler.org" :maxlevel . 2)))
+    (setq org-refile-targets '(((org-file-path "projects.org") :maxlevel . 3)
+                               ((org-file-path "later.org") :level . 1)
+                               ((org-file-path "tickler.org") :maxlevel . 2)))
 #+end_src
 
 #+RESULTS:
-: ((org-file-path projects.org :maxlevel . 3) (org-file-path later.org :level . 1))
+: (((org-file-path projects.org) :maxlevel . 3) ((org-file-path later.org) :level . 1) ((org-file-path tickler.org) :maxlevel . 2))
 
 *** Agenda Categorization
 
