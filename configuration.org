@@ -1176,13 +1176,13 @@ Capture todos to inbox.
                                (file+headline	org-index-file "Tasks")
                                "* TODO %i%?")
                               ("T" "Tickler" entry
-                               (file+headline (org-file-path "tickler.org") "Tickler")
+                               (file+headline "~/Documents/megrez/tickler.org" "Tickler")
                                "* %i%? \n %U")))
 #+end_src
 
 #+RESULTS:
-| t | Todo [inbox] | entry | (file+headline org-index-file Tasks)                | * TODO %i%? |
-| T | Tickler      | entry | (file+headline (org-file-path tickler.org) Tickler) | * %i%?      |
+| t | Todo [inbox] | entry | (file+headline org-index-file Tasks)                   | * TODO %i%? |
+| T | Tickler      | entry | (file+headline ~/Documents/megrez/tickler.org Tickler) | * %i%?      |
 
 *** Refile Templates
 
@@ -1206,11 +1206,15 @@ Set agenda files
 #+begin_src emacs-lisp
 (setq org-agenda-custom-commands
       '(("s" "Studying" tags-todo "@study"
-         ((org-agenda-overriding-header "Study")))))
+         ((org-agenda-overriding-header "Study")))
+				("w" "At work" tags-todo "@work"
+         ((org-agenda-overriding-header "Work")))))
 #+end_src
 
 #+RESULTS:
 | s | Studying | tags-todo | @study | ((org-agenda-overriding-header Study)) |
+| w | At work  | tags-todo | @work  | ((org-agenda-overriding-header Work))  |
+
 
 ** Keyboard shortcuts
 
