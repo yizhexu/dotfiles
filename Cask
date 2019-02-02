@@ -32,6 +32,7 @@
 (depends-on "multiple-cursors")
 (depends-on "neotree")
 (depends-on "nord-theme")
+(depends-on "org")
 (depends-on "org-bullets")
 (depends-on "org-plus-contrib")
 (depends-on "org-ref")
