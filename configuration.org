@@ -1,19 +1,4 @@
-* System Configuration
-
-Nvidia Drivers
-
-#+BEGIN_SRC shell
-pacman -S nvidia nvidia-utils
-#+END_SRC
-
-CUDA - cuDNN
-
-#+BEGIN_SRC shell
-pacman -S cuda cudnn
-#+END_SRC
-
 * Emacs Configuration
-
 ** Start-up
 
  Disable this start-up message
@@ -21,6 +6,9 @@ pacman -S cuda cudnn
  #+BEGIN_SRC emacs-lisp
  (setq inhibit-startup-screen t)
  #+END_SRC
+
+ #+RESULTS:
+ : t
 
 Load path to custom lisp code
 #+BEGIN_SRC emacs-lisp
@@ -1192,6 +1180,9 @@ Capture todos to inbox.
                            ("~/Documents/megrez/tickler.org" :maxlevel . 2)))
 #+end_src
 
+#+RESULTS:
+: ((~/Documents/megrez/projects.org :maxlevel . 3) (~/Documents/megrez/later.org :level . 1) (~/Documents/megrez/tickler.org :maxlevel . 2))
+
 *** Agenda Categorization
 Set agenda files
 #+begin_src emacs-lisp
@@ -1214,7 +1205,6 @@ Set agenda files
 #+RESULTS:
 | s | Studying | tags-todo | @study | ((org-agenda-overriding-header Study)) |
 | w | At work  | tags-todo | @work  | ((org-agenda-overriding-header Work))  |
-
 
 ** Keyboard shortcuts
 
@@ -1260,8 +1250,9 @@ Quickly visit =configuration.org= file
  (use-package org-bullets
    :init
    (add-hook 'org-mode-hook #'org-bullets-mode))
-
  #+END_SRC
+
+ #+RESULTS:
 
  If there's content under a header, show a little downward pointing arrow from [[https://github.com/hrs/dotfiles][hrs's dotfiles]]
 
@@ -1445,3 +1436,5 @@ Shortcuts for templates
  (use-package org-drill
     :load-path "~/.emacs.d/resources/org-drill.el")
 #+END_SRC
+
+#+RESULTS:
