@@ -10,8 +10,7 @@
 (pallet-mode t)
 
 ;; load literal configuration
-
- (org-babel-load-file
+(org-babel-load-file
   (expand-file-name "configuration.org"
                     user-emacs-directory))
 (custom-set-variables
