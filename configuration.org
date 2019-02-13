@@ -489,6 +489,16 @@ Sometimes cursor get stuck in minibuffer is annoying
 #+RESULTS:
 | read-only | t | point-entered | minibuffer-avoid-prompt | face | minibuffer-prompt |
 
+** Multiple Cursor
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+#+END_SRC
+
+#+RESULTS:
+: mc/mark-previous-like-this
+
 * Language
 ** General
 
