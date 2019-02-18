@@ -438,9 +438,9 @@ Use =neotree= to give a nice tree view of project directory
 
 
 #+BEGIN_SRC emacs-lisp
-(use-package cherry-blossom-theme
+(use-package nord-theme
   :config
-  (load-theme 'cherry-blossom t)
+  (load-theme 'nord t)
 	(transparency 93)
 	(let ((line (face-attribute 'mode-line :underline)))
     (set-face-attribute 'mode-line          nil :overline   line)
@@ -451,7 +451,7 @@ Use =neotree= to give a nice tree view of project directory
 #+END_SRC
 
 #+RESULTS:
-: #s(hash-table size 65 test eql rehash-size 1.5 rehash-threshold 0.8125 data (:use-package (23658 15950 56169 219000) :init (23658 15950 56164 800000) :config (23658 15950 56098 697000) :config-secs (0 0 5829 431000) :init-secs (0 0 39105 169000) :use-package-secs (0 0 566049 142000)))
+: #s(hash-table size 65 test eql rehash-size 1.5 rehash-threshold 0.8125 data (:use-package (23658 18353 789835 12000) :init (23658 18353 789827 337000) :config (23658 18353 789753 800000) :config-secs (0 0 69404 958000) :init-secs (0 0 116604 949000) :use-package-secs (0 0 116650 13000)))
 
 ** Font
 

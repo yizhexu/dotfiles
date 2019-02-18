@@ -28,8 +28,6 @@
 (depends-on "julia-repl")
 (depends-on "magit")
 (depends-on "material-theme")
-(depends-on "minions")
-(depends-on "monokai-theme")
 (depends-on "multi-term")
 (depends-on "multiple-cursors")
 (depends-on "neotree")
