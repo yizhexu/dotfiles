@@ -1,7 +1,7 @@
 # Change Escape Combination to Ctrl+f (Ctrl+a is too useful to lose)
 escape ^Ff
 
-# Bind F11 and F12 (NOT F1 and F2) to previous and next screen window
+# Bind F7 and F8 (NOT F1 and F2) to previous and next screen window
 bindkey -k k7 prev
 bindkey -k k8 next
 
@@ -16,17 +16,18 @@ autodetach on
 altscreen on
 
 # Programs opening by default
-screen -t beeline 1                                                    
+# chdir /data/workspace/yxu/home
+screen -t beeline 1 beeline
 screen -t bash 2
-screen -t spark 3
-
-# window number start at 1
-select 0
-bind c screen 1
-bind 0 select 20
+screen -t spark-shell 3 spark
 
 # Select bash
-select 1
+select 2
+
+# window number start at 1 
+select 0 
+bind c screen 1 
+bind 0 select 20
 
 pow_detach_msg "Screen session of $LOGNAME $:cr:$:nl:ended." # emulate .logout message
 
@@ -47,5 +48,4 @@ termcapinfo rxvt ti@:te@
 
 hardstatus alwayslastline
 hardstatus string "%{+b wk} %-w%{+b wk} %n %t %{-}%+w %41=%H @ %l %-= %= %D,%c:%s "
-# hardstatus string '%{= M} %H%{= B} %l %= %{= w}%-w%{+b r}%n*%t%{-b r}%{w}%+w %= %{c}%d %D %{B}%c '
 # hardstatus string "%?%{rk}%-Lw%?%{Ck}%n*%f %t%?(%u)%?%?%{rk}%+Lw%?%{Yk} | %{mk}%1` %{yk}%=%2`"
