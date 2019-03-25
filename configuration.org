@@ -1192,7 +1192,7 @@ related tasks. =later.org= to record stuff I might do some other time, like when
 I'm really free. =tickler.org= has all the stuff that's time sensitive.
 
 #+begin_src emacs-lisp
-(setq org-index-file (org-file-path "index.org"))
+(setq org-index-file (org-file-path "todo.org"))
 #+end_src
 
 #+RESULTS:
@@ -1224,7 +1224,7 @@ Capture todos to inbox.
 *** Refile Templates
 
 #+begin_src emacs-lisp
-(setq org-refile-targets '(("~/Documents/megrez/index.org" :maxlevel . 3)))
+(setq org-refile-targets '(("~/Documents/megrez/todo.org" :maxlevel . 3)))
 #+end_src
 
 #+RESULTS:
@@ -1233,13 +1233,11 @@ Capture todos to inbox.
 *** Agenda Categorization
 Set agenda files
 #+begin_src emacs-lisp
-(setq org-agenda-files '("~/Documents/megrez/index.org"
-                         "~/Documents/megrez/projects.org"
-                         "~/Documents/megrez/tickler.org"))
+(setq org-agenda-files '("~/Documents/megrez/todo.org"))
 #+end_src
 
 #+RESULTS:
-| ~/Documents/megrez/index.org | ~/Documents/megrez/projects.org | ~/Documents/megrez/tickler.org |
+| ~/Documents/megrez/todo.org |
 
 #+begin_src emacs-lisp
 (setq org-agenda-custom-commands
