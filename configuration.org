@@ -1146,12 +1146,28 @@ Load =ob-julia= from file
 
 #+RESULTS:
 : t
+** SQL
+
+#+begin_src emacs-lisp
+;; I want .hql and .q files to use sql-mode
+(add-to-list 'auto-mode-alist '("\\.hql\\'" . sql-mode))
+(add-to-list 'auto-mode-alist '("\\.q\\'" . sql-mode))
+(autoload 'sql-mode "sql-mode" "SQL editing mode." t)
+(setq sql-mode-hook 'my-sql-customisations)
+(defun my-sql-customisations ()
+  "sql-mode customisations that must be done after sql-mode loads"
+  (add-to-list 'same-window-buffer-names "*SQL*")
+(setq tab-width 2))
+#+end_src
+
+#+RESULTS:
+: my-sql-customisations
+
 * =org-mode=
 
 Heavily influenced by [[https://emacs.cafe/emacs/orgmode/gtd/2017/06/30/orgmode-gtd.html][this]]
 
 ** General Set-up
-
 *** Utility Functions
 
 In China, [[http://www.astronomytrek.com/star-facts-megrez/][Megrez]], along with 6 other stars, forms part of an asterism known as
@@ -1199,26 +1215,20 @@ Capture todos to inbox.
 #+begin_src emacs-lisp
 (setq org-capture-templates '(("t" "Todo [inbox]" entry
                                (file+headline	org-index-file "Tasks")
-                               "* TODO %i%?")
-                              ("T" "Tickler" entry
-                               (file+headline "~/Documents/megrez/tickler.org" "Tickler")
-                               "* %i%? \n %U")))
+                               "* TODO %i%?")))
 #+end_src
 
 #+RESULTS:
-| t | Todo [inbox] | entry | (file+headline org-index-file Tasks)                   | * TODO %i%? |
-| T | Tickler      | entry | (file+headline ~/Documents/megrez/tickler.org Tickler) | * %i%?      |
+| t | Todo [inbox] | entry | (file+headline org-index-file Tasks) | * TODO %i%? |
 
 *** Refile Templates
 
 #+begin_src emacs-lisp
-(setq org-refile-targets '(("~/Documents/megrez/projects.org" :maxlevel . 3)
-                           ("~/Documents/megrez/later.org" :level . 1)
-                           ("~/Documents/megrez/tickler.org" :maxlevel . 2)))
+(setq org-refile-targets '(("~/Documents/megrez/index.org" :maxlevel . 3)))
 #+end_src
 
 #+RESULTS:
-: ((~/Documents/megrez/projects.org :maxlevel . 3) (~/Documents/megrez/later.org :level . 1) (~/Documents/megrez/tickler.org :maxlevel . 2))
+: ((~/Documents/megrez/index.org :maxlevel . 3))
 
 *** Agenda Categorization
 Set agenda files
@@ -1335,7 +1345,6 @@ Just show the markup result *bold*, /italic/, -underlined-, =verbatic=
 
 #+RESULTS:
 | visual-line-mode | #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] | org-ref-org-menu | toc-org-mode | org-bullets-mode | org-display-inline-images | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes | org-eldoc-load |
-
 
 ** Table of Content
 

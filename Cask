@@ -46,6 +46,7 @@
 (depends-on "shut-up")
 (depends-on "smart-mode-line")
 (depends-on "smartparens")
+(depends-on "sqlup-mode")
 (depends-on "toc-org")
 (depends-on "tramp-term")
 (depends-on "use-package")
