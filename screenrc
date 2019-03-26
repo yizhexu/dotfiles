@@ -1,0 +1,51 @@
+# Change Escape Combination to Ctrl+f (Ctrl+a is too useful to lose)
+escape ^Ff
+
+# Bind F7 and F8 (NOT F1 and F2) to previous and next screen window
+bindkey -k k7 prev
+bindkey -k k8 next
+
+# Make screen load bash profile
+shell -$SHELL
+shelltitle    sh
+
+# auto detach
+autodetach on
+
+# To clear the screen after closing some programs
+altscreen on
+
+# Programs opening by default
+# chdir /data/workspace/yxu/home
+screen -t beeline 1 beeline
+screen -t bash 2
+screen -t spark-shell 3 spark
+
+# Select bash
+select 2
+
+# window number start at 1 
+select 0 
+bind c screen 1 
+bind 0 select 20
+
+pow_detach_msg "Screen session of $LOGNAME $:cr:$:nl:ended." # emulate .logout message
+
+# Make it colorful
+term screen-256color
+terminfo rxvt-unicode 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+
+bindkey -k k9 kill # Bind F9 to kill current screen
+
+# hardcopydir:  The directory which contains all hardcopies.
+hardcopydir ~/.screen
+
+# More scroll back
+defscrollback 5000
+
+# enable SHIFT-PGUP / SHIFT-PGDOWN scroll
+termcapinfo rxvt ti@:te@
+
+hardstatus alwayslastline
+hardstatus string "%{+b wk} %-w%{+b wk} %n %t %{-}%+w %41=%H @ %l %-= %= %D,%c:%s "
+# hardstatus string "%?%{rk}%-Lw%?%{Ck}%n*%f %t%?(%u)%?%?%{rk}%+Lw%?%{Yk} | %{mk}%1` %{yk}%=%2`"

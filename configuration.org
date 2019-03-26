@@ -1401,7 +1401,20 @@ Record the time that a todo was archived.
   :ensure t)
 #+end_src
 
-#+RESULTS:
+#+begin_src emacs-lisp
+;; setup org-ref
+(setq org-ref-bibliography-notes "~/Documents/megrez/notes.org"
+      org-ref-default-bibliography '("~/Documents/megrez/references.bib")
+      org-ref-pdf-directory "~/Documents/reference/")
+
+(unless (file-exists-p org-ref-pdf-directory)
+  (make-directory org-ref-pdf-directory t))
+
+;; Some org-mode customization
+(setq org-src-fontify-natively t
+      org-confirm-babel-evaluate nil
+      org-src-preserve-indentation t)
+#+end_src
 
 ** Exporting
 
