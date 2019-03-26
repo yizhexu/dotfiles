@@ -1336,7 +1336,6 @@ Just show the markup result *bold*, /italic/, -underlined-, =verbatic=
 #+RESULTS:
 | visual-line-mode | #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] | org-ref-org-menu | toc-org-mode | org-bullets-mode | org-display-inline-images | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes | org-eldoc-load |
 
-
 ** Table of Content
 
 #+begin_src emacs-lisp
@@ -1394,7 +1393,20 @@ Record the time that a todo was archived.
   :ensure t)
 #+end_src
 
-#+RESULTS:
+#+begin_src emacs-lisp
+;; setup org-ref
+(setq org-ref-bibliography-notes "~/Documents/megrez/notes.org"
+      org-ref-default-bibliography '("~/Documents/megrez/references.bib")
+      org-ref-pdf-directory "~/Documents/reference/")
+
+(unless (file-exists-p org-ref-pdf-directory)
+  (make-directory org-ref-pdf-directory t))
+
+;; Some org-mode customization
+(setq org-src-fontify-natively t
+      org-confirm-babel-evaluate nil
+      org-src-preserve-indentation t)
+#+end_src
 
 ** Exporting
 
