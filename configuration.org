@@ -1198,7 +1198,7 @@ I'm really free. =tickler.org= has all the stuff that's time sensitive.
 #+RESULTS:
 : ~/Documents/megrez/index.org
 
-Archive file record completed tasks =C-c C-x C-a=
+qArchive file record completed tasks =C-c C-x C-a=
 
 #+begin_src emacs-lisp
 (setq org-archive-location
@@ -1224,11 +1224,11 @@ Capture todos to inbox.
 *** Refile Templates
 
 #+begin_src emacs-lisp
-(setq org-refile-targets '(("~/Documents/megrez/todo.org" :maxlevel . 3)))
+(setq org-refile-targets '(("~/Documents/megrez/todo.org" :maxlevel . 2)))
 #+end_src
 
 #+RESULTS:
-: ((~/Documents/megrez/index.org :maxlevel . 3))
+: ((~/Documents/megrez/todo.org :maxlevel . 2))
 
 *** Agenda Categorization
 Set agenda files
