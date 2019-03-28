@@ -1065,7 +1065,6 @@ Actionable URLs in Emacs buffers via [[http://xenodium.com/#actionable-urls-in-e
            ("C-c a" . org-agenda)
            ("C-c b" . org-iswitchb)
            ("C-c M-k" . org-cut-subtree)
-           ("<down>" . org-insert-todo-heading)
            :map org-mode-map
            ("C-c >" . org-time-stamp-inactive))
     :custom-face
@@ -1124,6 +1123,7 @@ Actionable URLs in Emacs buffers via [[http://xenodium.com/#actionable-urls-in-e
      `(org-block-end-line ((t (:background "#000000"))))))
 
 #+END_SRC
+
 ** Pretty Bullet
 
 #+BEGIN_SRC emacs-lisp
@@ -1132,6 +1132,7 @@ Actionable URLs in Emacs buffers via [[http://xenodium.com/#actionable-urls-in-e
     :config
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 #+END_SRC
+
 ** Org Package
 *** org-modules
 
