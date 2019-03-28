@@ -1,6 +1,5 @@
 *
 !.gitignore
 !init.el
-!configuration.org
-!Cask
+!config.org
 !resources/**.el
