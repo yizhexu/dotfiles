@@ -16,7 +16,7 @@
                            ("org" . "https://orgmode.org/elpa/")))
   (package-initialize)
 
-  (setq load-prefer-newer t)
+  ;(setq load-prefer-newer t)
 #+end_src
 
 ** Use-Package
@@ -285,15 +285,11 @@ Visual indication of matching pairs of parentheses
     (sp-local-pair "=" "=")
     (sp-local-pair "*" "*")
     (sp-local-pair "/" "/")
-    (sp-local-pair "_" "_")
-    (sp-local-pair "+" "+")
     (sp-local-pair "<" ">")
     (sp-local-pair "[" "]"))
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode)))
 #+END_SRC
-
-*** TODO (bind-key "s" 'smartparens-mode toggle-map)
 ** Whitespace
 
 #+BEGIN_SRC emacs-lisp
@@ -347,7 +343,6 @@ Visual indication of matching pairs of parentheses
 #+END_SRC
 
 * Security
-
 ** TLS
 
 #+BEGIN_SRC emacs-lisp
@@ -425,7 +420,6 @@ Make C-n insert new lines if the point is at the end of the buffer.
 (setq next-line-add-newlines t)
 #+END_SRC
 ** Scrolling
-
 There are lots of neat ways of moving around quickly in a
 buffer. (Source: [[http://whattheemacsd.com/key-bindings.el-02.html][What the .emacs.d?]])
 
@@ -959,7 +953,6 @@ function.
 #+END_SRC
 
 ** Selected
-
  #+BEGIN_SRC emacs-lisp
  (use-package selected
    :commands selected-minor-mode
@@ -980,18 +973,6 @@ function.
                :map selected-org-mode-map
                ("t" . org-table-convert-region)))
  #+END_SRC
-
-** Beginend
-
-Redefine M-< and M-> (or any key bound to beginning-of-buffer or
-end-of-buffer) for some modes so that point moves to meaningful
-locations.
-
-#+BEGIN_SRC emacs-lisp
-(use-package beginend
-  :init
-  (beginend-global-mode))
-#+END_SRC
 
 ** Actionable URL’s
 
@@ -1015,6 +996,7 @@ Actionable URLs in Emacs buffers via [[http://xenodium.com/#actionable-urls-in-e
 (use-package emojify
   :init (global-emojify-mode))
 #+END_SRC
+
 ** Line Numbering
 
 #+BEGIN_SRC emacs-lisp
@@ -1024,14 +1006,15 @@ Actionable URLs in Emacs buffers via [[http://xenodium.com/#actionable-urls-in-e
   :config
   (setq linum-relative-current-symbol ""))
 #+END_SRC
+
 ** Indenting
 
 #+BEGIN_SRC emacs-lisp
-(use-package aggressive-indent
-  :init
-  (global-aggressive-indent-mode 1)
-  (add-to-list 'aggressive-indent-excluded-modes 'html-mode)
-  (unbind-key "C-c C-q" aggressive-indent-mode-map))
+  (use-package aggressive-indent
+    :init
+    (global-aggressive-indent-mode 1)
+    (add-to-list 'aggressive-indent-excluded-modes 'html-mode 'scala-mode 'sbt-mode)
+    (unbind-key "C-c C-q" aggressive-indent-mode-map))
 #+END_SRC
 
 * Browsing
@@ -1081,6 +1064,7 @@ Actionable URLs in Emacs buffers via [[http://xenodium.com/#actionable-urls-in-e
           org-special-ctrl-a/e t
           org-special-ctrl-k t
           org-yank-adjusted-subtrees t
+          org-src-window-setup 'current-window
           org-file-apps
           '((auto-mode . emacs)
             ("\\.mm\\'" . default)
@@ -1125,10 +1109,8 @@ Actionable URLs in Emacs buffers via [[http://xenodium.com/#actionable-urls-in-e
  #+END_SRC
 
 *** org-habits
-I use the org-habits module.
 
-#+begin_src emacs-lis
-#+
+#+begin_src emacs-lisp
 (setq org-habit-graph-column 105)
 
 (defun org-make-habit ()
@@ -1289,7 +1271,6 @@ This function opens the agenda in full screen.
       (beginning-of-buffer))))
 
 (bind-key "<f5>" 'open-agenda)
-(bind-key "a" 'open-agenda launcher-map)
 #+end_src
 
 *** Close Other Windows
@@ -1397,69 +1378,82 @@ The first Emacs Lisp that I ever wrote was to configure my capture templates!
          "* MAYBE %?\n")
         ("l" "Log" entry (file+olp+datetree "~/org/log.org" "Log")
          (file "~/org/templates/logtemplate.org"))))
-Clocking
-I really like Org-mode’s clocking functionality. I mostly use it for keeping time of billable tasks.
+*** Clocking
 
-Configuration
-(setq org-log-done 'time
-      org-clock-idle-time nil
-      org-clock-continuously nil
-      org-clock-persist t
-      org-clock-in-switch-to-state "STARTED"
-      org-clock-in-resume nil
-      org-clock-report-include-clocking-task t
-      org-clock-out-remove-zero-time-clocks t
-      ;; Too many clock entries clutter up a heading
-      org-log-into-drawer t
-      org-clock-into-drawer 1)
-Remove Empty Logbook Drawers
-Remove empty LOGBOOK drawers on clock out, from Michael Englehorn’s Emacs Configuration. This Stack Overflow post shows the fix to the bug in the original function (remove the “LOGBOOK” specification).
+Use clocking to track time spend on tasks
+**** Configuration
 
-(defun bh/remove-empty-drawer-on-clock-out ()
-  (interactive)
-  (save-excursion
-    (beginning-of-line 0)
-    (org-remove-empty-drawer-at (point))))
+#+BEGIN_SRC emacs-lisp
+  (setq org-log-done 'time
+        org-clock-idle-time nil
+        org-clock-continuously nil
+        org-clock-persist t
+        org-clock-in-switch-to-state "STARTED"
+        org-clock-in-resume nil
+        org-clock-report-include-clocking-task t
+        org-clock-out-remove-zero-time-clocks t
+        ;; Too many clock entries clutter up a heading
+        org-log-into-drawer t
+        org-clock-into-drawer 1)
+#+END_SRC
+**** Remove Empty Logbook Drawers
 
-(add-hook 'org-clock-out-hook 'bh/remove-empty-drawer-on-clock-out 'append)
-Key Bindings
-However, there are a lot of commands for clocking; this is a perfect instance for a Hydra.
+Remove empty LOGBOOK drawers on clock out, from [[https://michael.englehorn.com/config.html][Michael Englehorn's
+Emacs Configuration]]. This [[https://stackoverflow.com/questions/21767471/org-capture-and-time-clocking-misbehaving#21797427][Stack Overflow post]] shows the fix to the bug
+in the original function (remove the "LOGBOOK" specification).
 
-(defhydra hydra-org-clock (:color blue :hint nil)
-  "
-Clock   In/out^     ^Edit^   ^Summary     (_?_)
------------------------------------------
-        _i_n         _e_dit   _g_oto entry
-        _c_ontinue   _q_uit   _d_isplay
-        _o_ut        ^ ^      _r_eport
-      "
-  ("i" org-clock-in)
-  ("o" org-clock-out)
-  ("c" org-clock-in-last)
-  ("e" org-clock-modify-effort-estimate)
-  ("q" org-clock-cancel)
-  ("g" org-clock-goto)
-  ("d" org-clock-display)
-  ("r" org-clock-report)
-  ("?" (org-info "Clocking commands")))
+#+BEGIN_SRC emacs-lisp
+  (defun bh/remove-empty-drawer-on-clock-out ()
+    (interactive)
+    (save-excursion
+      (beginning-of-line 0)
+      (org-remove-empty-drawer-at (point))))
 
-(defhydra hydra-org-agenda-clock (:color blue :hint nil)
-  "
-Clock   In/out^
------------------------------------------
-        _i_n
-        _g_oto entry
-        _o_ut
-        _q_uit
-      "
-  ("i" org-agenda-clock-in)
-  ("o" org-agenda-clock-out)
-  ("q" org-agenda-clock-cancel)
-  ("g" org-agenda-clock-goto))
+  (add-hook 'org-clock-out-hook 'bh/remove-empty-drawer-on-clock-out 'append)
+#+END_SRC
 
-(bind-keys ("C-c w" . hydra-org-clock/body)
-           :map org-agenda-mode-map
-           ("C-c w" . hydra-org-agenda-clock/body))
+**** Key Bindings
+
+However, there are a *lot* of commands for clocking; this is a perfect instance for a Hydra.
+
+#+BEGIN_SRC emacs-lisp
+  (defhydra hydra-org-clock (:color blue :hint nil)
+    "
+  Clock   In/out^     ^Edit^   ^Summary     (_?_)
+  -----------------------------------------
+          _i_n         _e_dit   _g_oto entry
+          _c_ontinue   _q_uit   _d_isplay
+          _o_ut        ^ ^      _r_eport
+        "
+    ("i" org-clock-in)
+    ("o" org-clock-out)
+    ("c" org-clock-in-last)
+    ("e" org-clock-modify-effort-estimate)
+    ("q" org-clock-cancel)
+    ("g" org-clock-goto)
+    ("d" org-clock-display)
+    ("r" org-clock-report)
+    ("?" (org-info "Clocking commands")))
+
+  (defhydra hydra-org-agenda-clock (:color blue :hint nil)
+    "
+  Clock   In/out^
+  -----------------------------------------
+          _i_n
+          _g_oto entry
+          _o_ut
+          _q_uit
+        "
+    ("i" org-agenda-clock-in)
+    ("o" org-agenda-clock-out)
+    ("q" org-agenda-clock-cancel)
+    ("g" org-agenda-clock-goto))
+
+  (bind-keys ("C-c w" . hydra-org-clock/body)
+             :map org-agenda-mode-map
+             ("C-c w" . hydra-org-agenda-clock/body))
+#+END_SRC
+
 Drag and Drop
 (use-package org-download)
 Refiling
@@ -1512,7 +1506,7 @@ Sentence-End
 #+begin_src emacs-lisp
 (defun open-todo-file ()
   (interactive)
-  (find-file "~/org/todo.org"))
+  (find-file "~/Documents/megrez/todo.org"))
 
 (bind-key "C-c t" 'open-todo-file)
 #+end_src
@@ -1549,18 +1543,30 @@ From an appendix in Intro to Emacs Lisp.
 
 * Functions
 ** Emacs Configuration File
-This function and the corresponding keybinding allows me to rapidly access my configuration. They are adapted from Bozhidar Batsov’s post on Emacs Redux.
+This function and the corresponding keybinding allows me to rapidly
+access my configuration. They are adapted from Bozhidar Batsov’s post
+on Emacs Redux.
 
-I use mwf-init-file rather than user-init-file, because I edit the config file in a Git repo.
+#+begin_src emacs-lisp
+  (defun find-config-file ()
+    "Edit my emacs config file"
+    (interactive)
+    (let ((config-file "~/.emacs.d/config.org"))
+      (find-file config-file)))
+
+  (bind-key "C-c e" 'find-config-file)
+#+end_src
+
+I use mwf-init-file rather than user-init-file, because I edit the
+  config file in a Git repo.
 
 #+BEGIN_SRC emacs-lisp
-(defun find-init-file ()
-  "Edit my init file in another window."
-  (interactive)
-  (let ((mwf-init-file "~/.emacs.d/config.org"))
-    (find-file mwf-init-file)))
+  (defun find-init-file ()
+    "Edit my init file in another window."
+    (interactive)
+    (let ((mwf-init-file "~/.emacs.d/init.el"))
+      (find-file mwf-init-file)))
 
-(bind-key "C-c e" 'find-init-file)
 #+END_SRC
 
 Relatedly, I often want to reload my init-file. This will actually use the system-wide user-init-file variable.
@@ -1571,5 +1577,5 @@ Relatedly, I often want to reload my init-file. This will actually use the syste
   (interactive)
   (load-file user-init-file))
 
-(bind-key "C-c M-l" 'reload-init-file)
+(bind-key "C-c M-i" 'reload-init-file)
 #+END_SRC
