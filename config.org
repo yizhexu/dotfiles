@@ -1013,7 +1013,7 @@ Actionable URLs in Emacs buffers via [[http://xenodium.com/#actionable-urls-in-e
   (use-package aggressive-indent
     :init
     (global-aggressive-indent-mode 1)
-    (add-to-list 'aggressive-indent-excluded-modes 'html-mode 'scala-mode 'sbt-mode)
+    (add-to-list 'aggressive-indent-excluded-modes 'html-mode 'scala-mode)
     (unbind-key "C-c C-q" aggressive-indent-mode-map))
 #+END_SRC
 
