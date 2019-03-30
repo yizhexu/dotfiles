@@ -1099,8 +1099,7 @@ Actionable URLs in Emacs buffers via [[http://xenodium.com/#actionable-urls-in-e
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 #+END_SRC
 
-** Org Package
-*** org-modules
+** org-modules
 
  #+BEGIN_SRC emacs-lisp
  (require 'org-install)
@@ -1108,7 +1107,7 @@ Actionable URLs in Emacs buffers via [[http://xenodium.com/#actionable-urls-in-e
  (org-load-modules-maybe t)
  #+END_SRC
 
-*** org-habits
+** org-habits
 
 #+begin_src emacs-lisp
 (setq org-habit-graph-column 105)
@@ -1118,7 +1117,7 @@ Actionable URLs in Emacs buffers via [[http://xenodium.com/#actionable-urls-in-e
   (org-set-property "STYLE" "habit"))
 #+end_src
 
-*** org-gcal
+** org-gcal
 
 #+begin_src emacs-lis
 (use-package org-gcal
