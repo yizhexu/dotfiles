@@ -3,7 +3,7 @@
 #+begin_src emacs-lisp
   (setq user-full-name "Yizhe Xu"
         user-mail-address "me@yizhexu.com"
-        calendar-latitude 39.670397,
+        calendar-latitude 39.670397
         calendar-longitude -104.984643)
 #+end_src
 
@@ -509,7 +509,7 @@ have been so useful!
 (bind-key "C-h C-l" 'open-interaction-log)
 #+END_SRC
 
-* Programming and Development
+* Programming
 ** Path
 
 Append path of my programs
@@ -616,9 +616,6 @@ Testing this out
     :pin melpa
     :interpreter ("scala" . scala-mode))
 #+END_SRC
-
-#+RESULTS:
-: ((scala . scala-mode) (r . ess-r-mode) (Rscript . ess-r-mode) (ruby1.8 . ruby-mode) (ruby1.9 . ruby-mode) (jruby . ruby-mode) (rbx . ruby-mode) (ruby . ruby-mode) (python[0-9.]* . python-mode) (rhino . js-mode) (gjs . js-mode) (nodejs . js-mode) (node . js-mode) (gawk . awk-mode) (nawk . awk-mode) (mawk . awk-mode) (awk . awk-mode) (pike . pike-mode) (\(mini\)?perl5? . perl-mode) (wishx? . tcl-mode) (tcl\(sh\)? . tcl-mode) (expect . tcl-mode) (octave . octave-mode) (scm . scheme-mode) ([acjkwz]sh . sh-mode) (r?bash2? . sh-mode) (dash . sh-mode) (mksh . sh-mode) (\(dt\|pd\|w\)ksh . sh-mode) (es . sh-mode) (i?tcsh . sh-mode) (oash . sh-mode) (rc . sh-mode) (rpm . sh-mode) (sh5? . sh-mode) (tail . text-mode) (more . text-mode) (less . text-mode) (pg . text-mode) (make . makefile-gmake-mode) (guile . scheme-mode) (clisp . lisp-mode) (emacs . emacs-lisp-mode))
 
 And mute the start-up message
 
@@ -840,6 +837,30 @@ Format code according to =PEP8= when save:
     (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi)))
     (setq company-jedi-python-bin "python")))
 #+END_SRC
+** Julia
+*** On Mac
+#+BEGIN_SRC emacs-lisp
+  (when (is-mac-p)
+    (yizhe/append-to-path "/Applications/Julia-1.0.app/Contents/Resources/julia/bin"))
+#+END_SRC
+
+*** Julia repl
+
+#+BEGIN_SRC emacs-lisp
+(use-package julia-repl)
+#+END_SRC
+
+*** ob-julia
+
+#+BEGIN_SRC shell
+curl -o ~/.emacs.d/resources/ob-julia.el https://code.orgmode.org/bzg/org-mode/raw/master/contrib/lisp/ob-julia.el
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ob-julia
+    :load-path "~/.emacs.d/resources")
+#+END_SRC
+
 ** Regexp
 
 Regexes are great. Not everyone knows them, and most user interfaces
@@ -940,93 +961,8 @@ function.
   :delight)
 #+END_SRC
 
-* Editing
-** Expand
-
-#+BEGIN_SRC emacs-lisp
-(use-package expand-region
-  :bind (("C-@" . er/expand-region)
-         ("C-=" . er/expand-region)
-         ("M-3" . er/expand-region)))
-
-(pending-delete-mode t)
-#+END_SRC
-
-** Selected
- #+BEGIN_SRC emacs-lisp
- (use-package selected
-   :commands selected-minor-mode
-   :init
-   (setq selected-org-mode-map (make-sparse-keymap))
-   (selected-global-mode 1)
-   :bind (:map selected-keymap
-               ("e" . er/expand-region)
-               ("i" . indent-region)
-               ("l" . downcase-region)
-               ("m" . apply-macro-to-region-lines)
-               ("q" . selected-off)
-               ("r" . reverse-region)
-               ("s" . sort-lines)
-               ("u" . upcase-region)
-               ("w" . count-words-region)
-               ("y" . yank)
-               :map selected-org-mode-map
-               ("t" . org-table-convert-region)))
- #+END_SRC
-
-** Actionable URL’s
-
-Actionable URLs in Emacs buffers via [[http://xenodium.com/#actionable-urls-in-emacs-buffers][Álvaro Ramírez]].
-
-#+BEGIN_SRC emacs-lisp
-(use-package goto-addr
-  :hook ((compilation-mode . goto-address-mode)
-         (prog-mode . goto-address-prog-mode)
-         (eshell-mode . goto-address-mode)
-         (shell-mode . goto-address-mode))
-  :bind (:map goto-address-highlight-keymap
-              ("C-c C-o" . goto-address-at-point))
-  :commands (goto-address-prog-mode
-             goto-address-mode))
-#+END_SRC
-
-** Emojis
-
-#+BEGIN_SRC emacs-lisp
-(use-package emojify
-  :init (global-emojify-mode))
-#+END_SRC
-
-** Line Numbering
-
-#+BEGIN_SRC emacs-lisp
-(use-package linum-relative
-  :init
-  (setq linum-format 'linum-relative)
-  :config
-  (setq linum-relative-current-symbol ""))
-#+END_SRC
-
-** Indenting
-
-#+BEGIN_SRC emacs-lisp
-  (use-package aggressive-indent
-    :init
-    (global-aggressive-indent-mode 1)
-    (add-to-list 'aggressive-indent-excluded-modes 'html-mode 'scala-mode)
-    (unbind-key "C-c C-q" aggressive-indent-mode-map))
-#+END_SRC
-
-* Browsing
-** Browsers
-#+BEGIN_SRC emacs-lisp
- (setq browse-url-browser-function (cond ((is-mac-p) 'browse-url-default-macosx-browser)
-                                         ((is-linux-p) 'browse-url-default-browser)))
-
- (bind-key "C-c B" 'browse-url-at-point)
-#+END_SRC
 * Writing
-** Org-Mode
+** org-mode
 
 #+BEGIN_SRC emacs-lisp
   (use-package org
@@ -1086,11 +1022,11 @@ Actionable URLs in Emacs buffers via [[http://xenodium.com/#actionable-urls-in-e
 
     (add-hook 'org-mode-hook
               '(lambda ()
-                 (setq line-spacing 0.2) ;; Add more line padding for readability
-                 )))
+                 (setq line-spacing 0.2))) ;; Add more line padding for readability
+    )
 #+END_SRC
 
-** Pretty Bullet
+** org-bullets
 
 #+BEGIN_SRC emacs-lisp
   (use-package org-bullets
@@ -1117,47 +1053,62 @@ Actionable URLs in Emacs buffers via [[http://xenodium.com/#actionable-urls-in-e
   (org-set-property "STYLE" "habit"))
 #+end_src
 
+** org-cliplink
 
-org-cliplink
-org-cliplink lets you insert a link from your clipboard with a title that is fetched from the page’s metadata.
+A simple command that takes a URL from the clipboard and inserts an
+org-mode link with a title of a page found by the URL into the current
+buffer.
 
+#+BEGIN_SRC emacs-lisp
 (use-package org-cliplink
   :bind ("C-x p i" . org-cliplink))
-org-bullets
-(use-package org-bullets
-  :init
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-org-autosort
-I wanted to be able to add a sort property to files or subtrees and get automatic autosorting. A user of r/orgmode delivered a solution.
+#+END_SRC
 
-(defun yant/org-entry-has-subentries ()
-  "Any entry with subheadings."
-  (let ((subtree-end (save-excursion (org-end-of-subtree t))))
-    (save-excursion
-      (org-back-to-heading)
-      (forward-line 1)
-      (when (< (point) subtree-end)
-        (re-search-forward "^\*+ " subtree-end t)))))
+** org-babel
 
-(defun yant/org-entry-sort-by-property nil
-  "Apply property sort on current entry. The sorting is done using property with the name from value of :SORT: property.
-      For example, :SORT: DEADLINE will apply org-sort-entries by DEADLINE property on current entry."
-  (let ((property (org-entry-get (point) "SORT" 'INHERIT)))
-    (when (and (not (seq-empty-p property))
-               (yant/org-entry-has-subentries))
-      (funcall #'org-sort-entries nil ?r nil nil property))))
+Source code that =org-babel= wants to evaluate
 
-(defun yant/org-buffer-sort-by-property (&optional MATCH)
-  "Sort all subtrees in buffer by the property, which is the value of their :SORT: property.
-        Only subtrees, matching MATCH are selected"
-  (org-map-entries #'yant/org-entry-sort-by-property MATCH 'file))
+#+BEGIN_SRC emacs-lisp
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (R . t)
+     (python . t)
+     (shell . t)
+     (latex . t)
+     (julia . t)
+))
+#+END_SRC
 
-(add-hook 'org-mode-hook #'yant/org-buffer-sort-by-property)
-helm-org-rifle
-(use-package helm-org-rifle
-  :bind ("C-c o" . helm-org-rifle))
+** toc-org
 
-** Agendas
+#+begin_src emacs-lisp
+(use-package toc-org
+    :init
+    (add-hook 'org-mode-hook 'toc-org-mode))
+#+end_src
+
+** org-ref
+
+#+begin_src emacs-lisp
+(use-package org-ref
+:init
+;; setup org-ref
+(setq org-ref-bibliography-notes "~/Documents/megrez/notes.org"
+      org-ref-default-bibliography '("~/Documents/megrez/references.bib")
+      org-ref-pdf-directory "~/Documents/reference/")
+
+(unless (file-exists-p org-ref-pdf-directory)
+  (make-directory org-ref-pdf-directory t))
+
+;; Some org-mode customization
+(setq org-src-fontify-natively t
+      org-confirm-babel-evaluate nil
+      org-src-preserve-indentation t)
+)
+#+end_src
+
+** org-agenda
 *** Configuration
 
 #+begin_src emacs-lisp
@@ -1318,51 +1269,35 @@ The org-timeline functionality was recently removed. This code, adapted from a c
                        (org-agenda-skip-function '(org-agenda-skip-entry-if 'timestamp 'todo '("DONE" "CANCELLED" "MAYBE" "WAITING" "SOMEDAY"))))))) t)
 #+end_src
 
-*** Open Loops
+*** Capture Templates
 
-Thanks Sacha for this custom code!
+Configure my capture template!
 
-(defun my-org-agenda-recent-open-loops ()
-  (interactive)
-  (let ((org-agenda-start-with-log-mode t)
-        (org-agenda-use-time-grid nil)
-        (org-agenda-files '("~/org/calendar/gcal.org")))
-    (fetch-calendar)
-    (org-agenda-list nil (org-read-date nil nil "-2d") 4)
-    (beginend-org-agenda-mode-goto-beginning)))
-
-(defun my-org-agenda-longer-open-loops ()
-  (interactive)
-  (let ((org-agenda-start-with-log-mode t)
-        (org-agenda-use-time-grid nil)
-        (org-agenda-files '("~/org/calendar/gcal.org")))
-    (fetch-calendar)
-    (org-agenda-list 'file (org-read-date nil nil "-14d") 28)
-    (beginend-org-agenda-mode-goto-beginning)))
-Auto Advance
-(defun org-agenda-set-tags-auto-advance ()
-  (interactive)
-  (while t
-    (call-interactively #'org-agenda-set-tags)
-    (org-agenda-next-line)))
-
-(bind-key "`" 'org-agenda-set-tags-auto-advance org-agenda-mode-map)
-Capture Templates
-The first Emacs Lisp that I ever wrote was to configure my capture templates!
-
+#+BEGIN_SRC emacs-lisp
 (setq org-capture-templates
-      '(("t" "Task" entry (file "~/org/inbox.org")
-         "* TODO %?\n")
-        ("p" "Project" entry (file+headline "~/org/todo.org" "Projects")
-         (file "~/org/templates/newprojecttemplate.org"))
-        ("g" "Goal" entry (file+headline "~/org/goals.org" "Current Goals")
-         (file "~/org/templates/newgoaltemplate.org"))
-        ("s" "Someday" entry (file+headline "~/org/somedaymaybe.org" "Someday / Maybe")
-         "* SOMEDAY %?\n")
-        ("m" "Maybe" entry (file+headline "~/org/somedaymaybe.org" "Someday / Maybe")
-         "* MAYBE %?\n")
-        ("l" "Log" entry (file+olp+datetree "~/org/log.org" "Log")
-         (file "~/org/templates/logtemplate.org"))))
+      '(("t" "Task" entry (file "~/Documents/megrez/inbox.org")
+         "* TODO %?\n")))
+#+END_SRC
+
+*** Refile
+
+#+BEGIN_SRC emacs-lisp
+(setq org-refile-targets '((("~/Documents/megrez/todo.org" "~/Documents/megrez/archive.org") :maxlevel . 3))
+      ;; org-refile-use-cache t
+      org-refile-use-outline-path t)
+
+#+END_SRC
+
+Exclude completed tasks from refile targets, from Michael Englehorn’s Emacs Configuration.
+
+#+BEGIN_SRC emacs-lisp
+(defun bh/verify-refile-target ()
+  "Exclude todo keywords with a done state from refile targets"
+  (not (member (nth 2 (org-heading-components)) org-done-keywords)))
+
+(setq org-refile-target-verify-function 'bh/verify-refile-target)
+#+END_SRC
+
 *** Clocking
 
 Use clocking to track time spend on tasks
@@ -1439,53 +1374,6 @@ However, there are a *lot* of commands for clocking; this is a perfect instance 
              ("C-c w" . hydra-org-agenda-clock/body))
 #+END_SRC
 
-Drag and Drop
-(use-package org-download)
-Refiling
-(setq org-refile-targets '((("~/org/todo.org" "~/org/somedaymaybe.org" "~/org/goals.org") :maxlevel . 3))
-      ;; org-refile-use-cache t
-      org-refile-use-outline-path t)
-Exclude completed tasks from refile targets, from Michael Englehorn’s Emacs Configuration.
-
-(defun bh/verify-refile-target ()
-  "Exclude todo keywords with a done state from refile targets"
-  (not (member (nth 2 (org-heading-components)) org-done-keywords)))
-
-(setq org-refile-target-verify-function 'bh/verify-refile-target)
-Speed Commands
-(setq org-use-speed-commands t
-      org-speed-commands-user
-      '(("N" org-narrow-to-subtree)
-        ("$" org-archive-subtree)
-        ("A" org-archive-subtree)
-        ("W" widen)
-        ("d" org-down-element)
-        ("k" org-cut-subtree)
-        ("m" org-mark-subtree)
-        ("s" org-sort)
-        ("x" smex-major-mode-commands)
-        ("X" org-todo-done)
-        ("R" org-done-and-archive)
-        ("y" org-todo-yesterday)))
-Speed commands are really useful, but I often want to make use of them when I’m not at the beginning of a header. This command brings you back to the beginning of an item’s header, so that you can do speed commands.
-
-(defun org-go-speed ()
-  "Goes to the beginning of an element's header, so that you can execute speed commands."
-  (interactive)
-  (when (equal major-mode 'org-mode)
-    (if (org-at-heading-p)
-        (beginning-of-line)
-      (outline-previous-heading))))
-
-(bind-key "C-c s" 'org-go-speed)
-
-Other
-Shell in Org Source Blocks
-(org-babel-do-load-languages 'org-babel-load-languages
-                             '((shell . t)))
-Sentence-End
-(setq sentence-end-double-space nil)
-
 *** Easy Bind To Open Todos
 
 #+begin_src emacs-lisp
@@ -1525,6 +1413,91 @@ From an appendix in Intro to Emacs Lisp.
 
 ;; Bind 'the-the' to  C-c \
 (bind-key "C-c \\" 'the-the)
+
+* Browsing
+** Browsers
+#+BEGIN_SRC emacs-lisp
+ (setq browse-url-browser-function (cond ((is-mac-p) 'browse-url-default-macosx-browser)
+                                         ((is-linux-p) 'browse-url-default-browser)))
+
+ (bind-key "C-c B" 'browse-url-at-point)
+#+END_SRC
+* Editing
+** Expand
+
+#+BEGIN_SRC emacs-lisp
+(use-package expand-region
+  :bind (("C-@" . er/expand-region)
+         ("C-=" . er/expand-region)
+         ("M-3" . er/expand-region)))
+
+(pending-delete-mode t)
+#+END_SRC
+
+** Selected
+ #+BEGIN_SRC emacs-lisp
+ (use-package selected
+   :commands selected-minor-mode
+   :init
+   (setq selected-org-mode-map (make-sparse-keymap))
+   (selected-global-mode 1)
+   :bind (:map selected-keymap
+               ("e" . er/expand-region)
+               ("i" . indent-region)
+               ("l" . downcase-region)
+               ("m" . apply-macro-to-region-lines)
+               ("q" . selected-off)
+               ("r" . reverse-region)
+               ("s" . sort-lines)
+               ("u" . upcase-region)
+               ("w" . count-words-region)
+               ("y" . yank)
+               :map selected-org-mode-map
+               ("t" . org-table-convert-region)))
+ #+END_SRC
+
+** Actionable URL’s
+
+Actionable URLs in Emacs buffers via [[http://xenodium.com/#actionable-urls-in-emacs-buffers][Álvaro Ramírez]].
+
+#+BEGIN_SRC emacs-lisp
+(use-package goto-addr
+  :hook ((compilation-mode . goto-address-mode)
+         (prog-mode . goto-address-prog-mode)
+         (eshell-mode . goto-address-mode)
+         (shell-mode . goto-address-mode))
+  :bind (:map goto-address-highlight-keymap
+              ("C-c C-o" . goto-address-at-point))
+  :commands (goto-address-prog-mode
+             goto-address-mode))
+#+END_SRC
+
+** Emojis
+
+#+BEGIN_SRC emacs-lisp
+(use-package emojify
+  :init (global-emojify-mode))
+#+END_SRC
+
+** Line Numbering
+
+#+BEGIN_SRC emacs-lisp
+(use-package linum-relative
+  :init
+  (setq linum-format 'linum-relative)
+  :config
+  (setq linum-relative-current-symbol ""))
+#+END_SRC
+
+** Indenting
+
+#+BEGIN_SRC emacs-lisp
+  (use-package aggressive-indent
+    :init
+    (global-aggressive-indent-mode 1)
+    (add-to-list 'aggressive-indent-excluded-modes 'html-mode 'scala-mode)
+    (unbind-key "C-c C-q" aggressive-indent-mode-map))
+#+END_SRC
 
 * Functions
 ** Emacs Configuration File
