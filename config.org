@@ -3,8 +3,8 @@
 #+begin_src emacs-lisp
   (setq user-full-name "Yizhe Xu"
         user-mail-address "me@yizhexu.com"
-        calendar-latitude 39.6701627,
-        calendar-longitude -104.9804092)
+        calendar-latitude 39.670397,
+        calendar-longitude -104.984643)
 #+end_src
 
 * Package Management
