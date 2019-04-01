@@ -961,6 +961,20 @@ function.
   :delight)
 #+END_SRC
 
+** SQL
+
+Use =sql-mode= for =.hql= file type
+
+#+BEGIN_SRC emacs-lisp
+;; I want .hql and .q files to use sql-mode
+(add-to-list 'auto-mode-alist '("\\.hql\\'" . sql-mode))
+(autoload 'sql-mode "sql-mode" "SQL editing mode." t)
+(setq sql-mode-hook 'my-sql-customisations)
+(defun my-sql-customisations ()
+  "sql-mode customisations that must be done after sql-mode loads"
+  (add-to-list 'same-window-buffer-names "*SQL*")
+#+END_SRC
+
 * Writing
 ** org-mode
 
@@ -1472,7 +1486,7 @@ Actionable URLs in Emacs buffers via [[http://xenodium.com/#actionable-urls-in-e
   (use-package aggressive-indent
     :init
     (global-aggressive-indent-mode 1)
-    (add-to-list 'aggressive-indent-excluded-modes 'html-mode 'scala-mode)
+    (add-to-list 'aggressive-indent-excluded-modes 'html-mode 'scala-mode 'sbt-mode)
     (unbind-key "C-c C-q" aggressive-indent-mode-map))
 #+END_SRC
 
