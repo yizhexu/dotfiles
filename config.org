@@ -742,22 +742,33 @@ Configure my coda environments
         (pyvenv-tracking-mode 1))
 #+END_SRC
 
+Configure python mode
+
+#+BEGIN_SRC emacs-lisp
+;; enable elpy
+(use-package python
+  :ensure t
+  :defer t
+  :mode ("\\.py\\'" . python-mode)
+  :interpreter ("python" . python-mode)
+  :init
+  (setq-default indent-tabs-mode nil)
+  :config
+  (setq python-indent-offset 4)
+  (use-package smartparens
+    :init
+    (add-hook 'python-mode-hook 'smartparens-mode))
+  (use-package color-identifiers-mode
+    :init
+    (add-hook 'python-mode-hook 'color-identifiers-mode)))
+#+END_SRC
+
+
 Use =elpy=, it is nice!
 
 #+BEGIN_SRC emacs-lisp
-  ;; enable elpy
-  (use-package python
-    :ensure t
-    :defer t
-    :mode ("\\.py\\'" . python-mode)
-    :interpreter ("python" . python-mode)
-    :init
-    (setq-default indent-tabs-mode nil)
-    :config
-    (elpy-enable)
-    (setq python-indent-offset 4)
-    (add-hook 'python-mode-hook 'smartparens-mode)
-    (add-hook 'python-mode-hook 'color-identifiers-mode))
+(use-package elpy
+  :init (add-hook 'python-mode-hook 'elpy-enable))
 #+END_SRC
 
 Python indents
@@ -829,10 +840,8 @@ Format code according to =PEP8= when save:
 
 #+BEGIN_SRC emacs-lisp
 (use-package jedi
-  :ensure t
   :config
   (use-package company-jedi
-    :ensure t
     :init
     (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi)))
     (setq company-jedi-python-bin "python")))
