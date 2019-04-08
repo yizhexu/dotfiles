@@ -984,8 +984,15 @@ Use =sql-mode= for =.hql= file type
   :config
   (add-to-list 'auto-mode-alist '("\\.hql\\'" . sql-mode))
   (autoload 'sql-mode "sql-mode" "SQL editing mode." t)
-  (setq sql-mode-hook 'my-sql-customisations)
-  )
+  (setq sql-mode-hook 'my-sql-customisations))
+#+END_SRC
+
+Indentation
+
+#+BEGIN_SRC emacs-lisp
+(use-package sql-indent
+  :config
+(add-hook 'sql-mode-hook 'sqlind-minor-mode))
 #+END_SRC
 
 * Writing
@@ -1117,22 +1124,22 @@ Source code that =org-babel= wants to evaluate
 
 ** org-ref
 
+Configure synced drive path
+
 #+begin_src emacs-lisp
 (use-package org-ref
-:init
-;; setup org-ref
-(setq org-ref-bibliography-notes "~/Documents/megrez/notes.org"
-      org-ref-default-bibliography '("~/Documents/megrez/references.bib")
-      org-ref-pdf-directory "~/Documents/reference/")
+  :init
+  ;; setup org-ref
+  (setq org-ref-default-bibliography '("/Volumes/Keybase (p2762265)/private/yizhe/references/library.bib")
+        org-ref-pdf-directory "/Volumes/Keybase (p2762265)/private/yizhe/references")
 
-(unless (file-exists-p org-ref-pdf-directory)
-  (make-directory org-ref-pdf-directory t))
+  (unless (file-exists-p org-ref-pdf-directory)
+    (make-directory org-ref-pdf-directory t))
 
-;; Some org-mode customization
-(setq org-src-fontify-natively t
-      org-confirm-babel-evaluate nil
-      org-src-preserve-indentation t)
-)
+  ;; Some org-mode customization
+  (setq org-src-fontify-natively t
+        org-confirm-babel-evaluate nil
+        org-src-preserve-indentation t))
 #+end_src
 
 * Organizing
