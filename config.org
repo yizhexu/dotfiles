@@ -847,13 +847,13 @@ Format code according to =PEP8= when save:
     (setq company-jedi-python-bin "python")))
 #+END_SRC
 ** Julia
-*** On Mac
+*** With OSX
 #+BEGIN_SRC emacs-lisp
   (when (is-mac-p)
     (yizhe/append-to-path "/Applications/Julia-1.0.app/Contents/Resources/julia/bin"))
 #+END_SRC
 
-*** Julia repl
+*** Julia Repl
 
 #+BEGIN_SRC emacs-lisp
 (use-package julia-repl)
@@ -1130,7 +1130,7 @@ Configure synced drive path
 (use-package org-ref
   :init
   ;; setup org-ref
-  (setq org-ref-default-bibliography '("/Volumes/Keybase (p2762265)/private/yizhe/references/library.bib")
+  (setq org-ref-default-bibliography '("/Volumes/Keybase\ (p2762265)/private/yizhe/references/library.bib")
         org-ref-pdf-directory "/Volumes/Keybase (p2762265)/private/yizhe/references")
 
   (unless (file-exists-p org-ref-pdf-directory)
