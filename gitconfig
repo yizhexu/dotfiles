@@ -1,0 +1,79 @@
+[user]
+	email = yizhe.xu@charter.com
+	name = Yizhe
+	username = yizhe
+
+[core]
+	editor = vi
+	whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
+	excludesfile = ~/.gitignore
+
+[web]
+	browser = google-chrome
+
+[color]
+	ui = auto
+
+[color "branch"]
+	current = yellow bold
+	local = green bold
+	remote = cyan bold
+
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+
+[color "status"]
+	added = green bold
+	changed = yellow bold
+	untracked = red bold
+
+[alias]
+  st = status -sb                                 # status in short-format & show the branch and tracking info
+	a = add --all -v                                # add <file> w/ verbose
+  ad = add -vA .                                  # add all for the current directory w/ verbose
+  at = add -vA :/                                 # add all for the whole tree w/ verbose
+
+	#############
+	b = branch
+	ba = branch -a
+	bd = branch -d
+	bdd = branch -D
+
+	#############
+	c = commit
+	ca = commit -a
+	cm = commit -m
+
+	#############
+	cob = checkout -b                               # create branch and checkout
+
+	#############
+	# last ▼                                        # show last commit & generate a diffstat in log
+	last = log -1 --stat --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all
+	# lf ▼                                          # show the history of a specific file, with diffs
+	lf = log -u --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all
+	# lg ▼                                          # beautiful git log
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all
+	# ll ▼                                          # list commits w/ changed files
+	ll = log --decorate --numstat --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all
+    
+    lol = log --graph --decorate --pretty=oneline --abbrev-commit
+    lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+
+	#############
+	ps = push -v --progress                         # push w/ verbose & progress
+	pso = push origin -v --progress                 # push origin w/ verbose & progress
+	psom = push -u origin master -v --progress       # push origin to master remote w/ verbose & progress
+
+	#############
+	pl = pull -v --progress                         # pull w/ verbose & progress
+	plo = pull origin -v --progress                 # pull origin w/ verbose & progress
+
+	#############
+	ignore = "!gi() { curl -L -s https://www.gitignore.io/api/$@ ;}; gi"
+	# list all aliases
+	la = "!git config -l | grep alias | cut -c 7- | sed 's|=| = |g'"
