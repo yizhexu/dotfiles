@@ -512,7 +512,7 @@ have been so useful!
 * Programming
 ** Path
 
-Append path of my programs
+Define append to path method
 
 #+BEGIN_SRC emacs-lisp
 
@@ -523,6 +523,7 @@ Append path of my programs
 
 #+END_SRC
 
+Append path of my programs
 
 #+BEGIN_SRC emacs-lisp
 (yizhe/append-to-path "/usr/bin")
@@ -1033,6 +1034,8 @@ Indentation
         org-goto-interface 'outline-path-completion
         org-outline-path-complete-in-steps nil
         org-src-fontify-natively t
+        org-confirm-babel-evaluate nil
+        org-src-preserve-indentation t
         org-lowest-priority ?C
         org-default-priority ?B
         org-expiry-inactive-timestamps t
@@ -1135,20 +1138,22 @@ Source code that =org-babel= wants to evaluate
 
 Configure synced drive path
 
+#+BEGIN_SRC emacs-lisp
+(when (is-mac-p)
+  (setq keybase-ref "/Volumes/Keybase\ (p2762265)/private/yizhe/references/"
+        mendeley-lib-bib "/Volumes/Keybase\ (p2762265)/private/yizhe/references/library.bib"))
+
+(when (is-linux-p)
+  (setq keybase-ref "/keybase/private/yizhe/references/"
+        mendeley-lib-bib "/keybase/private/yizhe/references/library.bib"))
+#+END_SRC
+
 #+begin_src emacs-lisp
 (use-package org-ref
   :init
   ;; setup org-ref
-  (setq org-ref-default-bibliography '("/Volumes/Keybase\ (p2762265)/private/yizhe/references/library.bib")
-        org-ref-pdf-directory "/Volumes/Keybase (p2762265)/private/yizhe/references")
-
-  (unless (file-exists-p org-ref-pdf-directory)
-    (make-directory org-ref-pdf-directory t))
-
-  ;; Some org-mode customization
-  (setq org-src-fontify-natively t
-        org-confirm-babel-evaluate nil
-        org-src-preserve-indentation t))
+  (setq org-ref-default-bibliography '(mendeley-lib-bib)
+        org-ref-pdf-directory keybase-ref))
 #+end_src
 
 * Organizing
