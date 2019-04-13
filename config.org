@@ -995,69 +995,78 @@ Indentation
 (add-hook 'sql-mode-hook 'sqlind-minor-mode))
 #+END_SRC
 
+** Latex
+
+#+BEGIN_SRC emacs-lisp
+(when (is-mac-p) (yizhe/append-to-path "/Library/TeX/texbin/"))
+#+END_SRC
+
 * Writing
 ** org-mode
 
 #+BEGIN_SRC emacs-lisp
-  (use-package org
-    :bind (("C-c l" . org-store-link)
-           ("C-c c" . org-capture)
-           ("C-c a" . org-agenda)
-           ("C-c b" . org-iswitchb)
-           ("C-c M-k" . org-cut-subtree)
-           :map org-mode-map
-           ("C-c >" . org-time-stamp-inactive))
-    :custom-face
-    (variable-pitch ((t (:family "ETBembo"))))
-    (org-done ((t (:strike-through t ))))
-    (org-headline-done ((t ( :strike-through t))))
-    (org-image-actual-width '(600))
-    :init
-    (setq default-major-mode 'org-mode
-          org-directory "~/Documents/megrez/"
-          org-log-done t
-          org-startup-indented t
-          org-startup-truncated nil
-          org-startup-with-inline-images t
-          org-completion-use-ido t
-          org-default-notes-file (concat org-directory "todo.org")
-          org-image-actual-width '(300)
-          org-goto-max-level 10
-          org-imenu-depth 5
-          org-goto-interface 'outline-path-completion
-          org-outline-path-complete-in-steps nil
-          org-src-fontify-natively t
-          org-lowest-priority ?C
-          org-default-priority ?B
-          org-expiry-inactive-timestamps t
-          org-show-notification-handler 'message
-          org-special-ctrl-a/e t
-          org-special-ctrl-k t
-          org-yank-adjusted-subtrees t
-          org-src-window-setup 'current-window
-          org-file-apps
-          '((auto-mode . emacs)
-            ("\\.mm\\'" . default)
-            ("\\.x?html?\\'" . "firefox %s")
-            ("\\.pdf\\'" . "open %s"))
-          org-todo-keywords
-          '((sequence "TODO(t)" "STARTED(s)" "WAITING(w)" "SOMEDAY(.)" "MAYBE(m)" "|" "DONE(x!)" "CANCELLED(c)"))
-          ;; Theming
-          org-ellipsis "⤵" ;; folding symbol
-          org-pretty-entities t
-          org-hide-emphasis-markers t ;; show actually italicized text instead of /italicized text/
-          org-agenda-block-separator ""
-          org-fontify-whole-heading-line t
-          org-fontify-done-headline t
-          org-fontify-quote-and-verse-blocks t)
+(use-package org
+  :bind (("C-c l" . org-store-link)
+         ("C-c c" . org-capture)
+         ("C-c a" . org-agenda)
+         ("C-c b" . org-iswitchb)
+         ("C-c M-k" . org-cut-subtree)
+         :map org-mode-map
+         ("C-c >" . org-time-stamp-inactive))
+  :custom-face
+  (variable-pitch ((t (:family "ETBembo"))))
+  (org-done ((t (:strike-through t ))))
+  (org-headline-done ((t ( :strike-through t))))
+  (org-image-actual-width '(600))
+  :init
+  (setq default-major-mode 'org-mode
+        org-directory "~/Documents/megrez/"
+        org-log-done t
+        org-startup-indented t
+        org-startup-truncated nil
+        org-startup-with-inline-images t
+        org-completion-use-ido t
+        org-default-notes-file (concat org-directory "todo.org")
+        org-image-actual-width '(300)
+        org-goto-max-level 10
+        org-imenu-depth 5
+        org-goto-interface 'outline-path-completion
+        org-outline-path-complete-in-steps nil
+        org-src-fontify-natively t
+        org-lowest-priority ?C
+        org-default-priority ?B
+        org-expiry-inactive-timestamps t
+        org-show-notification-handler 'message
+        org-special-ctrl-a/e t
+        org-special-ctrl-k t
+        org-yank-adjusted-subtrees t
+        org-src-window-setup 'current-window
+        org-file-apps
+        '((auto-mode . emacs)
+          ("\\.mm\\'" . default)
+          ("\\.x?html?\\'" . "firefox %s")
+          ("\\.pdf\\'" . "open %s"))
+        org-todo-keywords
+        '((sequence "TODO(t)" "STARTED(s)" "WAITING(w)" "SOMEDAY(.)" "MAYBE(m)" "|" "DONE(x!)" "CANCELLED(c)"))
+        ;; Theming
+        org-ellipsis "⤵" ;; folding symbol
+        org-pretty-entities t
+        org-use-sub-superscripts '{} ;; underscores, etc needs to be wraped as a_{underscore}
+        org-hide-emphasis-markers t ;; show actually italicized text instead of /italicized text/
+        org-agenda-block-separator ""
+        org-fontify-whole-heading-line t
+        org-fontify-done-headline t
+        org-fontify-quote-and-verse-blocks t
+        org-format-latex-options
+        (plist-put org-format-latex-options :scale 1.5))
 
-    (add-to-list 'org-global-properties
-                 '("Effort_ALL". "0:05 0:15 0:30 1:00 2:00 3:00 4:00"))
+  (add-to-list 'org-global-properties
+               '("Effort_ALL". "0:05 0:15 0:30 1:00 2:00 3:00 4:00"))
 
-    (add-hook 'org-mode-hook
-              '(lambda ()
-                 (setq line-spacing 0.2))) ;; Add more line padding for readability
-    )
+  (add-hook 'org-mode-hook
+            '(lambda ()
+               (setq line-spacing 0.2))) ;; Add more line padding for readability
+  )
 #+END_SRC
 
 ** org-bullets
