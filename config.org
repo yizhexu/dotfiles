@@ -282,7 +282,6 @@ Visual indication of matching pairs of parentheses
   (sp-with-modes '(markdown-mode gfm-mode)
     (sp-local-pair "*" "*"))
   (sp-with-modes '(org-mode)
-    (sp-local-pair "=" "=")
     (sp-local-pair "*" "*")
     (sp-local-pair "/" "/")
     (sp-local-pair "<" ">")
@@ -290,6 +289,7 @@ Visual indication of matching pairs of parentheses
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode)))
 #+END_SRC
+
 ** Whitespace
 
 #+BEGIN_SRC emacs-lisp
@@ -1140,19 +1140,17 @@ Configure synced drive path
 
 #+BEGIN_SRC emacs-lisp
 (when (is-mac-p)
-  (setq keybase-ref "/Volumes/Keybase\ (p2762265)/private/yizhe/references/"
-        mendeley-lib-bib "/Volumes/Keybase\ (p2762265)/private/yizhe/references/library.bib"))
+  (setq keybase-ref "/Volumes/Keybase\ (p2762265)/private/yizhe/references/"))
 
 (when (is-linux-p)
-  (setq keybase-ref "/keybase/private/yizhe/references/"
-        mendeley-lib-bib "/keybase/private/yizhe/references/library.bib"))
+  (setq keybase-ref "/keybase/private/yizhe/references/"))
 #+END_SRC
 
 #+begin_src emacs-lisp
 (use-package org-ref
   :init
   ;; setup org-ref
-  (setq org-ref-default-bibliography '(mendeley-lib-bib)
+  (setq org-ref-default-bibliography (concat keybase-ref "library.bib")
         org-ref-pdf-directory keybase-ref))
 #+end_src
 
