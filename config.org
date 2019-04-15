@@ -283,6 +283,7 @@ Visual indication of matching pairs of parentheses
     (sp-local-pair "*" "*"))
   (sp-with-modes '(org-mode)
     (sp-local-pair "*" "*")
+    (sp-local-pair "=" "=")
     (sp-local-pair "/" "/")
     (sp-local-pair "<" ">")
     (sp-local-pair "[" "]"))
