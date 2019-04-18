@@ -1116,15 +1116,15 @@ buffer.
 Source code that =org-babel= wants to evaluate
 
 #+BEGIN_SRC emacs-lisp
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((emacs-lisp . t)
-     (R . t)
-     (python . t)
-     (shell . t)
-     (latex . t)
-     (julia . t)
-))
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (R . t)
+   (python . t)
+   (shell . t)
+   (latex . t)
+   (julia . t)
+   (dot . t)))
 #+END_SRC
 
 ** toc-org
