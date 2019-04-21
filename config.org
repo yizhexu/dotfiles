@@ -917,7 +917,6 @@ function.
 #+END_SRC
 
 ** Git
-
 *** magit
 
 #+BEGIN_SRC emacs-lisp
@@ -1003,6 +1002,10 @@ Indentation
 (when (is-mac-p) (yizhe/append-to-path "/Library/TeX/texbin/"))
 #+END_SRC
 
+** graphviz
+#+BEGIN_SRC emacs-lisp
+(use-package graphviz-dot-mode)
+#+END_SRC
 * Writing
 ** org-mode
 
