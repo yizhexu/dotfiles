@@ -11,6 +11,9 @@
 [web]
 	browser = google-chrome
 
+[commit]
+	template = ~/.gitmessage
+
 [color]
 	ui = auto
 
@@ -32,10 +35,10 @@
 	untracked = red bold
 
 [alias]
-  st = status -sb                                 # status in short-format & show the branch and tracking info
+	st = status -sb                                 # status in short-format & show the branch and tracking info
 	a = add --all -v                                # add <file> w/ verbose
-  ad = add -vA .                                  # add all for the current directory w/ verbose
-  at = add -vA :/                                 # add all for the whole tree w/ verbose
+	ad = add -vA .                                  # add all for the current directory w/ verbose
+	at = add -vA :/                                 # add all for the whole tree w/ verbose
 
 	#############
 	b = branch
@@ -60,9 +63,8 @@
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all
 	# ll ▼                                          # list commits w/ changed files
 	ll = log --decorate --numstat --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all
-    
-    lol = log --graph --decorate --pretty=oneline --abbrev-commit
-    lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+	lol = log --graph --decorate --pretty=oneline --abbrev-commit
+	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
 
 	#############
 	ps = push -v --progress                         # push w/ verbose & progress
