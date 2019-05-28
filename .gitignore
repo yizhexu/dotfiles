@@ -1,3 +1,4 @@
+.DS_Store
 emacs/.emacs.d/*
 !emacs/.emacs.d/config.org
 !emacs/.emacs.d/init.el

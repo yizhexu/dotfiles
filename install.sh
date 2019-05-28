@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Install packages
+graphviz
+
 # Install `stow`.
 yay stow
 

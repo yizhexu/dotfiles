@@ -1056,7 +1056,7 @@ Indentation
         org-todo-keywords
         '((sequence "TODO(t)" "STARTED(s)" "WAITING(w)" "SOMEDAY(.)" "MAYBE(m)" "|" "DONE(x!)" "CANCELLED(c)"))
         ;; Theming
-        org-ellipsis "⤵" ;; folding symbol
+        org-ellipsis "⤵" ;; foldings symbol
         org-pretty-entities t
         org-use-sub-superscripts '{} ;; underscores, etc needs to be wraped as a_{underscore}
         org-hide-emphasis-markers t ;; show actually italicized text instead of /italicized text/
@@ -1073,6 +1073,14 @@ Indentation
   (add-hook 'org-mode-hook
             '(lambda ()
                (setq line-spacing 0.2))) ;; Add more line padding for readability
+
+  (add-hook 'org-mode-hook
+            '(lambda ()
+               "Beautify Org Checkbox Symbol"
+               (push '("[ ]" . "☐") prettify-symbols-alist)
+               (push '("[x]" . "☒") prettify-symbols-alist)
+               (prettify-symbols-mode)
+               ))
   )
 #+END_SRC
 
@@ -1213,7 +1221,8 @@ Configure synced drive path
 ** Agenda Files
 
 #+begin_src emacs-lisp
-(setq org-agenda-files (quote ("~/Documents/megrez/todo.org")))
+(setq org-agenda-files (list "~/Documents/megrez/todo.org"
+                             "~/Documents/megrez/inbox.org"))
 #+end_src
 
 ** Open Org Agenda
