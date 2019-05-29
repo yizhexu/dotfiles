@@ -1051,35 +1051,7 @@ Indentation
 #+BEGIN_SRC emacs-lisp
 (use-package graphviz-dot-mode)
 #+END_SRC
-** tramp
 
-#+BEGIN_SRC emacs-lisp
-(use-package tramp
-  :ensure t
-  :config
-  ;; My DevDesktop has quite a few consumed environments on it.  Adding
-  ;; each of their "bin" directories to my tramp list.
-  (add-to-list 'tramp-remote-path "/apollo/env/RemoteCommand/bin")
-  (add-to-list 'tramp-remote-path "/apollo/env/envImprovement/bin")
-  (add-to-list 'tramp-remote-path "/home/yizhx/bin")
-  (add-to-list 'tramp-remote-path "/home/josber/.nvm/versions/node/v11.4.0/bin")
-  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
-
-  ;; I don't like my history littering many spots, and don't always have a home directory on remotes.
-  (setq tramp-histfile-override "/tmp/.yizhx_tramp_history")
-
-  ;; Shamelessly stolen from amazon common.  Basically, when we go
-  ;; through the bastions the message saying can not chdir to directory
-  ;; will appear.  We are simply ensuring that the error start with "scp."
-  (setq tramp-copy-failed-regexp
-        (concat "\\(s?cp:.+: "
-                (regexp-opt '("Permission denied"
-                              "not a regular file"
-                              "is a directory"
-                              "No such file or directory") t)
-                "\\)\\s-*")))
-
-#+END_SRC
 * Writing
 ** org-mode
 
