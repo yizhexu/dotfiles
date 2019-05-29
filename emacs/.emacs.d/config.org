@@ -9,6 +9,8 @@
 
 * Package Management
 
+package.el is a package manager for emacs modes
+
 #+begin_src emacs-lisp
   (require 'package)
   (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
@@ -146,8 +148,8 @@ Maximize screen room
 ** Syntax
 
 #+BEGIN_SRC emacs-lisp
-        (use-package neotree
-                :bind ([f8] . neotree-toggle))
+(use-package neotree
+  :bind ([f8] . neotree-toggle))
 #+END_SRC
 
 ** Mode Line
@@ -194,6 +196,18 @@ Maximize screen room
 
 #+BEGIN_SRC emacs-lisp
 (fset 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+
+** Tabs
+
+#+BEGIN_SRC emacs-lisp
+(setq-default indent-tabs-mode nil)
+#+END_SRC
+
+** Fill Width
+
+#+BEGIN_SRC emacs-lisp
+(setq fill-column 80)
 #+END_SRC
 
 ** Buffer / File Warnings
@@ -605,6 +619,36 @@ Testing this out
           (setq-local company-backends '(esh-autosuggest))
           (setq-local company-frontends '(company-preview-frontend))))))
 #+END_SRC
+
+*** Some eshell functions
+
+[[https://justin.abrah.ms/dotfiles/emacs.html][source]]
+
+#+BEGIN_SRC emacs-lisp
+(defun eshell/extract (file)
+  (eshell-command-result (concat (if-string-match-then-result
+                                  file
+                                  '((".*\.tar.bz2" "tar xjf")
+                                    (".*\.tar.gz" "tar xzf")
+                                    (".*\.bz2" "bunzip2")
+                                    (".*\.rar" "unrar x")
+                                    (".*\.gz" "gunzip")
+                                    (".*\.tar" "tar xf")
+                                    (".*\.tbz2" "tar xjf")
+                                    (".*\.tgz" "tar xzf")
+                                    (".*\.zip" "unzip")
+                                    (".*\.jar" "unzip")
+                                    (".*\.Z" "uncompress")
+                                    (".*" "echo 'Could not extract the requested file:'")))
+                                 " " file)))
+
+(defun eshell/clear ()
+  "clear the eshell buffer."
+  (interactive)
+  (let ((inhibit-read-only t))
+    (erase-buffer)))
+#+END_SRC
+
 ** Scala
 
 =scala-mode= and =sbt-mode= needs to be installed
@@ -780,11 +824,11 @@ Python indents
 (setq python-indent-guess-indent-offset-verbose nil)
 #+END_SRC
 
-Have been getting this: Warning (python): Your ‘python-shell-interpreter’
-doesn’t seem to support readline, yet ‘python-shell-completion-native’ was t and
-"ipython" is not part of the
-‘python-shell-completion-native-disabled-interpreters’ list. Native completions
-have been disabled locally.
+Have been getting this: Warning (python): Your
+‘python-shell-interpreter’ doesn’t seem to support readline, yet
+‘python-shell-completion-native’ was t and "ipython" is not part of
+the ‘python-shell-completion-native-disabled-interpreters’
+list. Native completions have been disabled locally.
 
 #+BEGIN_SRC emacs-lisp
 (setq python-shell-completion-native-enable nil)
@@ -848,6 +892,7 @@ Format code according to =PEP8= when save:
     (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi)))
     (setq company-jedi-python-bin "python")))
 #+END_SRC
+
 ** Julia
 *** With OSX
 #+BEGIN_SRC emacs-lisp
@@ -1005,6 +1050,35 @@ Indentation
 ** graphviz
 #+BEGIN_SRC emacs-lisp
 (use-package graphviz-dot-mode)
+#+END_SRC
+** tramp
+
+#+BEGIN_SRC emacs-lisp
+(use-package tramp
+  :ensure t
+  :config
+  ;; My DevDesktop has quite a few consumed environments on it.  Adding
+  ;; each of their "bin" directories to my tramp list.
+  (add-to-list 'tramp-remote-path "/apollo/env/RemoteCommand/bin")
+  (add-to-list 'tramp-remote-path "/apollo/env/envImprovement/bin")
+  (add-to-list 'tramp-remote-path "/home/yizhx/bin")
+  (add-to-list 'tramp-remote-path "/home/josber/.nvm/versions/node/v11.4.0/bin")
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+
+  ;; I don't like my history littering many spots, and don't always have a home directory on remotes.
+  (setq tramp-histfile-override "/tmp/.yizhx_tramp_history")
+
+  ;; Shamelessly stolen from amazon common.  Basically, when we go
+  ;; through the bastions the message saying can not chdir to directory
+  ;; will appear.  We are simply ensuring that the error start with "scp."
+  (setq tramp-copy-failed-regexp
+        (concat "\\(s?cp:.+: "
+                (regexp-opt '("Permission denied"
+                              "not a regular file"
+                              "is a directory"
+                              "No such file or directory") t)
+                "\\)\\s-*")))
+
 #+END_SRC
 * Writing
 ** org-mode

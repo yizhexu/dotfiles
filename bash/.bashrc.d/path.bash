@@ -17,5 +17,6 @@ pathconcat $HOME/.bin after
 pathconcat $HOME/.local/bin after
 pathconcat /usr/local/opt/gettext/bin after
 pathconcat /usr/local/opt/sqlite/bin after
+pathconcat /usr/local/opt/gnu-getopt/bin
 
 export PATH
