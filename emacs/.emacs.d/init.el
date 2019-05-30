@@ -6,6 +6,11 @@
 (org-babel-load-file
  (expand-file-name "config.org"
                    user-emacs-directory))
+
+;; load additional configuration
+(cond ((is-yizhx) (org-babel-load-file
+                   (expand-file-name "~/WorkDocs/amazon-config.org"))))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -13,7 +18,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (org-ref toc-org org-cliplink julia-repl which-key visual-regexp use-package smartparens selected rainbow-delimiters py-autopep8 pcmpl-git paradox origami org-super-agenda org-bullets nord-theme neotree magit linum-relative jedi interaction-log git-timemachine git-link git-auto-commit-mode flycheck f expand-region ess esh-autosuggest ensime emojify elpy elisp-slime-nav discover-my-major company-jedi beginend aggressive-indent))))
+    (helm-pass pass org-ref toc-org org-cliplink julia-repl which-key visual-regexp use-package smartparens selected rainbow-delimiters py-autopep8 pcmpl-git paradox origami org-super-agenda org-bullets nord-theme neotree magit linum-relative jedi interaction-log git-timemachine git-link git-auto-commit-mode flycheck f expand-region ess esh-autosuggest ensime emojify elpy elisp-slime-nav discover-my-major company-jedi beginend aggressive-indent))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -52,25 +52,34 @@ It is a modernizing Emacs' Package Menu with stars!
 Different setup sometimes required for different operating system
 
 #+begin_src emacs-lisp
-  (defun is-mac-p
-      ()
-    (eq system-type 'darwin))
+(defun is-mac-p
+    ()
+  (eq system-type 'darwin))
 
-  (defun is-linux-p
-      ()
-    (eq system-type 'gnu/linux))
+(defun is-linux-p
+    ()
+  (eq system-type 'gnu/linux))
 
-  (defun is-windows-p
-      ()
-    (or
-     (eq system-type 'ms-dos)
-     (eq system-type 'windows-nt)
-     (eq system-type 'cygwin)))
+(defun is-windows-p
+    ()
+  (or
+   (eq system-type 'ms-dos)
+   (eq system-type 'windows-nt)
+   (eq system-type 'cygwin)))
 
-  (defun is-bsd-p
-      ()
-    (eq system-type 'gnu/kfreebsd))
+(defun is-bsd-p
+    ()
+  (eq system-type 'gnu/kfreebsd))
 #+end_src
+
+** User Login
+
+#+BEGIN_SRC emacs-lisp
+(defun is-yizhx
+    ()
+  (string-equal user-login-name "yizhx"))
+
+#+END_SRC
 
 ** Internet
 
@@ -372,6 +381,13 @@ Force emacs to use its own password prompt ([[https://github.com/mwfogleman/.ema
 #+BEGIN_SRC emacs-lisp
   (setenv "GPG_AGENT_INFO" nil)
 #+END_SRC
+
+** Pass
+
+#+BEGIN_SRC emacs-lisp
+(use-package pass)
+#+END_SRC
+
 * Saving
 ** Backups
  Store backups and auto-saved files in a fixed location rather in the same directory as the file.
@@ -1041,6 +1057,13 @@ Indentation
 (add-hook 'sql-mode-hook 'sqlind-minor-mode))
 #+END_SRC
 
+Line truncates
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'sql-interactive-mode-hook
+          (lambda ()
+            (toggle-truncate-lines t)))
+#+END_SRC
 ** Latex
 
 #+BEGIN_SRC emacs-lisp
@@ -1051,7 +1074,6 @@ Indentation
 #+BEGIN_SRC emacs-lisp
 (use-package graphviz-dot-mode)
 #+END_SRC
-
 * Writing
 ** org-mode
 
@@ -1181,7 +1203,8 @@ Source code that =org-babel= wants to evaluate
    (shell . t)
    (latex . t)
    (julia . t)
-   (dot . t)))
+   (dot . t)
+   (sql . t)))
 #+END_SRC
 
 ** toc-org
@@ -1619,6 +1642,7 @@ Relatedly, I often want to reload my init-file. This will actually use the syste
 
 (bind-key "C-c M-i" 'reload-init-file)
 #+END_SRC
+
 ** Debugging
 
 #+BEGIN_SRC emacs-lisp
