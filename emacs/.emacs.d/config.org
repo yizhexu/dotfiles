@@ -3,8 +3,8 @@
 #+begin_src emacs-lisp
   (setq user-full-name "Yizhe Xu"
         user-mail-address "me@yizhexu.com"
-        calendar-latitude 39.670397
-        calendar-longitude -104.984643)
+        calendar-latitude 47.6133788
+        calendar-longitude -122.3497462)
 #+end_src
 
 * Package Management
@@ -21,7 +21,7 @@ package.el is a package manager for emacs modes
   ;(setq load-prefer-newer t)
 #+end_src
 
-** Use-Package
+** =use-package=
 
 I'm switching [[https://stackoverflow.com/questions/21064916/auto-install-emacs-packages-with-melpa][too]]
 
@@ -722,7 +722,7 @@ Activate company mode with ESS
 
 #+BEGIN_SRC emacs-lisp
         (setq ess-use-company t
-                                company-selection-wrap-around t
+                                company-selectionw-rap-around t
                                 company-tooltip-align-annotations t
                                 company-idle-delay 0.36
                                 company-show-numbers t
@@ -1221,19 +1221,91 @@ Configure synced drive path
 
 #+BEGIN_SRC emacs-lisp
 (when (is-mac-p)
-  (setq keybase-ref "/Volumes/Keybase\ (p2762265)/private/yizhe/references/"))
+  (setq keybase-ref "/Volumes/Keybase\ (yizhx)/private/yizhe/references/"))
 
 (when (is-linux-p)
   (setq keybase-ref "/keybase/private/yizhe/references/"))
 #+END_SRC
 
 #+begin_src emacs-lisp
+(defun my/org-ref-open-pdf-at-point ()
+  "Open the pdf for bibtex key under point if it exists."
+  (interactive)
+  (let* ((results (org-ref-get-bibtex-key-and-file))
+         (key (car results))
+         (pdf-file (funcall org-ref-get-pdf-filename-function key)))
+    (if (file-exists-p pdf-file)
+    (funcall bibtex-completion-pdf-open-function (car (bibtex-completion-find-pdf key)))
+      (message "No PDF found for %s" key))))
+
+(setq org-ref-open-pdf-function 'my/org-ref-open-pdf-at-point)
 (use-package org-ref
   :init
   ;; setup org-ref
-  (setq org-ref-default-bibliography (concat keybase-ref "library.bib")
-        org-ref-pdf-directory keybase-ref))
+  (setq org-ref-default-bibliography "~/Documents/megrez/library.bib"
+        org-ref-bibliography-notes "~/Documents/megrez/todo.org"
+        org-ref-pdf-directory keybase-ref
+        org-ref-open-pdf-function 'my/org-ref-open-pdf-at-point))
 #+end_src
+
+** org-noter
+
+Use org-noter
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-noter
+  :after org
+  :config
+  (setq org-noter-default-notes-file-names '("todo.org")
+        org-noter-notes-search-path '("~/Documents/megrez")
+        org-noter-separate-notes-from-heading t))
+#+END_SRC
+
+Combine to use with org-ref, [[https://write.as/dani/notes-on-org-noter][source]]
+
+#+BEGIN_SRC emacs-lisp
+(defun org-ref-noter-at-point ()
+      "Open the pdf for bibtex key under point if it exists."
+      (interactive)
+      (let* ((results (org-ref-get-bibtex-key-and-file))
+             (key (car results))
+             (pdf-file (funcall org-ref-get-pdf-filename-function key)))
+        (if (file-exists-p pdf-file)
+            (progn
+              (find-file-other-window pdf-file)
+              (org-noter))
+          (message "no pdf found for %s" key))))
+
+(add-to-list 'org-ref-helm-user-candidates
+             '("Org-Noter notes" . org-ref-noter-at-point))
+#+END_SRC
+
+** pdf-tools
+
+Configure paths stuff for pdf-tools
+
+#+BEGIN_SRC emacs-lisp
+;; appending a new path to existing path
+(when (is-mac-p)
+  (setenv "PKG_CONFIG_PATH"
+          (concat
+           "/usr/local/Cellar/zlib/1.2.8/lib/pkgconfig" ":"
+           "/usr/local/opt/libffi/lib/pkgconfig" ":"
+           "/usr/local/lib/pkgconfig" ":"
+           "/opt/X11/lib/pkgconfig" ":"
+           (getenv "PKG_CONFIG_PATH")
+           )))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(use-package pdf-tools
+  :ensure t
+  :config
+  (custom-set-variables
+    '(pdf-tools-handle-upgrades nil)) ; Use brew upgrade pdf-tools instead.
+  (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo"))
+(pdf-tools-install)
+#+END_SRC
 
 * Organizing
 ** Configuration
@@ -1647,7 +1719,7 @@ Relatedly, I often want to reload my init-file. This will actually use the syste
 
 #+BEGIN_SRC emacs-lisp
   ;; activate debugging
-  (setq debug-on-error t
+  (setq debug-on-error nil
         debug-on-signal nil
         debug-on-quit nil)
 #+END_SRC
