@@ -26,9 +26,12 @@ gpg -e emacs-amazon-config.org
 ** decrypt
 
 #+BEGIN_SRC bash
+mkdir -p ssh/.ssh
 gpg -d dotfile.secret/ssh-config.gpg > ssh/.ssh/config
 gpg -d dotfile.secret/emacs-amazon-config.org.gpg > emacs/.emacs.d/amazon-config.org
 #+END_SRC
+
+#+RESULTS:
 
 ** dotfiles
 

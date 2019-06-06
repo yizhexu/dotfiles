@@ -21,6 +21,8 @@ emacs/.emacs.d
 dotfile.secret/*
 !/dotfile.secret/*.gpg
 
+ssh/.ssh/*
+
 !/git/.gitconfig
 !/vim/.vimrc
 !/screen/.screenrc
