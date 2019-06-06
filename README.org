@@ -1,0 +1,37 @@
+#+BEGIN_QUOTE
+ bash           > bash settings, aliases, and custom prompts
+ emacs          > for everything!!
+ vim            > cli based text editor -> the ultimate weapon of choice
+ git            > global git config and aliases
+
+and more
+#+END_QUOTE
+
+* installing
+
+** stow
+
+- =sudo pacman -S stow=
+- =sudo apt-get install stow=
+- =brew install stow=
+
+** encrypt
+
+#+BEGIN_SRC bash
+cd dotfile.secret
+gpg -e ssh-config
+gpg -e emacs-amazon-config.org
+#+END_SRC
+
+** decrypt
+
+#+BEGIN_SRC bash
+gpg -d dotfile.secret/ssh-config.gpg > ssh/.ssh/config
+gpg -d dotfile.secret/emacs-amazon-config.org.gpg > emacs/.emacs.d/amazon-config.org
+#+END_SRC
+
+** dotfiles
+
+- =stow emacs -t ~=
+- =stow bash -t ~=
+- and so on

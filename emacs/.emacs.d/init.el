@@ -9,7 +9,7 @@
 
 ;; load additional configuration
 (cond ((is-yizhx) (org-babel-load-file
-                   (expand-file-name "~/WorkDocs/amazon-config.org"))))
+                   (expand-file-name "amazon-config.org"))))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

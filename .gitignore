@@ -1,5 +1,26 @@
-.DS_Store
-*
-!emacs/.emacs.d/config.org
-!emacs/.emacs.d/init.el
-!emacs/.emacs.d/resources
+# ignore everything
+/*
+
+# don't ignore directory
+!*/
+
+# but keep
+!.gitignore
+
+# allow readme
+!README.org
+
+# allow some
+!/bash/.bashrc
+
+emacs/.emacs.d
+!/emacs/.emacs.d/config.org
+!/emacs/.emacs.d/init.el
+!/emacs/.emacs.d/resources/*.el
+
+dotfile.secret/*
+!/dotfile.secret/*.gpg
+
+!/git/.gitconfig
+!/vim/.vimrc
+!/screen/.screenrc
