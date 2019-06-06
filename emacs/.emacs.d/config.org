@@ -349,6 +349,12 @@ Visual indication of matching pairs of parentheses
 
 ** Window
 
+Always full screen
+
+#+BEGIN_SRC emacs-lisp
+(set-frame-parameter nil 'fullscreen 'fullboth)
+#+END_SRC
+
 #+BEGIN_SRC emacs-lisp
 (defun vsplit-last-buffer ()
   (interactive)
@@ -798,7 +804,6 @@ Configure my coda environments
 (when (is-mac-p)(setenv "WORKON_HOME" "/usr/local/anaconda3/envs"))
 
 (use-package pyvenv
-        :ensure t
         :init
         (pyvenv-mode 1)
         (pyvenv-tracking-mode 1))
@@ -809,7 +814,6 @@ Configure python mode
 #+BEGIN_SRC emacs-lisp
 ;; enable elpy
 (use-package python
-  :ensure t
   :defer t
   :mode ("\\.py\\'" . python-mode)
   :interpreter ("python" . python-mode)
@@ -824,7 +828,6 @@ Configure python mode
     :init
     (add-hook 'python-mode-hook 'color-identifiers-mode)))
 #+END_SRC
-
 
 Use =elpy=, it is nice!
 
@@ -1243,7 +1246,7 @@ Configure synced drive path
   :init
   ;; setup org-ref
   (setq org-ref-default-bibliography "~/Documents/megrez/library.bib"
-        org-ref-bibliography-notes "~/Documents/megrez/todo.org"
+        org-ref-bibliography-notes "~/Documents/megrez/note.org"
         org-ref-pdf-directory keybase-ref
         org-ref-open-pdf-function 'my/org-ref-open-pdf-at-point))
 #+end_src
