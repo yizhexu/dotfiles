@@ -1,19 +1,20 @@
+#!/usr/bin/env bash
 # -*- mode: sh -*-
 
-# List direcory conqtents
+# list direcory conqtents
 alias ls='ls -G'
 alias lsa='ls -lah'
 alias l='ls -lah'
 alias ll='ls -lh'
 alias la='ls -lAh'
 
-# Color output
+# color output
 alias grep='grep --color=auto'
 alias tree="tree -C"
 alias less="less -R" # display colors correctly
 
-# Internet
-alias ip="ip address | grep inet.*wlan0 | cut -d' ' -f6 | sed \"s/\/24//g\""
+# internet
+alias ip="curl ipinfo.io/ip"
 alias localip="ipconfig getifaddr en1"
 alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[0-9]\+\)\|[a-fA-F0-9:]\+\)' | awk '{ sub(/inet6? (addr:)? ?/, \"\"); print }'"
 alias speedtest='echo "scale=2; `curl  --progress-bar -w "%{speed_download}" http://speedtest.wdc01.softlayer.com/downloads/test10.zip -o /dev/null` / 131072" | bc | xargs -I {} echo {} mbps'
@@ -23,8 +24,16 @@ alias pg="ping google.de"
 
 # macos
 alias update='brew update && brew upgrade; brew cleanup'
+
+# Recursively delete `.DS_Store` files
 alias cleanup="find . -type f -name '*.DS_Store' -ls -delete"
+
+# Finally, clear download history from quarantine. https://mths.be/bum
 alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl"
+
+# Show/hide hidden files in Finder
+alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
 
 # Hide/show all desktop icons (useful when presenting)
 alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"

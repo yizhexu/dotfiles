@@ -9,5 +9,5 @@
 
 ;; load additional configuration
 (cond ((is-yizhx) (org-babel-load-file
-                   (expand-file-name "amazon-config.org"
+                   (expand-file-name "secret.org"
                                      user-emacs-directory))))

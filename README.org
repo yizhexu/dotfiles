@@ -20,9 +20,9 @@ and more
 #+BEGIN_SRC bash
 cd dotfile.secret
 gpg -e ssh-config
-gpg -e secret-config.org
+gpg -e secret.org
 gpg -e pgpass
-gpg -e secret-path.bash
+gpg -e secret.bash
 #+END_SRC
 
 ** decrypt
@@ -31,13 +31,13 @@ gpg -e secret-path.bash
 mkdir -p ssh/.ssh
 gpg -d dotfile.secret/ssh-config.gpg > ssh/.ssh/config
 
-gpg -d dotfile.secret/secret-config.org.gpg > emacs/.emacs.d/secret-config.org
+gpg -d dotfile.secret/secret.org.gpg > emacs/.emacs.d/secret.org
 
 mkdir -p pg
 gpg -d dotfile.secret/pgpass.gpg > pg/.pgpass
 chmod 0600 ~/.pgpass
 
-gpg -d dotfile.secret/secret-path.bash.gpg > bash/.bashrc.d/secret-path.bash
+gpg -d dotfile.secret/secret.bash.gpg > bash/.bashrc.d/secret.bash
 #+END_SRC
 
 ** dotfiles
