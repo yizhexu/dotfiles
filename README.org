@@ -19,11 +19,11 @@ and more
 
 #+BEGIN_SRC bash
 cd dotfile.secret
-gpg -e ssh-config
-gpg -e secret.org
-gpg -e pgpass
-gpg -e secret.bash
-#+END_SRC
+gpg -e -r "yizhx" ssh-config
+gpg -e -r "yizhx" secret.org
+gpg -e -r "yizhx" pgpass
+gpg -e -r "yizhx" secret.bash
+#+End_SRC
 
 ** decrypt
 
