@@ -21,6 +21,7 @@ and more
 cd dotfile.secret
 gpg -e ssh-config
 gpg -e emacs-amazon-config.org
+gpg -e pgpass
 #+END_SRC
 
 ** decrypt
@@ -28,10 +29,13 @@ gpg -e emacs-amazon-config.org
 #+BEGIN_SRC bash
 mkdir -p ssh/.ssh
 gpg -d dotfile.secret/ssh-config.gpg > ssh/.ssh/config
-gpg -d dotfile.secret/emacs-amazon-config.org.gpg > emacs/.emacs.d/amazon-config.org
-#+END_SRC
 
-#+RESULTS:
+gpg -d dotfile.secret/emacs-amazon-config.org.gpg > emacs/.emacs.d/amazon-config.org
+
+mkdir -p pg
+gpg -d dotfile.secret/pgpass.gpg > pg/.pgpass
+chmod 0600 ~/.pgpass
+#+END_SRC
 
 ** dotfiles
 
