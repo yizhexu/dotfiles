@@ -11,6 +11,7 @@
 !README.org
 
 # allow some
+bash/*
 !/bash/.bashrc
 
 emacs/.emacs.d/*
@@ -22,6 +23,8 @@ dotfile.secret/*
 !/dotfile.secret/*.gpg
 
 ssh/.ssh/*
+
+pg/*
 
 !/git/.gitconfig
 !/vim/.vimrc

@@ -13,5 +13,8 @@ shopt -s histappend
 # path
 source ~/.bashrc.d/path.bash
 
+# secret path
+source ~/.bashrc.d/secret-path.bash
+
 # aliases
 source ~/.bashrc.d/aliases.bash
