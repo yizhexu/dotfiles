@@ -308,7 +308,7 @@ Visual indication of matching pairs of parentheses
     (sp-local-pair "*" "*")
     (sp-local-pair "=" "=")
     (sp-local-pair "/" "/")
-    (sp-local-pair "<" ">")
+    (sp-local-pair "(" ")")
     (sp-local-pair "[" "]"))
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode)))
@@ -566,6 +566,7 @@ Append path of my programs
 (yizhe/append-to-path "/usr/bin")
 (yizhe/append-to-path "/usr/local/bin")
 #+END_SRC
+
 ** Company Mode
 
 #+BEGIN_SRC emacs-lisp
@@ -616,6 +617,8 @@ Indent with 2 spaces.
           (lambda ()
             (setq sh-basic-offset 2
                   sh-indentation 2)))
+
+(setq-default explicit-shell-file-name "bash")
 #+END_SRC
 
 ** Eshell
@@ -793,7 +796,7 @@ Add =/opt/anaconda/bin= to load path.
 
 #+BEGIN_SRC emacs-lisp
 (when (is-linux-p) (yizhe/append-to-path "/opt/anaconda/bin"))
-(when (is-mac-p) (yizhe/append-to-path "/usr/local/anaconda3/bin"))
+(when (is-mac-p) (yizhe/append-to-path "~~/.pyenv/shims/python"))
 #+END_SRC
 
 Configure my coda environments
@@ -801,7 +804,7 @@ Configure my coda environments
 #+BEGIN_SRC emacs-lisp
 ; where to look for environments
 (when (is-linux-p)(setenv "WORKON_HOME" "/home/yizhe/.conda/envs"))
-(when (is-mac-p)(setenv "WORKON_HOME" "/usr/local/anaconda3/envs"))
+(when (is-mac-p)(setenv "WORKON_HOME" "~/.local/share/virtualenvs"))
 
 (use-package pyvenv
         :init
@@ -1077,6 +1080,13 @@ Line truncates
 #+BEGIN_SRC emacs-lisp
 (use-package graphviz-dot-mode)
 #+END_SRC
+** tramp
+
+#+BEGIN_SRC emacs-lisp
+(setq tramp-auto-save-directory "~/tmp")
+(setq tramp-shell-prompt-pattern "^[^$>\n]*[#$%>] *\\(\[[0-9;]*[a-zA-Z] *\\)*")
+#+END_SRC
+
 * Writing
 ** org-mode
 
@@ -1264,6 +1274,13 @@ Use org-noter
         org-noter-separate-notes-from-heading t))
 #+END_SRC
 
+On smaller screen, change the split
+
+#+BEGIN_SRC emacs-lisp
+(when (is-mac-p)
+  (setq org-noter-set-doc-split-fraction 0.7))
+#+END_SRC
+
 Combine to use with org-ref, [[https://write.as/dani/notes-on-org-noter][source]]
 
 #+BEGIN_SRC emacs-lisp
@@ -1338,7 +1355,7 @@ Configure paths stuff for pdf-tools
              (:name "Follow-Up" ;; monastery work
                     :tag "followup")
              ;; After the last group, the agenda will display items that didn't
-             ;; match any of these groups, with the default order position of 99
+             ;;m atch any of these groups, with the default order position of 99
              ;; To prevent this, add this code:
              ;; (:discard (:anything t))
              )))
