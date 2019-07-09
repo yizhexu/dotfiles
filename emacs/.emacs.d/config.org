@@ -78,7 +78,6 @@ Different setup sometimes required for different operating system
 (defun is-yizhx
     ()
   (string-equal user-login-name "yizhx"))
-
 #+END_SRC
 
 ** Internet
@@ -345,6 +344,13 @@ Visual indication of matching pairs of parentheses
             ("C-x C-=" . hydra-zoom/body)
             ("C-x C--" . hydra-zoom/body)
             ("C-x C-+" . hydra-zoom/body))
+#+END_SRC
+
+*** Key Binding
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x C-=") 'text-scale-increase)
+(global-set-key (kbd "C-x C--") 'text-scale-decrease)
 #+END_SRC
 
 ** Window
@@ -796,7 +802,7 @@ Add =/opt/anaconda/bin= to load path.
 
 #+BEGIN_SRC emacs-lisp
 (when (is-linux-p) (yizhe/append-to-path "/opt/anaconda/bin"))
-(when (is-mac-p) (yizhe/append-to-path "~~/.pyenv/shims/python"))
+(when (is-mac-p) (yizhe/append-to-path "~/.pyenv/shims/python"))
 #+END_SRC
 
 Configure my coda environments
@@ -1074,7 +1080,7 @@ Line truncates
 upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
 
 #+BEGIN_SRC emacs-lisp
-(defun upcase-sql-keywords ()
+(defun sql-upcase-keywords ()
   (interactive)
   (save-excursion
     (dolist (keywords sql-mode-postgres-font-lock-keywords)
@@ -1100,6 +1106,7 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
 ** tramp
 
 #+BEGIN_SRC emacs-lisp
+(setq tramp-default-method "sshx")
 (setq tramp-auto-save-directory "~/tmp")
 (setq tramp-shell-prompt-pattern "^[^$>\n]*[#$%>] *\\(\[[0-9;]*[a-zA-Z] *\\)*")
 #+END_SRC
@@ -1175,8 +1182,10 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
   (add-hook 'org-mode-hook
             '(lambda ()
                "Beautify Org Checkbox Symbol"
-               (push '("[ ]" . "☐") prettify-symbols-alist)
-               (push '("[x]" . "☒") prettify-symbols-alist)
+                (push '("TODO"  . ?▲) prettify-symbols-alist)
+                (push '("DONE"  . ?✓) prettify-symbols-alist)
+                (push '("CANCELLED"  . ?✘) prettify-symbols-alist)
+                (push '("QUESTION"  . ??) prettify-symbols-alist)
                (prettify-symbols-mode)
                ))
   )
@@ -1597,20 +1606,9 @@ However, there are a *lot* of commands for clocking; this is a perfect instance 
 (bind-key "C-c t" 'open-todo-file)
 #+end_src
 
-** Prettify Symbols
-#+begin_src emacs-lisp
-(add-hook 'org-mode-hook
-              (lambda ()
-                (push '("TODO"  . ?▲) prettify-symbols-alist)
-                (push '("DONE"  . ?✓) prettify-symbols-alist)
-                (push '("CANCELLED"  . ?✘) prettify-symbols-alist)
-                (push '("QUESTION"  . ??) prettify-symbols-alist)))
-#+end_src
+** Search
 
-Visual Line Mode
-(add-hook 'text-mode-hook 'turn-on-visual-line-mode)
-Repeated Words
-From an appendix in Intro to Emacs Lisp.
+#+BEGIN_SRC emacs-lisp
 
 (defun the-the ()
   "Search forward for for a duplicated word."
@@ -1627,6 +1625,7 @@ From an appendix in Intro to Emacs Lisp.
 ;; Bind 'the-the' to  C-c \
 (bind-key "C-c \\" 'the-the)
 
+#+END_SRC
 * Browsing
 ** Browsers
 #+BEGIN_SRC emacs-lisp
@@ -1636,7 +1635,6 @@ From an appendix in Intro to Emacs Lisp.
 
 (bind-key "C-c B" 'browse-url-at-point)
 
-(setq browse-url-browser-function 'eww-browse-url)
 #+END_SRC
 * Editing
 ** Expand
