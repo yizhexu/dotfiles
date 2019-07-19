@@ -1,3 +1,6 @@
+# Bash
+export SHELL=/bin/bash
+
 # Prompt for the legends
 PS1='\[\e[0;36m\]ϟϟϟ \[\e[0;32m\]\w ⟶ \[\e[0;37m\]'
 
