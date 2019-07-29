@@ -1107,7 +1107,7 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
 
 #+BEGIN_SRC emacs-lisp
 (setq tramp-default-method "sshx")
-(setq tramp-auto-save-directory "~/tmp")
+(setq tramp-auto-save-directory "~/Documents/auto-saves")
 (setq tramp-shell-prompt-pattern "^[^$>\n]*[#$%>] *\\(\[[0-9;]*[a-zA-Z] *\\)*")
 #+END_SRC
 
