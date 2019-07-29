@@ -7,4 +7,4 @@
  (expand-file-name "config.org" user-emacs-directory))
 
 ;; load additional configuration
-(cond ((is-yizhx) (org-babel-load-file (expand-file-name "secret.org" user-emacs-directory))))
+;; (cond ((is-yizhx) (org-babel-load-file (expand-file-name "additional-config.org" user-emacs-directory))))

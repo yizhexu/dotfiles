@@ -1423,8 +1423,7 @@ Configure paths stuff for pdf-tools
 ** Agenda Files
 
 #+begin_src emacs-lisp
-(setq org-agenda-files (list "~/Documents/megrez/todo.org"
-                             "~/Documents/megrez/inbox.org"))
+(setq org-agenda-files (list "~/Documents/megrez/todo.org"))
 #+end_src
 
 ** Open Org Agenda
