@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+# -*- mode: sh -*-
 # Bash
 export SHELL=/bin/bash
 
@@ -13,11 +15,22 @@ export HISTSIZE=10000
 # Append to the history file when exiting instead of overwriting it
 shopt -s histappend
 
-# path
-source ~/.bashrc.d/path.bash
+# Define functions
+pathconcat () {
+  if ! echo $PATH | egrep -q "(^|:)$1($|:)" ; then
+    if [ "$2" = "after" ] ; then
+      PATH=$PATH:$1
+    else
+      PATH=$1:$PATH
+    fi
+  fi
+}
 
-# aliases
-source ~/.bashrc.d/aliases.bash
+# path, alias, and other configs
+configs=`ls $HOME/.bashrc.d` 
 
-# secret bash
-source ~/.bashrc.d/secret.bash
+for config in $configs
+do
+    source $HOME/.bashrc.d/$config
+done
+

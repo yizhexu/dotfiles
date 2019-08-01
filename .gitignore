@@ -11,6 +11,8 @@
 !README.org
 
 # allow some
+aws/
+
 bash/*
 !/bash/.bashrc
 

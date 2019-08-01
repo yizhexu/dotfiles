@@ -1159,7 +1159,7 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
           ("\\.x?html?\\'" . "firefox %s")
           ("\\.pdf\\'" . "open %s"))
         org-todo-keywords
-        '((sequence "TODO(t)" "STARTED(s)" "WAITING(w)" "SOMEDAY(.)" "MAYBE(m)" "|" "DONE(x!)" "CANCELLED(c)"))
+        '((sequence "TODO(t)" "STARTED(s)" "MAYBE(m)" "|" "DONE(x!)" "CANCELLED(c)"))
         ;; Theming
         org-ellipsis "⤵" ;; foldings symbol
         org-pretty-entities t
@@ -1182,10 +1182,11 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
   (add-hook 'org-mode-hook
             '(lambda ()
                "Beautify Org Checkbox Symbol"
-                (push '("TODO"  . ?▲) prettify-symbols-alist)
-                (push '("DONE"  . ?✓) prettify-symbols-alist)
-                (push '("CANCELLED"  . ?✘) prettify-symbols-alist)
-                (push '("QUESTION"  . ??) prettify-symbols-alist)
+               (push '("TODO"  . ?▲) prettify-symbols-alist)
+               (push '("STARTED"  . ?♫) prettify-symbols-alist)
+               (push '("MAYBE"  . ??) prettify-symbols-alist)
+               (push '("DONE"  . ?✓) prettify-symbols-alist)
+               (push '("CANCELLED"  . ?✘) prettify-symbols-alist)
                (prettify-symbols-mode)
                ))
   )
