@@ -7,6 +7,12 @@
         calendar-longitude -122.3497462)
 #+end_src
 
+* Debug
+
+#+BEGIN_SRC emacs-lisp
+(setq debug-on-error t)
+#+END_SRC
+
 * Package Management
 
 package.el is a package manager for emacs modes
@@ -878,6 +884,7 @@ Enable graphical output
 Some inline example SRC_R[:exports results]{round(pi, 2)}
 
 ** Python
+*** Config
 
 Add =/opt/anaconda/bin= to load path.
 
@@ -1001,6 +1008,50 @@ Format code according to =PEP8= when save:
     (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi)))
     (setq company-jedi-python-bin "python")))
 #+END_SRC
+
+*** Example of use
+
+Plots
+
+#+begin_src python :results file
+import matplotlib, numpy
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+fig=plt.figure(figsize=(4,2))
+x=numpy.linspace(-15,15)
+plt.plot(numpy.sin(x)/x)
+fig.tight_layout()
+plt.savefig('python-matplot-fig.png')
+return 'python-matplot-fig.png' # return filename to org-mode
+#+end_src
+
+#+RESULTS:
+[[file:python-matplot-fig.png]]
+
+Inline: Two plus two equals src_python{return(2+2)}
+
+#+begin_src python :session calc :exports code :results none
+a = 5 + 5
+#+end_src
+
+Another inline example: the result of the calculation is src_python[:session calc]{a}
+
+Another example using value raw option ([[https://orgmode.org/manual/results.html][link]])
+
+#+begin_src python :session calc :exports code :results values raw
+a = 5 + 5
+b = a-1
+ares = '#+MACRO: a '+ str(a)
+bres = '#+MACRO: b '+ str(b)
+ares + '\n' + bres
+#+end_src
+
+#+RESULTS:
+#+MACRO: a 10
+#+MACRO: b 9
+
+The result is still {{{a}}} and b is {{{b}}}. The key is source code
+block needs to evaluated first before export.
 
 ** Julia
 *** With OSX
@@ -1449,6 +1500,55 @@ Configure paths stuff for pdf-tools
   (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo"))
 (pdf-tools-install)
 #+END_SRC
+
+** table
+
+Read doc at [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Text-Based-Tables.html][here]]
+
+Bound to table mode: =C-c ~=
+
++---------+---------+---------+
+| Header1 | Header2 | Header3 |
++---------+---------+---------+
+| Merged  | Text1   | Text2   |
+| text    +---------+---------+
+| here    | Text3   | Text4   |
++---------+---------+---------+
+
++-----------------+--------------------------------+-----------------+
+|     Command     |          Description           |   Key Binding   |
++-----------------+--------------------------------+-----------------+
+|  forward-char   |Move point right N characters   |       C-f       |
+|                 |(left if N is negative).        |                 |
+|                 |                                |                 |
++-----------------+--------------------------------+-----------------+
+|  backward-char  |Move point left N characters    |       C-b       |
+|                 |(right if N is negative).       |                 |
+|                 |                                |                 |
++-----------------+--------------------------------+-----------------+
+
+Create table: =M-x table-insert=
+
+=M-x table-span-cell=
+
+=M-x table-split-cell=
+
+=M-x table-heighten-cell=
+Enlarge the current cell vertically.
+
+
+=M-x table-shorten-cell=
+Shrink the current cell vertically.
+
+
+=M-x table-widen-cell=
+Enlarge the current cell horizontally.
+
+
+=M-x table-narrow-cell=
+Shrink the current cell horizontally.
+
+
 
 * Organizing
 ** Configuration
