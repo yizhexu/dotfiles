@@ -1030,11 +1030,16 @@ return 'python-matplot-fig.png' # return filename to org-mode
 
 Inline: Two plus two equals src_python{return(2+2)}
 
-#+begin_src python :session calc :exports code :results none
+#+begin_src python :session sess_calc :exports code :results none
 a = 5 + 5
+b = a + 5
 #+end_src
 
 Another inline example: the result of the calculation is src_python[:session calc]{a}
+
+- test with result in a list: src_python[:session sess_calc]{a}
+  + src_python[:session sess_calc]{a} vs src_python[:session sess_calc]{b}
+  + 1 + 1 = src_python[:exports code]{ return 1 + 1 }
 
 Another example using value raw option ([[https://orgmode.org/manual/results.html][link]])
 
@@ -1042,7 +1047,7 @@ Another example using value raw option ([[https://orgmode.org/manual/results.htm
 a = 5 + 5
 b = a-1
 ares = '#+MACRO: a '+ str(a)
-bres = '#+MACRO: b '+ str(b)
+bres = '#+MACRO: a '+ str(b)
 ares + '\n' + bres
 #+end_src
 
@@ -1501,7 +1506,24 @@ Configure paths stuff for pdf-tools
 (pdf-tools-install)
 #+END_SRC
 
-** table
+** examples
+*** plain list
+**** Lord of the Rings
+   My favorite scenes are (in this order)
+   1. The attack of the Rohirrim
+   2. Eowyn's fight with the witch king
+      + this was already my favorite scene in the book
+      + I really like Miranda Otto.
+   3. Peter Jackson being shot by Legolas
+      - on DVD only
+      He makes a really funny face when it happens.
+   But in the end, no individual scenes matter but the film as a whole.
+   Important actors in this film are:
+   - Elijah Wood :: He plays Frodo
+   - Sean Astin :: He plays Sam, Frodo's friend.  I still remember
+     him very well from his role as Mikey Walsh in The Goonies.
+
+*** table
 
 Read doc at [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Text-Based-Tables.html][here]]
 
@@ -1547,8 +1569,6 @@ Enlarge the current cell horizontally.
 
 =M-x table-narrow-cell=
 Shrink the current cell horizontally.
-
-
 
 * Organizing
 ** Configuration
