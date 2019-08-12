@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 # -*- mode: sh -*-
 
-source $HOME/.bashrc.d/functions.bash
-
 pathconcat /usr/local/sbin
 pathconcat /usr/local/bin
 pathconcat /sbin after
