@@ -1011,7 +1011,7 @@ Format code according to =PEP8= when save:
 
 *** Example of use
 
-Plots
+**** plots
 
 #+begin_src python :results file
 import matplotlib, numpy
@@ -1028,7 +1028,7 @@ return 'python-matplot-fig.png' # return filename to org-mode
 #+RESULTS:
 [[file:python-matplot-fig.png]]
 
-Inline: Two plus two equals src_python{return(2+2)}
+**** inline source code
 
 #+begin_src python :session sess_calc :exports code :results none
 a = 5 + 5
@@ -1047,7 +1047,7 @@ Another example using value raw option ([[https://orgmode.org/manual/results.htm
 a = 5 + 5
 b = a-1
 ares = '#+MACRO: a '+ str(a)
-bres = '#+MACRO: a '+ str(b)
+bres = '#+MACRO: b '+ str(b)
 ares + '\n' + bres
 #+end_src
 
@@ -1057,6 +1057,21 @@ ares + '\n' + bres
 
 The result is still {{{a}}} and b is {{{b}}}. The key is source code
 block needs to evaluated first before export.
+
+**** caching
+
+#+name: cachedFunction
+#+BEGIN_SRC python :cache yes
+x = 18
+return x
+#+END_SRC
+
+#+name: uncachedFunction
+#+BEGIN_SRC python :var x=cachedFunction
+return int(x)
+#+END_SRC
+
+Now any calls to call_uncachedFunction() will get the cached value from cachedFunction.
 
 ** Julia
 *** With OSX
