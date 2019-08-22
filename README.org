@@ -9,6 +9,8 @@ and more
 
 * installing
 
+Clone repo. For example =~/Documents/dotfiles=
+
 ** stow
 
 - =sudo pacman -S stow=
@@ -17,6 +19,7 @@ and more
 
 ** dotfiles
 
+- =cd ~/Documents/dotfiles=
 - =stow emacs -t ~=
 - =stow bash -t ~=
 - and so on
