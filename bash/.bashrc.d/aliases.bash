@@ -20,7 +20,7 @@ alias ips="ifconfig -a | grep -o 'inet6\? \(addr:\)\?\s\?\(\(\([0-9]\+\.\)\{3\}[
 alias speedtest='echo "scale=2; `curl  --progress-bar -w "%{speed_download}" http://speedtest.wdc01.softlayer.com/downloads/test10.zip -o /dev/null` / 131072" | bc | xargs -I {} echo {} mbps'
 alias whois="whois -h whois-servers.net"
 alias p8="ping 8.8.8.8"
-alias pg="ping google.de"
+alias pg="ping google.com"
 
 # macos
 alias update='brew update && brew upgrade; brew cleanup'
