@@ -27,10 +27,4 @@ pathconcat () {
 }
 
 # path, alias, and other configs
-configs=`ls $HOME/.bashrc.d` 
-
-for config in $configs
-do
-    source $HOME/.bashrc.d/$config
-done
-
+source "${HOME}"/.bashrc.d/*
