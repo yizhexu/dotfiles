@@ -27,4 +27,8 @@ pathconcat () {
 }
 
 # path, alias, and other configs
-source "${HOME}"/.bashrc.d/*
+if [ -e "${HOME}"/.bashrc.d/ ] ; then
+  while IFS= read -r -d '' f ; do
+    . "${f}" >/dev/null 2>&1
+  done
+fi
