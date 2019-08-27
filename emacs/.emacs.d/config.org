@@ -18,13 +18,27 @@
 package.el is a package manager for emacs modes
 
 #+begin_src emacs-lisp
-  (require 'package)
-  (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                           ("melpa" . "https://melpa.org/packages/")
-                           ("org" . "https://orgmode.org/elpa/")))
-  (package-initialize)
+(require 'package)
 
-  ;(setq load-prefer-newer t)
+(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+                    (not (gnutls-available-p))))
+       (proto (if no-ssl "http" "https")))
+  (when no-ssl
+    (warn "\
+Your version of Emacs does not support SSL connections,
+which is unsafe because it allows man-in-the-middle attacks.
+There are two things you can do about this warning:
+1. Install an Emacs version that does support SSL and be safe.
+2. Remove this warning from your init file so you won't see it again."))
+  ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
+  (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+  ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
+  ;;(add-to-list 'package-archives (cons "org" (concat proto "://orgmode.org/elpa")) t)
+  (when (< emacs-major-version 24)
+    ;; For important compatibility libraries like cl-lib
+    (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")))))
+
+(package-initialize)
 #+end_src
 
 ** =use-package=
@@ -440,11 +454,11 @@ Visual indication of matching pairs of parentheses
             ("C-x C-+" . hydra-zoom/body))
 #+END_SRC
 
-*** Key Binding
+Temporary work around when hydra zoom doesn't work
 
 #+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-x C-=") 'text-scale-increase)
-(global-set-key (kbd "C-x C--") 'text-scale-decrease)
+;; (global-set-key (kbd "C-x C-=") 'text-scale-increase)
+;; (global-set-key (kbd "C-x C--") 'text-scale-decrease)
 #+END_SRC
 
 ** Window
@@ -452,7 +466,13 @@ Visual indication of matching pairs of parentheses
 Always full screen
 
 #+BEGIN_SRC emacs-lisp
-(set-frame-parameter nil 'fullscreen 'fullboth)
+;; (set-frame-parameter nil 'fullscreen 'fullboth)
+#+END_SRC
+
+Maximize screen
+
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -478,6 +498,14 @@ Always full screen
 #+BEGIN_SRC emacs-lisp
 (setq tls-checktrust t
       gnutls-verify-error t)
+;; FIXME:  workaround to fix https not working well with elpa
+;; https://www.reddit.com/r/orgmode/comments/cvmjjr/workaround_for_tlsrelated_bad_request_and_package/
+(when
+  (and
+    (>= libgnutls-version 30603)
+    (version<= emacs-version "26.2")
+  )
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 #+END_SRC
 
 ** Encryption
@@ -1437,9 +1465,14 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
 ** org-modules
 
  #+BEGIN_SRC emacs-lisp
- (require 'org-install)
- (setq org-modules '(org-habit org-info org-tempo))
- (org-load-modules-maybe t)
+(require 'org-install)
+;; FIXME: workaround
+;; https://github.com/syl20bnr/spacemacs/issues/11798
+(when (version<= "9.2" (org-version))
+  (require 'org-tempo))
+
+(setq org-modules '(org-habit org-info))
+(org-load-modules-maybe t)
  #+END_SRC
 
 ** org-habits

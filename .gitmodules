@@ -1,0 +1,3 @@
+[submodule "friendlies/dotfiles"]
+	path = friendlies/dotfiles
+	url = https://gitlab.com/tom.expd/dotfiles.git
