@@ -2,14 +2,12 @@
 # -*- mode: sh -*-
 
 # list direcory conqtents
-alias ls='ls -G'
 alias lsa='ls -lah'
 alias l='ls -lah'
 alias ll='ls -lh'
 alias la='ls -lAh'
 
 # color output
-alias grep='grep --color=auto'
 alias tree="tree -C"
 alias less="less -R" # display colors correctly
 
