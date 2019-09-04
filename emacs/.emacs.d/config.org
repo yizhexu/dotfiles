@@ -132,11 +132,15 @@ Transparency looks nice
 ** Theme
 
 #+begin_src emacs-lisp
-(use-package nord-theme
+(use-package monokai-pro-theme
   :config
-  (load-theme 'nord t)
-        (transparency 93)
-        (let ((line (face-attribute 'mode-line :underline)))
+  (load-theme 'monokai-pro t)
+
+  ;; (use-package nord-theme
+  ;;   :config
+  ;;   (load-theme 'nord t)
+  (transparency 93)
+  (let ((line (face-attribute 'mode-line :underline)))
     (set-face-attribute 'mode-line          nil :overline   line)
     (set-face-attribute 'mode-line-inactive nil :overline   line)
     (set-face-attribute 'mode-line-inactive nil :underline  line)
@@ -156,6 +160,12 @@ Maximize screen room
  (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
  #+END_SRC
 
+ replace the active region just by typing text, just like modern editors
+
+ #+BEGIN_SRC emacs-lisp
+ (delete-selection-mode +1)
+ #+END_SRC
+
 *** Startup Message
 
 #+BEGIN_SRC emacs-lisp
@@ -167,7 +177,18 @@ Maximize screen room
 ** Font
 
 #+BEGIN_SRC emacs-lisp
-(set-default-font "Hack-12")
+(set-default-font "Hack")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(font-family-list)
+#+END_SRC
+
+** Line Spacing
+
+#+BEGIN_SRC emacs-lisp
+;; increase line space for better readability
+(setq-default line-spacing 3)
 #+END_SRC
 
 ** Unicode
@@ -310,7 +331,8 @@ Return `default-directory' if no project was found."
                 ;;mode-line-misc-info
                 mode-line-end-spaces))
 #+END_SRC
-** Power
+
+** Battery
 
 #+BEGIN_SRC emacs-lisp
   (when (is-mac-p)
@@ -414,7 +436,8 @@ Visual indication of matching pairs of parentheses
   (show-smartparens-global-mode t)
   (use-package smartparens-config
     :ensure f)
-  ;(bind-key "s" 'smartparens-mode toggle-map)
+  ;;; FIXME: Symbol’s value as variable is void: toggle-map
+  ;; (bind-key "s" 'smartparens-mode toggle-map)
   (when (is-mac-p)
     (bind-keys ("<s-right>" . sp-forward-slurp-sexp)
                ("<s-left>" . sp-forward-barf-sexp)))
@@ -594,6 +617,15 @@ Make C-n insert new lines if the point is at the end of the buffer.
 (setq next-line-add-newlines t)
 #+END_SRC
 ** Scrolling
+
+#+BEGIN_SRC emacs-lisp
+;; better scrolling experience
+(setq scroll-margin 0
+      scroll-conservatively 10000
+      scroll-preserve-screen-position t
+      auto-window-vscroll nil)
+#+END_SRC
+
 There are lots of neat ways of moving around quickly in a
 buffer. (Source: [[http://whattheemacsd.com/key-bindings.el-02.html][What the .emacs.d?]])
 
@@ -721,8 +753,12 @@ This binding comes from Emacs Redux.
 
 #+BEGIN_SRC emacs-lisp
 (use-package which-key
-  :init
-  (which-key-mode))
+  :diminish which-key-mode
+  :defer 1
+  :config
+  (which-key-mode +1)
+  (setq which-key-idle-delay 0.4
+        which-key-idle-secondary-delay 0.4))
 #+END_SRC
 
 ** discover-my-major
@@ -1376,6 +1412,11 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
 (setq tramp-default-method "sshx")
 (setq tramp-auto-save-directory "~/Documents/auto-saves")
 (setq tramp-shell-prompt-pattern "^[^$>\n]*[#$%>] *\\(\[[0-9;]*[a-zA-Z] *\\)*")
+#+END_SRC
+** json
+
+#+BEGIN_SRC emacs-lisp
+(use-package json-mode)
 #+END_SRC
 
 * Writing
@@ -2069,10 +2110,11 @@ Actionable URLs in Emacs buffers via [[http://xenodium.com/#actionable-urls-in-e
     (unbind-key "C-c C-q" aggressive-indent-mode-map))
 #+END_SRC
 
-Use spaces instead of tab
+Use spaces instead of tab for intentation - 4 spaces
 
 #+BEGIN_SRC emacs-lisp
-(setq-default indent-tabs-mode nil)
+(setq-default indent-tabs-mode nil
+              tab-width 4)
 #+END_SRC
 
 ** Spell Check
@@ -2103,6 +2145,20 @@ Thanks to [[https://blog.binchen.org/posts/what-s-the-best-spell-check-set-up-in
   (setq ispell-program-name "aspell")
   ;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
   (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))))
+#+END_SRC
+
+Check word-spellings in strings and comments
+
+#+BEGIN_SRC emacs-lisp
+(use-package flyspell
+  :hook (prog-mode . flyspell-prog-mode))
+#+END_SRC
+
+** Flycheck
+
+#+BEGIN_SRC emacs-lisp
+(use-package flycheck
+  :hook (after-init . global-flycheck-mode))
 #+END_SRC
 
 * Functions
