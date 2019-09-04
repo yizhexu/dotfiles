@@ -132,24 +132,32 @@ Transparency looks nice
 ** Theme
 
 #+begin_src emacs-lisp
-(use-package monokai-pro-theme
-  :config
-  (load-theme 'monokai-pro t)
+(when (is-mac-p)
+  (use-package nord-theme
+    :config
+    (load-theme 'nord t)
+    (transparency 93)
+    (let ((line (face-attribute 'mode-line :underline)))
+      (set-face-attribute 'mode-line          nil :overline   line)
+      (set-face-attribute 'mode-line-inactive nil :overline   line)
+      (set-face-attribute 'mode-line-inactive nil :underline  line)
+      (set-face-attribute 'mode-line          nil :box        nil)
+      (set-face-attribute 'mode-line-inactive nil :box        nil))))
 
-  ;; (use-package nord-theme
-  ;;   :config
-  ;;   (load-theme 'nord t)
-  (transparency 93)
-  (let ((line (face-attribute 'mode-line :underline)))
-    (set-face-attribute 'mode-line          nil :overline   line)
-    (set-face-attribute 'mode-line-inactive nil :overline   line)
-    (set-face-attribute 'mode-line-inactive nil :underline  line)
-    (set-face-attribute 'mode-line          nil :box        nil)
-    (set-face-attribute 'mode-line-inactive nil :box        nil)))
+(when (is-linux-p)
+  (use-package monokai-pro-theme
+    :config
+    (load-theme 'monokai-pro t)
+    (transparency 93)
+    (let ((line (face-attribute 'mode-line :underline)))
+      (set-face-attribute 'mode-line          nil :overline   line)
+      (set-face-attribute 'mode-line-inactive nil :overline   line)
+      (set-face-attribute 'mode-line-inactive nil :underline  line)
+      (set-face-attribute 'mode-line          nil :box        nil)
+      (set-face-attribute 'mode-line-inactive nil :box        nil))))
 #+end_src
 
 ** Simplify UI
-
 *** Top Bar
 
 Maximize screen room
