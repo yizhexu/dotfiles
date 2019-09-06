@@ -1,3 +1,3 @@
-[submodule "friendlies/dotfiles"]
-	path = friendlies/dotfiles
+[submodule "friendlies/tom"]
+	path = friendlies/tom
 	url = https://gitlab.com/tom.expd/dotfiles.git
