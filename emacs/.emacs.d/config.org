@@ -2169,6 +2169,14 @@ Check word-spellings in strings and comments
   :hook (after-init . global-flycheck-mode))
 #+END_SRC
 
+** Fixme
+
+Highlight and navigate fixmes
+
+#+BEGIN_SRC
+(use-package hi-lock-mode)
+#+END_SRC
+
 * Functions
 ** Emacs Configuration File
 This function and the corresponding keybinding allows me to rapidly

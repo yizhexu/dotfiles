@@ -29,5 +29,6 @@ ssh/.ssh/*
 pg/*
 
 !/git/.gitconfig
+!/git/.gitmessage
 !/vim/.vimrc
 !/screen/.screenrc
