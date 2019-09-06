@@ -2183,7 +2183,7 @@ Check word-spellings in strings and comments
 
 Highlight and navigate fixmes
 
-#+BEGIN_SRC
+#+BEGIN_SRC emacs-lisp
 (use-package hi-lock-mode)
 #+END_SRC
 
