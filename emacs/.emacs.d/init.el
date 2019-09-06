@@ -8,3 +8,4 @@
 
 ;; load additional configuration
 ;; (cond ((is-yizhx) (org-babel-load-file (expand-file-name "additional-config.org" user-emacs-directory))))
+(setq custom-file "~/.emacs.d/custom-set-variables.el")

@@ -145,9 +145,9 @@ Transparency looks nice
       (set-face-attribute 'mode-line-inactive nil :box        nil))))
 
 (when (is-linux-p)
-  (use-package monokai-pro-theme
+  (use-package afternoon-theme
     :config
-    (load-theme 'monokai-pro t)
+    (load-theme 'afternoon t)
     (transparency 93)
     (let ((line (face-attribute 'mode-line :underline)))
       (set-face-attribute 'mode-line          nil :overline   line)
@@ -532,6 +532,12 @@ Maximize screen
 (bind-key "C-x 3" 'hsplit-last-buffer)
 #+END_SRC
 
+** Title of Frame
+
+#+BEGIN_SRC emacs-lisp
+(setq frame-title-format '("Orca"))
+#+END_SRC
+
 * Security
 ** TLS
 
@@ -587,12 +593,17 @@ Force emacs to use its own password prompt ([[https://github.com/mwfogleman/.ema
 
 ** Auto Revert
 
-Revert buffers automatically when underlying files are changed externally.
+Revert buffers automatically when underlying files are changed externally. Auto refreshes every 2 seconds. Don't forget to refresh the version control status as well.
 
-#+BEGIN_SRC emacs-lispAuto Revert Mode
-(global-auto-revert-mode t)
-(setq global-auto-revert-non-file-buffers t
-      auto-revert-verbose nil)
+#+BEGIN_SRC emacs-lisp
+  (use-package autorevert
+    :ensure nil
+    :hook (after-init . global-auto-revert-mode)
+    :config
+    (setq
+      auto-revert-interval 2
+      auto-revert-check-vc-info t
+      auto-revert-verbose nil))
 #+END_SRC
 
 ** Save Place
@@ -804,12 +815,10 @@ have been so useful!
 Define append to path method
 
 #+BEGIN_SRC emacs-lisp
-
-  (defun yizhe/append-to-path (path)
-    "Add a path both to the $PATH variable and Emacs's path"
-    (setenv "PATH" (concat (getenv "PATH") ":" path))
-    (add-to-list 'exec-path path))
-
+(defun yizhe/append-to-path (path)
+  "Add a path both to the $PATH variable and Emacs's path"
+  (setenv "PATH" (concat (getenv "PATH") ":" path))
+  (add-to-list 'exec-path path))
 #+END_SRC
 
 Append path of my programs
@@ -1289,6 +1298,7 @@ input.
 #+END_SRC
 
 *** Eldoc
+
 When in emacs-lisp-mode, display the argument list for the current
 function.
 
