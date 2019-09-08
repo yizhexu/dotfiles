@@ -1703,6 +1703,13 @@ Configure paths stuff for pdf-tools
 (pdf-tools-install)
 #+END_SRC
 
+** ox-hugo
+
+#+BEGIN_SRC emacs-lisp
+(use-package ox-hugo
+  :after ox)
+#+END_SRC
+
 ** examples
 *** plain list
 **** Lord of the Rings
