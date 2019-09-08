@@ -1,11 +1,25 @@
 #!/usr/bin/env bash
 # -*- mode: sh -*-
 
-# list direcory conqtents
+# list direcory contents
+usage() {
+  du -sch "$@" | sort -h
+}
+
+# ls
+if ls --color > /dev/null 2>&1; then colorflag="--color"; else colorflag="-G"; fi;
+export CLICOLOR_FORCE=1
+
+alias ls='ls ${colorflag} --group-directories-first'
 alias lsa='ls -lah'
 alias l='ls -lah'
 alias ll='ls -lh'
 alias la='ls -lAh'
+
+# mv, rm, cp
+alias mv='mv -v'
+alias rm='rm -i -v'
+alias cp='cp -v'
 
 # color output
 alias tree="tree -C"
@@ -20,7 +34,6 @@ alias whois="whois -h whois-servers.net"
 alias p8="ping 8.8.8.8"
 alias pg="ping google.com"
 
-# macos
 alias update='brew update && brew upgrade; brew cleanup'
 
 # Recursively delete `.DS_Store` files
@@ -47,7 +60,3 @@ alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resource
 # wifi password
 alias wifipass="security find-generic-password -g -D \"AirPort network password\" -w -a"
 alias wifipow="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -s"
-
-usage() {
-  du -sch "$@" | sort -h
-}

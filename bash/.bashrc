@@ -77,10 +77,6 @@ if ${use_color} ; then
         PS1='\[\e[0;36m\]ϟϟϟ \[\e[0;32m\]\w ⟶ \[\e[0;37m\]'
     fi
 
-    #alias ls='ls --color=auto'
-    alias grep='grep --colour=auto'
-    alias egrep='egrep --colour=auto'
-    alias fgrep='fgrep --colour=auto'
 else
     if [[ ${EUID} == 0 ]] ; then
         # show root@ when we don't have colors
