@@ -132,29 +132,16 @@ Transparency looks nice
 ** Theme
 
 #+begin_src emacs-lisp
-(when (is-mac-p)
-  (use-package nord-theme
-    :config
-    (load-theme 'nord t)
-    (transparency 93)
-    (let ((line (face-attribute 'mode-line :underline)))
-      (set-face-attribute 'mode-line          nil :overline   line)
-      (set-face-attribute 'mode-line-inactive nil :overline   line)
-      (set-face-attribute 'mode-line-inactive nil :underline  line)
-      (set-face-attribute 'mode-line          nil :box        nil)
-      (set-face-attribute 'mode-line-inactive nil :box        nil))))
-
-(when (is-linux-p)
-  (use-package afternoon-theme
-    :config
-    (load-theme 'afternoon t)
-    (transparency 93)
-    (let ((line (face-attribute 'mode-line :underline)))
-      (set-face-attribute 'mode-line          nil :overline   line)
-      (set-face-attribute 'mode-line-inactive nil :overline   line)
-      (set-face-attribute 'mode-line-inactive nil :underline  line)
-      (set-face-attribute 'mode-line          nil :box        nil)
-      (set-face-attribute 'mode-line-inactive nil :box        nil))))
+(use-package afternoon-theme
+  :config
+  (load-theme 'afternoon t)
+  (transparency 93)
+  (let ((line (face-attribute 'mode-line :underline)))
+    (set-face-attribute 'mode-line          nil :overline   line)
+    (set-face-attribute 'mode-line-inactive nil :overline   line)
+    (set-face-attribute 'mode-line-inactive nil :underline  line)
+    (set-face-attribute 'mode-line          nil :box        nil)
+    (set-face-attribute 'mode-line-inactive nil :box        nil)))
 #+end_src
 
 ** Simplify UI
@@ -1971,7 +1958,7 @@ When I do the following task, I use =C-c c= to capture it, including:
 ** Refile
 
 #+BEGIN_SRC emacs-lisp
-(setq org-refile-targets '((("~/Documents/megrez/todo.org" "~/Documents/megrez/archive.org") :maxlevel . 3))
+(setq org-refile-targets '((("~/Documents/yizhe/index.org" "~/Documents/megrez/todo.org") :maxlevel . 3))
       ;; org-refile-use-cache t
       org-refile-use-outline-path t)
 
@@ -1979,8 +1966,9 @@ When I do the following task, I use =C-c c= to capture it, including:
 
 Exclude completed tasks from refile targets, from Michael Englehorn’s Emacs Configuration.
 
-#+BEGIN_SRC emacs-lisp
-(defun verify-refile-target ()
+#+BEGIN_SRC
+(defun verify-refile-target
+    ()
   "Exclude todo keywords with a done state from refile targets"
   (not (member (nth 2 (org-heading-components)) org-done-keywords)))
 
@@ -2246,14 +2234,18 @@ access my configuration. They are adapted from Bozhidar Batsov’s post
 on Emacs Redux.
 
 #+begin_src emacs-lisp
-  (defun find-config-file ()
-    "Edit my emacs config file"
-    (interactive)
-    (let ((config-file "~/.emacs.d/config.org"))
-      (find-file config-file)))
+(defun find-config-file
+    ()
+  "Edit my emacs config file"
+  (interactive)
+  (let ((config-file "~/.emacs.d/config.org"))
+    (find-file config-file)))
 
-  (bind-key "C-c e" 'find-config-file)
+(bind-key "C-c e" 'find-config-file)
 #+end_src
+
+#+RESULTS:
+: find-config-file
 
 I use mwf-init-file rather than user-init-file, because I edit the
   config file in a Git repo.
