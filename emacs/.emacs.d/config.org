@@ -196,7 +196,7 @@ Maximize screen room
 
 #+BEGIN_SRC emacs-lisp
 ;; increase line space for better readability
-(setq-default line-spacing 3)
+(setq-default line-spacing 0.5)
 #+END_SRC
 
 ** Unicode
@@ -1458,47 +1458,49 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
   (org-image-actual-width '(600))
   :init
   (setq default-major-mode 'org-mode
-        org-directory "~/Documents/megrez/"
-        org-log-done t
-        org-startup-indented t
-        org-startup-truncated nil
-        org-startup-with-inline-images t
-        org-completion-use-ido t
-        org-default-notes-file (concat org-directory "todo.org")
-        org-image-actual-width '(300)
-        org-goto-max-level 10
-        org-imenu-depth 5
-        org-goto-interface 'outline-path-completion
-        org-outline-path-complete-in-steps nil
-        org-src-fontify-natively t
+        org-agenda-block-separator ""
+        org-agenda-sticky t
+        org-agenda-tags-column org-tags-column
+        org-blank-before-new-entry '((heading . always) (plain-list-item . nil))
         org-confirm-babel-evaluate nil
-        org-src-preserve-indentation t
-        org-lowest-priority ?C
+        org-completion-use-ido t
         org-default-priority ?B
+        org-default-notes-file (concat org-directory "index.org")
+        org-directory "~/Documents/yizhe/"
+        org-ellipsis "⤵" ;; foldings symbol
         org-expiry-inactive-timestamps t
-        org-show-notification-handler 'message
-        org-special-ctrl-a/e t
-        org-special-ctrl-k t
-        org-yank-adjusted-subtrees t
-        org-src-window-setup 'current-window
+        org-fontify-whole-heading-line t
+        org-fontify-done-headline t
+        org-fontify-quote-and-verse-blocks t
+        org-format-latex-options (plist-put org-format-latex-options :scale 1.5)
         org-file-apps
         '((auto-mode . emacs)
           ("\\.mm\\'" . default)
           ("\\.x?html?\\'" . "firefox %s")
           ("\\.pdf\\'" . "open %s"))
-        org-todo-keywords
-        '((sequence "TODO(t)" "STARTED(s)" "MAYBE(m)" "WAITING(w)" "|" "DONE(x!)" "CANCELLED(c)"))
-        ;; Theming
-        org-ellipsis "⤵" ;; foldings symbol
+        org-goto-max-level 10
+        org-goto-interface 'outline-path-completion
+        org-hide-emphasis-markers t ;; show actually italicized text instead of /italicized text/
+        org-image-actual-width '(300)
+        org-imenu-depth 5
+        org-log-done t
+        org-startup-indented t
+        org-startup-truncated nil
+        org-startup-with-inline-images t
+        org-show-notification-handler 'message
+        org-special-ctrl-a/e t
+        org-special-ctrl-k t
+        org-src-preserve-indentation t
+        org-src-fontify-natively t
+        org-src-window-setup 'current-window
+        org-tags-column 80
+        org-todo-keywords '((sequence "TODO(t)" "STARTED(s)" "MAYBE(m)" "WAITING(w)" "|" "DONE(x!)" "CANCELLED(c)"))
+        org-outline-path-complete-in-steps nil
+        org-lowest-priority ?C
+        org-yank-adjusted-subtrees t
         org-pretty-entities t
         org-use-sub-superscripts '{} ;; underscores, etc needs to be wraped as a_{underscore}
-        org-hide-emphasis-markers t ;; show actually italicized text instead of /italicized text/
-        org-agenda-block-separator ""
-        org-fontify-whole-heading-line t
-        org-fontify-done-headline t
-        org-fontify-quote-and-verse-blocks t
-        org-format-latex-options
-        (plist-put org-format-latex-options :scale 1.5))
+        )
 
   (add-to-list 'org-global-properties
                '("Effort_ALL". "0:05 0:15 0:30 1:00 2:00 3:00 4:00"))
@@ -1506,6 +1508,8 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
   (add-hook 'org-mode-hook
             '(lambda ()
                (setq line-spacing 0.2))) ;; Add more line padding for readability
+
+  (add-hook 'org-mode-hook 'flyspell-mode)
 
   (add-hook 'org-mode-hook
             '(lambda ()
@@ -1546,12 +1550,36 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
 ** org-habits
 
 #+begin_src emacs-lisp
-(setq org-habit-graph-column 105)
+(setq org-habit-graph-column 48)
+(setq org-habit-show-habits-only-for-today t)
 
 (defun org-make-habit ()
   (interactive)
   (org-set-property "STYLE" "habit"))
 #+end_src
+
+A habit has a =SCHEDULE= tag with a repeat specification like =.+=, =++=, or
+=+=. A =STYLE= property set to value habit.
+
+For scheduling:
+
+=.+2d/4d= means:
+
+- Repeat as frequently as every two days, but
+- Never less frequently than every four days, and
+- When completed, start counting again from today.
+
+=++=  means:
+
+ from the last date completed, count as many 2-day intervals as
+ necessary to find a date in the future. This is useful if you want
+ something to always fall on the same days of the week
+
+or plain =+= repeat, which is unusual for a habit, because if you fall
+quite behind you will need to complete the task as many times as it
+takes for the next occurrence to get into the future. This would be
+useful for something like paying your rent where you cannot skip any
+instances, but that isn’t really a habit.
 
 ** org-cliplink
 
@@ -1774,7 +1802,7 @@ Enlarge the current cell horizontally.
 =M-x table-narrow-cell=
 Shrink the current cell horizontally.
 
-* Organizing
+* Agenda
 ** Configuration
 
 #+begin_src emacs-lisp
@@ -1782,13 +1810,14 @@ Shrink the current cell horizontally.
       org-agenda-show-future-repeats nil
       org-agenda-start-on-weekday nil
       org-agenda-skip-deadline-if-done t
-      org-agenda-skip-scheduled-if-done t)
+      org-agenda-skip-scheduled-if-done t
+      org-agenda-window-setup 'current-window)
 
 (unbind-key "C-c [")
 (unbind-key "C-c ]")
 #+end_src
 
-** Org-Super-Agenda
+** =org-super-agenda=
 
 #+begin_src emacs-lisp
 (use-package org-super-agenda
@@ -1829,7 +1858,7 @@ Shrink the current cell horizontally.
 ** Agenda Files
 
 #+begin_src emacs-lisp
-(setq org-agenda-files (list "~/Documents/megrez/todo.org"))
+(setq org-agenda-files (list "~/Documents/yizhe/index.org"))
 #+end_src
 
 ** Open Org Agenda
@@ -1917,10 +1946,19 @@ The org-timeline functionality was recently removed. This code, adapted from a c
 
 Configure my capture template!
 
+When I do the following task, I use =C-c c= to capture it, including:
+- recording a task
+- a meeting
+- do a journal entry of the day
+
 #+BEGIN_SRC emacs-lisp
 (setq org-capture-templates
-      '(("t" "Task" entry (file "~/Documents/megrez/inbox.org")
-         "* TODO %?\n")))
+      (quote (("t" "Task" entry (file "~/Documents/yizhe/index.org")
+               "* TODO %?\n")
+              ("m" "Meeting" entry (file "~/Documents/yizhe/meeting.org")
+               "* MEETING with %? \n%U" :clock-in t :clock-resume t)
+              ("j" "Journal" entry (file+datetree "~/Documents/yizhe/logbook.org")
+               "* %?\n%U\n" :clock-in t :clock-resume t))))
 #+END_SRC
 
 ** Refile
