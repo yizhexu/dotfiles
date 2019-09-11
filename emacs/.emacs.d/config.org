@@ -1431,8 +1431,7 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
 
 #+BEGIN_SRC emacs-lisp
 (use-package org
-  :bind (("C-c l" . org-store-link)
-         ("C-c c" . org-capture)
+  :bind (("C-c c" . org-capture)
          ("C-c a" . org-agenda)
          ("C-c b" . org-iswitchb)
          ("C-c M-k" . org-cut-subtree)
@@ -1481,7 +1480,7 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
         org-src-fontify-natively t
         org-src-window-setup 'current-window
         org-tags-column 80
-        org-todo-keywords '((sequence "TODO(t)" "STARTED(s)" "MAYBE(m)" "WAITING(w)" "|" "DONE(x!)" "CANCELLED(c)"))
+        org-todo-keywords '((sequence "TODO(t)" "STARTED(s)" "FOLLOWUP(f)" "WAITING(w)" "|" "DONE(x!)" "CANCELLED(c)"))
         org-outline-path-complete-in-steps nil
         org-lowest-priority ?C
         org-yank-adjusted-subtrees t
@@ -1499,7 +1498,7 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
                "Beautify Org Checkbox Symbol"
                (push '("TODO"  . ?▲) prettify-symbols-alist)
                (push '("STARTED"  . ?♫) prettify-symbols-alist)
-               (push '("MAYBE"  . ??) prettify-symbols-alist)
+               (push '("FOLLOWUP"  . ??) prettify-symbols-alist)
                (push '("WAITING" . ?⁕) prettify-symbols-alist)
                (push '("DONE"  . ?✓) prettify-symbols-alist)
                (push '("CANCELLED"  . ?✘) prettify-symbols-alist)
@@ -1508,407 +1507,7 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
   )
 #+END_SRC
 
-** =org-bullets=
-
-#+BEGIN_SRC emacs-lisp
-  (use-package org-bullets
-    :init
-    :config
-    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-#+END_SRC
-
-** =org-modules=
-
- #+BEGIN_SRC emacs-lisp
-(require 'org-install)
-;; FIXME: workaround
-;; https://github.com/syl20bnr/spacemacs/issues/11798
-(when (version<= "9.2" (org-version))
-  (require 'org-tempo))
-
-(setq org-modules '(org-habit org-info))
-(org-load-modules-maybe t)
- #+END_SRC
-
-** =org-habits=
-
-#+begin_src emacs-lisp
-(setq org-habit-graph-column 48)
-(setq org-habit-show-habits-only-for-today t)
-
-(defun org-make-habit ()
-  (interactive)
-  (org-set-property "STYLE" "habit"))
-#+end_src
-
-A habit has a =SCHEDULE= tag with a repeat specification like =.+=, =++=, or
-=+=. A =STYLE= property set to value habit.
-
-For scheduling:
-
-=.+2d/4d= means:
-
-- Repeat as frequently as every two days, but
-- Never less frequently than every four days, and
-- When completed, start counting again from today.
-
-=++=  means:
-
- from the last date completed, count as many 2-day intervals as
- necessary to find a date in the future. This is useful if you want
- something to always fall on the same days of the week
-
-or plain =+= repeat, which is unusual for a habit, because if you fall
-quite behind you will need to complete the task as many times as it
-takes for the next occurrence to get into the future. This would be
-useful for something like paying your rent where you cannot skip any
-instances, but that isn’t really a habit.
-
-** org-cliplink
-
-A simple command that takes a URL from the clipboard and inserts an
-org-mode link with a title of a page found by the URL into the current
-buffer.
-
-#+BEGIN_SRC emacs-lisp
-(use-package org-cliplink
-  :bind ("C-x p i" . org-cliplink))
-#+END_SRC
-
-** org-babel
-
-Source code that =org-babel= wants to evaluate
-
-#+BEGIN_SRC emacs-lisp
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((emacs-lisp . t)
-   (R . t)
-   (python . t)
-   (shell . t)
-   (latex . t)
-   (julia . t)
-   (dot . t)
-   (sql . t)))
-#+END_SRC
-
-Tangle the source block under cursor ([[https://stackoverflow.com/a/39628921][source]])
-
-#+BEGIN_SRC emacs-lisp
-(defun org-babel-tangle-block()
-  (interactive)
-  (let ((current-prefix-arg '(4)))
-     (call-interactively 'org-babel-tangle)
-))
-
-(eval-after-load "org"
-  '(progn
-     (define-key org-mode-map (kbd "C-c b") 'org-babel-tangle-block)
-))
-#+END_SRC
-
-** toc-org
-
-#+begin_src emacs-lisp
-(use-package toc-org
-    :init
-    (add-hook 'org-mode-hook 'toc-org-mode))
-#+end_src
-
-** org-ref
-
-Configure synced drive path
-
-#+BEGIN_SRC emacs-lisp
-(when (is-mac-p)
-  (setq keybase-ref "/Volumes/Keybase\ (yizhx)/private/yizhe/references/"))
-
-(when (is-linux-p)
-  (setq keybase-ref "/keybase/private/yizhe/references/"))
-#+END_SRC
-
-#+begin_src emacs-lisp
-(defun my/org-ref-open-pdf-at-point ()
-  "Open the pdf for bibtex key under point if it exists."
-  (interactive)
-  (let* ((results (org-ref-get-bibtex-key-and-file))
-         (key (car results))
-         (pdf-file (funcall org-ref-get-pdf-filename-function key)))
-    (if (file-exists-p pdf-file)
-    (funcall bibtex-completion-pdf-open-function (car (bibtex-completion-find-pdf key)))
-      (message "No PDF found for %s" key))))
-
-(setq org-ref-open-pdf-function 'my/org-ref-open-pdf-at-point)
-(use-package org-ref
-  :init
-  ;; setup org-ref
-  (setq org-ref-default-bibliography "~/Documents/megrez/library.bib"
-        org-ref-bibliography-notes "~/Documents/megrez/note.org"
-        org-ref-pdf-directory keybase-ref
-        org-ref-open-pdf-function 'my/org-ref-open-pdf-at-point))
-#+end_src
-
-** org-noter
-
-Use org-noter
-
-#+BEGIN_SRC emacs-lisp
-(use-package org-noter
-  :after org
-  :config
-  (setq org-noter-default-notes-file-names '("index.org")
-        org-noter-notes-search-path '("~/Documents/yizhe")
-        org-noter-separate-notes-from-heading t))
-#+END_SRC
-
-On smaller screen, change the split
-
-#+BEGIN_SRC emacs-lisp
-(when (is-mac-p)
-  (setq org-noter-set-doc-split-fraction 0.7))
-#+END_SRC
-
-Combine to use with org-ref, [[https://write.as/dani/notes-on-org-noter][source]]
-
-#+BEGIN_SRC emacs-lisp
-(defun org-ref-noter-at-point ()
-      "Open the pdf for bibtex key under point if it exists."
-      (interactive)
-      (let* ((results (org-ref-get-bibtex-key-and-file))
-             (key (car results))
-             (pdf-file (funcall org-ref-get-pdf-filename-function key)))
-        (if (file-exists-p pdf-file)
-            (progn
-              (find-file-other-window pdf-file)
-              (org-noter))
-          (message "no pdf found for %s" key))))
-
-(add-to-list 'org-ref-helm-user-candidates
-             '("Org-Noter notes" . org-ref-noter-at-point))
-#+END_SRC
-
-** pdf-tools
-
-Configure paths stuff for pdf-tools
-
-#+BEGIN_SRC emacs-lisp
-;; appending a new path to existing path
-(when (is-mac-p)
-  (setenv "PKG_CONFIG_PATH"
-          (concat
-           "/usr/local/Cellar/zlib/1.2.8/lib/pkgconfig" ":"
-           "/usr/local/opt/libffi/lib/pkgconfig" ":"
-           "/usr/local/lib/pkgconfig" ":"
-           "/opt/X11/lib/pkgconfig" ":"
-           (getenv "PKG_CONFIG_PATH")
-           )))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(use-package pdf-tools
-  :ensure t
-  :config
-  (custom-set-variables
-    '(pdf-tools-handle-upgrades nil)) ; Use brew upgrade pdf-tools instead.
-  (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo"))
-(pdf-tools-install)
-#+END_SRC
-
-** =ox-hugo=
-
-#+BEGIN_SRC emacs-lisp
-(use-package ox-hugo
-  :after ox)
-#+END_SRC
-
-** examples
-*** plain list
-**** Lord of the Rings
-   My favorite scenes are (in this order)
-   1. The attack of the Rohirrim
-   2. Eowyn's fight with the witch king
-      + this was already my favorite scene in the book
-      + I really like Miranda Otto.
-   3. Peter Jackson being shot by Legolas
-      - on DVD only
-      He makes a really funny face when it happens.
-   But in the end, no individual scenes matter but the film as a whole.
-   Important actors in this film are:
-   - Elijah Wood :: He plays Frodo
-   - Sean Astin :: He plays Sam, Frodo's friend.  I still remember
-     him very well from his role as Mikey Walsh in The Goonies.
-
-*** table
-
-Read doc at [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Text-Based-Tables.html][here]]
-
-Bound to table mode: =C-c ~=
-
-+---------+---------+---------+
-| Header1 | Header2 | Header3 |
-+---------+---------+---------+
-| Merged  | Text1   | Text2   |
-| text    +---------+---------+
-| here    | Text3   | Text4   |
-+---------+---------+---------+
-
-+-----------------+--------------------------------+-----------------+
-|     Command     |          Description           |   Key Binding   |
-+-----------------+--------------------------------+-----------------+
-|  forward-char   |Move point right N characters   |       C-f       |
-|                 |(left if N is negative).        |                 |
-|                 |                                |                 |
-+-----------------+--------------------------------+-----------------+
-|  backward-char  |Move point left N characters    |       C-b       |
-|                 |(right if N is negative).       |                 |
-|                 |                                |                 |
-+-----------------+--------------------------------+-----------------+
-
-Create table: =M-x table-insert=
-
-=M-x table-span-cell=
-
-=M-x table-split-cell=
-
-=M-x table-heighten-cell=
-Enlarge the current cell vertically.
-
-
-=M-x table-shorten-cell=
-Shrink the current cell vertically.
-
-
-=M-x table-widen-cell=
-Enlarge the current cell horizontally.
-
-
-=M-x table-narrow-cell=
-Shrink the current cell horizontally.
-
-* Agenda
-
-** Configuration
-
-#+begin_src emacs-lisp
-(setq org-agenda-inhibit-startup nil
-      org-agenda-block-separator ""
-      org-agenda-show-future-repeats nil
-      org-agenda-start-on-weekday nil
-      org-agenda-skip-deadline-if-done t
-      org-agenda-skip-scheduled-if-done t
-      org-agenda-window-setup 'current-window
-      org-agenda-sticky t
-      org-agenda-tags-column org-tags-column
-      org-deadline-warning-days 7
-      org-agenda-sorting-strategy
-      (quote
-       ((agenda deadline-up priority-down)
-        (todo priority-down category-keep)
-        (tags priority-down category-keep)
-        (search category-keep))))
-
-(unbind-key "C-c [")
-(unbind-key "C-c ]")
-#+end_src
-
-
-** =org-super-agenda=
-
-#+BEGIN_SRC emacs-lisp
-(use-package org-super-agenda
-  :init
-  (org-super-agenda-mode)
-  (defun my-org-super-agenda()
-    (interactive)
-    (let ((org-super-agenda-groups
-          '((:auto-group t))))
-     (org-agenda-list)))
-  :bind (("C-c 1" . 'my-org-super-agenda))
-)
-#+END_SRC
-
-** Agenda Files
-
-#+BEGIN_SRC emacs-lisp
-(setq org-agenda-files (list org-directory))
-#+END_SRC
-
-** COMMENT old-org-agenda
-
-*** Open Org Agenda
-
-This function opens the agenda in full screen.
-
-#+begin_src emacs-lisp
-(defun open-agenda ()
-  "Opens the org-agenda."
-  (interactive)
-  (let ((agenda "*Org Agenda*"))
-    (if (equal (get-buffer agenda) nil)
-        (org-agenda-list)
-      (unless (equal (buffer-name (current-buffer)) agenda)
-        (switch-to-buffer agenda))
-      (org-agenda-redo t)
-      (beginning-of-buffer))))
-
-(bind-key "<f5>" 'my-org-super-agenda)
-#+end_src
-
-*** Custom Agendas
-Here are some hand-made agenda files.
-
-#+begin_src emacs-lisp
-(defun org-buffer-todo ()
-  (interactive)
-  "Creates a todo-list for the current buffer. Equivalent to the sequence: org-agenda, < (restrict to current buffer), t (todo-list)."
-  (progn
-    (org-agenda-set-restriction-lock 'file)
-    (org-todo-list)))
-
-(defun org-buffer-agenda ()
-  (interactive)
-  "Creates an agenda for the current buffer. Equivalent to the sequence: org-agenda, < (restrict to current buffer), a (agenda-list)."
-  (progn
-    (org-agenda-set-restriction-lock 'file)
-    (org-agenda-list)))
-
-(defun org-buffer-day-agenda ()
-  (interactive)
-  "Creates an agenda for the current buffer. Equivalent to the sequence: org-agenda, < (restrict to current buffer), a (agenda-list), d (org-agenda-day-view)."
-  (progn
-    (org-agenda-set-restriction-lock 'file)
-    (org-agenda-list)
-    (org-agenda-day-view))) ;; Maybe I should try writing a Emacs Lisp macro for this kind of thing!
-
-(bind-key "y" 'org-agenda-todo-yesterday org-agenda-mode-map)
-#+end_src
-
-*** Timeline
-
-The org-timeline functionality was recently removed. This code, adapted from a comment on Reddit, adds similar functionality back.
-
-#+begin_src emacs-lisp
-(add-to-list 'org-agenda-custom-commands
-             '("L" "Timeline"
-               ((agenda
-                 ""
-                 ((org-agenda-span 7)
-                  (org-agenda-prefix-format '((agenda . " %1c %?-12t% s"))))))))
-#+end_src
-
-*** Unscheduled Tasks
-
-#+begin_src emacs-lisp
-(add-to-list 'org-agenda-custom-commands
-             '("u" "Unscheduled TODOs"
-               ((todo ""
-                      ((org-agenda-overriding-header "\nUnscheduled TODO")
-                       (org-agenda-skip-function
-                        '(org-agenda-skip-entry-if
-                          'timestamp 'todo '("DONE" "CANCELLED" "MAYBE" "WAITING" "SOMEDAY"))))))) t)
-#+end_src
-
-*** Capture Templates
+** Capture
 
 Configure my capture template!
 
@@ -1920,17 +1519,17 @@ When I do the following task, I use =C-c c= to capture it, including:
 #+BEGIN_SRC emacs-lisp
 (setq org-capture-templates
       (quote (("t" "Task" entry (file "~/Documents/yizhe/index.org")
-               "* TODO %?\n")
+               "* TODO %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"today\"))\n %^{Effort}p \n")
               ("m" "Meeting" entry (file "~/Documents/yizhe/meeting.org")
-               "* MEETING with %? \n%U" :clock-in t :clock-resume t)
+               "* TODO Meet with %? \nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"today\"))")
               ("j" "Journal" entry (file+datetree "~/Documents/yizhe/logbook.org")
                "* %?\n%U\n" :clock-in t :clock-resume t))))
 #+END_SRC
 
-*** Refile
+** Refile
 
 #+BEGIN_SRC emacs-lisp
-(setq org-refile-targets '((("~/Documents/yizhe/index.org" "~/Documents/yizhe/meeting.org") :maxlevel . 3))
+(setq org-refile-targets '((org-agenda-files . (:maxlevel . 4)))
       ;; org-refile-use-cache t
       org-refile-use-outline-path t)
 
@@ -1938,7 +1537,7 @@ When I do the following task, I use =C-c c= to capture it, including:
 
 Exclude completed tasks from refile targets, from Michael Englehorn’s Emacs Configuration.
 
-#+BEGIN_SRC
+#+BEGIN_SRC emacs-lisp
 (defun verify-refile-target
     ()
   "Exclude todo keywords with a done state from refile targets"
@@ -1947,9 +1546,94 @@ Exclude completed tasks from refile targets, from Michael Englehorn’s Emacs Co
 (setq org-refile-target-verify-function 'verify-refile-target)
 #+END_SRC
 
+** =org-agenda=
+
+*** Configuration
+
+#+begin_src emacs-lisp
+(setq
+ ;; stop preparing agenda buffers on startup
+ org-agenda-inhibit-startup t
+
+ ;; blocks
+ org-agenda-block-separator nil
+ org-agenda-compact-blocks t
+ org-agenda-show-future-repeats nil
+ org-agenda-start-on-weekday nil
+
+ ;; skips
+ org-agenda-skip-archived-trees t
+ org-agenda-skip-deadline-if-done t
+ org-agenda-skip-scheduled-if-done t
+
+ org-agenda-window-setup 'current-window
+
+ ;; hit r to rebuild agenda
+ org-agenda-sticky t
+
+ org-agenda-tags-column org-tags-column
+ org-deadline-warning-days 5
+ org-agenda-with-colors t
+ org-agenda-sorting-strategy
+ (quote
+  ((agenda deadline-up priority-down)
+   (todo priority-down category-keep)
+   (tags priority-down category-keep)
+   (search category-keep)))
+ org-agenda-time-grid
+ '((daily today require-timed)
+   ()
+   "......"
+   ".................."))
+#+end_src
+
+*** =org-super-agenda=
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-super-agenda
+  :config (org-super-agenda-mode))
+#+END_SRC
+
+*** =org-super-agenda-groups=
+
+#+BEGIN_SRC emacs-lisp
+(setq org-agenda-custom-commands
+      '(("z" "Super view"
+         ((agenda "" ((org-agenda-span 'day)
+                      (org-super-agenda-groups
+                       '((:name "Today"
+                                :time-grid t
+                                :habit t
+                                :date today
+                                :scheduled today)
+                         (:name "Important"
+                                :date today
+                                :scheduled today
+                                :priority "A")))))
+
+          (alltodo "" ((org-agenda-overriding-header "")
+                       (org-super-agenda-groups
+                        '((:auto-group t)
+                          (:name "Important"
+                                 :priority "A")
+                          (:name "Quick Picks"
+                                 :effort< "0:30")
+                          (:name "Due Soon"
+                                 :deadline future)
+                          (:name "Overdue"
+                                 :deadline past)
+                          (:name "To read"
+                                 :tag "read")
+(:name "To write"
+:tag "write")
+                          (:name "Follow up"
+                                 :todo "FOLLOWUP")))))))))
+#+END_SRC
+
 *** Clocking
 
 Use clocking to track time spend on tasks
+
 **** Configuration
 
 #+BEGIN_SRC emacs-lisp
@@ -2053,6 +1737,329 @@ However, there are a *lot* of commands for clocking; this is a perfect instance 
 (bind-key "C-c \\" 'the-the)
 
 #+END_SRC
+
+
+*** COMMENT old-org-agenda
+
+**** Custom Agendas
+Here are some hand-made agenda files.
+
+#+begin_src emacs-lisp
+(defun org-buffer-todo ()
+  (interactive)
+  "Creates a todo-list for the current buffer. Equivalent to the sequence: org-agenda, < (restrict to current buffer), t (todo-list)."
+  (progn
+    (org-agenda-set-restriction-lock 'file)
+    (org-todo-list)))
+
+(defun org-buffer-agenda ()
+  (interactive)
+  "Creates an agenda for the current buffer. Equivalent to the sequence: org-agenda, < (restrict to current buffer), a (agenda-list)."
+  (progn
+    (org-agenda-set-restriction-lock 'file)
+    (org-agenda-list)))
+
+(defun org-buffer-day-agenda ()
+  (interactive)
+  "Creates an agenda for the current buffer. Equivalent to the sequence: org-agenda, < (restrict to current buffer), a (agenda-list), d (org-agenda-day-view)."
+  (progn
+    (org-agenda-set-restriction-lock 'file)
+    (org-agenda-list)
+    (org-agenda-day-view))) ;; Maybe I should try writing a Emacs Lisp macro for this kind of thing!
+
+(bind-key "y" 'org-agenda-todo-yesterday org-agenda-mode-map)
+#+end_src
+
+**** Unscheduled Tasks
+
+#+begin_src emacs-lisp
+(add-to-list 'org-agenda-custom-commands
+             '("u" "Unscheduled TODOs"
+               ((todo ""
+                      ((org-agenda-overriding-header "\nUnscheduled TODO")
+                       (org-agenda-skip-function
+                        '(org-agenda-skip-entry-if
+                          'timestamp 'todo '("DONE" "CANCELLED" "MAYBE" "WAITING" "SOMEDAY"))))))) t)
+#+end_src
+
+** =org-bullets=
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-bullets
+    :init
+    :config
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+#+END_SRC
+
+** =org-modules=
+
+ #+BEGIN_SRC emacs-lisp
+(require 'org-install)
+;; FIXME: workaround
+;; https://github.com/syl20bnr/spacemacs/issues/11798
+(when (version<= "9.2" (org-version))
+  (require 'org-tempo))
+
+(setq org-modules '(org-habit org-info))
+(org-load-modules-maybe t)
+ #+END_SRC
+
+** =org-habits=
+
+#+begin_src emacs-lisp
+(setq org-habit-graph-column 48)
+(setq org-habit-show-habits-only-for-today t)
+
+(defun org-make-habit ()
+  (interactive)
+  (org-set-property "STYLE" "habit"))
+#+end_src
+
+A habit has a =SCHEDULE= tag with a repeat specification like =.+=, =++=, or
+=+=. A =STYLE= property set to value habit.
+
+For scheduling:
+
+=.+2d/4d= means:
+
+- Repeat as frequently as every two days, but
+- Never less frequently than every four days, and
+- When completed, start counting again from today.
+
+=++=  means:
+
+ from the last date completed, count as many 2-day intervals as
+ necessary to find a date in the future. This is useful if you want
+ something to always fall on the same days of the week
+
+or plain =+= repeat, which is unusual for a habit, because if you fall
+quite behind you will need to complete the task as many times as it
+takes for the next occurrence to get into the future. This would be
+useful for something like paying your rent where you cannot skip any
+instances, but that isn’t really a habit.
+
+** =org-cliplink=
+
+A simple command that takes a URL from the clipboard and inserts an
+org-mode link with a title of a page found by the URL into the current
+buffer.
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-cliplink
+  :bind ("C-x p i" . org-cliplink))
+#+END_SRC
+
+** =org-babel=
+
+Source code that =org-babel= wants to evaluate
+
+#+BEGIN_SRC emacs-lisp
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (R . t)
+   (python . t)
+   (shell . t)
+   (latex . t)
+   (julia . t)
+   (dot . t)
+   (sql . t)))
+#+END_SRC
+
+Tangle the source block under cursor ([[https://stackoverflow.com/a/39628921][source]])
+
+#+BEGIN_SRC emacs-lisp
+(defun org-babel-tangle-block()
+  (interactive)
+  (let ((current-prefix-arg '(4)))
+     (call-interactively 'org-babel-tangle)
+))
+
+(eval-after-load "org"
+  '(progn
+     (define-key org-mode-map (kbd "C-c b") 'org-babel-tangle-block)
+))
+#+END_SRC
+
+** =toc-org=
+
+#+begin_src emacs-lisp
+(use-package toc-org
+    :init
+    (add-hook 'org-mode-hook 'toc-org-mode))
+#+end_src
+
+** =org-ref=
+
+Configure synced drive path
+
+#+BEGIN_SRC emacs-lisp
+(when (is-mac-p)
+  (setq keybase-ref "/Volumes/Keybase\ (yizhx)/private/yizhe/references/"))
+
+(when (is-linux-p)
+  (setq keybase-ref "/keybase/private/yizhe/references/"))
+#+END_SRC
+
+#+begin_src emacs-lisp
+(defun my/org-ref-open-pdf-at-point ()
+  "Open the pdf for bibtex key under point if it exists."
+  (interactive)
+  (let* ((results (org-ref-get-bibtex-key-and-file))
+         (key (car results))
+         (pdf-file (funcall org-ref-get-pdf-filename-function key)))
+    (if (file-exists-p pdf-file)
+    (funcall bibtex-completion-pdf-open-function (car (bibtex-completion-find-pdf key)))
+      (message "No PDF found for %s" key))))
+
+(setq org-ref-open-pdf-function 'my/org-ref-open-pdf-at-point)
+(use-package org-ref
+  :init
+  ;; setup org-ref
+  (setq org-ref-default-bibliography "~/Documents/megrez/library.bib"
+        org-ref-bibliography-notes "~/Documents/megrez/note.org"
+        org-ref-pdf-directory keybase-ref
+        org-ref-open-pdf-function 'my/org-ref-open-pdf-at-point))
+#+end_src
+
+** =org-noter=
+
+Use org-noter
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-noter
+  :after org
+  :config
+  (setq org-noter-default-notes-file-names '("index.org")
+        org-noter-notes-search-path '("~/Documents/yizhe")
+        org-noter-separate-notes-from-heading t))
+#+END_SRC
+
+On smaller screen, change the split
+
+#+BEGIN_SRC emacs-lisp
+(when (is-mac-p)
+  (setq org-noter-set-doc-split-fraction 0.7))
+#+END_SRC
+
+Combine to use with org-ref, [[https://write.as/dani/notes-on-org-noter][source]]
+
+#+BEGIN_SRC emacs-lisp
+(defun org-ref-noter-at-point ()
+      "Open the pdf for bibtex key under point if it exists."
+      (interactive)
+      (let* ((results (org-ref-get-bibtex-key-and-file))
+             (key (car results))
+             (pdf-file (funcall org-ref-get-pdf-filename-function key)))
+        (if (file-exists-p pdf-file)
+            (progn
+              (find-file-other-window pdf-file)
+              (org-noter))
+          (message "no pdf found for %s" key))))
+
+(add-to-list 'org-ref-helm-user-candidates
+             '("Org-Noter notes" . org-ref-noter-at-point))
+#+END_SRC
+
+** =pdf-tools=
+
+Configure paths stuff for pdf-tools
+
+#+BEGIN_SRC emacs-lisp
+;; appending a new path to existing path
+(when (is-mac-p)
+  (setenv "PKG_CONFIG_PATH"
+          (concat
+           "/usr/local/Cellar/zlib/1.2.8/lib/pkgconfig" ":"
+           "/usr/local/opt/libffi/lib/pkgconfig" ":"
+           "/usr/local/lib/pkgconfig" ":"
+           "/opt/X11/lib/pkgconfig" ":"
+           (getenv "PKG_CONFIG_PATH")
+           )))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(use-package pdf-tools
+  :ensure t
+  :config
+  (custom-set-variables
+    '(pdf-tools-handle-upgrades nil)) ; Use brew upgrade pdf-tools instead.
+  (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo"))
+(pdf-tools-install)
+#+END_SRC
+
+** =ox-hugo=
+
+#+BEGIN_SRC emacs-lisp
+(use-package ox-hugo
+  :after ox)
+#+END_SRC
+
+
+** examples
+*** plain list
+**** Lord of the Rings
+   My favorite scenes are (in this order)
+   1. The attack of the Rohirrim
+   2. Eowyn's fight with the witch king
+      + this was already my favorite scene in the book
+      + I really like Miranda Otto.
+   3. Peter Jackson being shot by Legolas
+      - on DVD only
+      He makes a really funny face when it happens.
+   But in the end, no individual scenes matter but the film as a whole.
+   Important actors in this film are:
+   - Elijah Wood :: He plays Frodo
+   - Sean Astin :: He plays Sam, Frodo's friend.  I still remember
+     him very well from his role as Mikey Walsh in The Goonies.
+
+*** table
+
+Read doc at [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Text-Based-Tables.html][here]]
+
+Bound to table mode: =C-c ~=
+
++---------+---------+---------+
+| Header1 | Header2 | Header3 |
++---------+---------+---------+
+| Merged  | Text1   | Text2   |
+| text    +---------+---------+
+| here    | Text3   | Text4   |
++---------+---------+---------+
+
++-----------------+--------------------------------+-----------------+
+|     Command     |          Description           |   Key Binding   |
++-----------------+--------------------------------+-----------------+
+|  forward-char   |Move point right N characters   |       C-f       |
+|                 |(left if N is negative).        |                 |
+|                 |                                |                 |
++-----------------+--------------------------------+-----------------+
+|  backward-char  |Move point left N characters    |       C-b       |
+|                 |(right if N is negative).       |                 |
+|                 |                                |                 |
++-----------------+--------------------------------+-----------------+
+
+Create table: =M-x table-insert=
+
+=M-x table-span-cell=
+
+=M-x table-split-cell=
+
+=M-x table-heighten-cell=
+Enlarge the current cell vertically.
+
+
+=M-x table-shorten-cell=
+Shrink the current cell vertically.
+
+
+=M-x table-widen-cell=
+Enlarge the current cell horizontally.
+
+
+=M-x table-narrow-cell=
+Shrink the current cell horizontally.
+
 * Browsing
 ** Browsers
 #+BEGIN_SRC emacs-lisp
