@@ -1865,7 +1865,7 @@ Shrink the current cell horizontally.
 ** Agenda Files
 
 #+begin_src emacs-lisp
-(setq org-agenda-files (list "~/Documents/yizhe/index.org"))
+(setq org-agenda-files (list org-directory))
 #+end_src
 
 ** Open Org Agenda
@@ -1984,7 +1984,7 @@ Exclude completed tasks from refile targets, from Michael Englehorn’s Emacs Co
   "Exclude todo keywords with a done state from refile targets"
   (not (member (nth 2 (org-heading-components)) org-done-keywords)))
 
-(setq org-refile-target-verify-function verify-refile-target)
+(setq org-refile-target-verify-function 'verify-refile-target)
 #+END_SRC
 
 ** Clocking
