@@ -132,29 +132,16 @@ Transparency looks nice
 ** Theme
 
 #+begin_src emacs-lisp
-(when (is-mac-p)
-  (use-package nord-theme
-    :config
-    (load-theme 'nord t)
-    (transparency 93)
-    (let ((line (face-attribute 'mode-line :underline)))
-      (set-face-attribute 'mode-line          nil :overline   line)
-      (set-face-attribute 'mode-line-inactive nil :overline   line)
-      (set-face-attribute 'mode-line-inactive nil :underline  line)
-      (set-face-attribute 'mode-line          nil :box        nil)
-      (set-face-attribute 'mode-line-inactive nil :box        nil))))
-
-(when (is-linux-p)
-  (use-package afternoon-theme
-    :config
-    (load-theme 'afternoon t)
-    (transparency 93)
-    (let ((line (face-attribute 'mode-line :underline)))
-      (set-face-attribute 'mode-line          nil :overline   line)
-      (set-face-attribute 'mode-line-inactive nil :overline   line)
-      (set-face-attribute 'mode-line-inactive nil :underline  line)
-      (set-face-attribute 'mode-line          nil :box        nil)
-      (set-face-attribute 'mode-line-inactive nil :box        nil))))
+(use-package afternoon-theme
+  :config
+  (load-theme 'afternoon t)
+  (transparency 93)
+  (let ((line (face-attribute 'mode-line :underline)))
+    (set-face-attribute 'mode-line          nil :overline   line)
+    (set-face-attribute 'mode-line-inactive nil :overline   line)
+    (set-face-attribute 'mode-line-inactive nil :underline  line)
+    (set-face-attribute 'mode-line          nil :box        nil)
+    (set-face-attribute 'mode-line-inactive nil :box        nil)))
 #+end_src
 
 ** Simplify UI
@@ -196,7 +183,7 @@ Maximize screen room
 
 #+BEGIN_SRC emacs-lisp
 ;; increase line space for better readability
-(setq-default line-spacing 0.5)
+(setq-default line-spacing 0.2)
 #+END_SRC
 
 ** Unicode
@@ -1438,7 +1425,7 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
 #+END_SRC
 
 * Writing
-** org-mode
+** =org-mode=
 
 [[http://xahlee.info/comp/unicode_index.html][Unicode!]]
 
@@ -1464,12 +1451,15 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
         org-default-priority ?B
         org-default-notes-file (concat org-directory "index.org")
         org-directory "~/Documents/yizhe/"
+        org-agenda-files (list org-directory)
         org-ellipsis "⤵" ;; foldings symbol
         org-expiry-inactive-timestamps t
         org-fontify-whole-heading-line t
         org-fontify-done-headline t
         org-fontify-quote-and-verse-blocks t
         org-format-latex-options (plist-put org-format-latex-options :scale 1.5)
+        org-footnote-auto-adjust t
+        org-footnote-auto-label t
         org-file-apps
         '((auto-mode . emacs)
           ("\\.mm\\'" . default)
@@ -1502,10 +1492,6 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
   (add-to-list 'org-global-properties
                '("Effort_ALL". "0:05 0:15 0:30 1:00 2:00 3:00 4:00"))
 
-  (add-hook 'org-mode-hook
-            '(lambda ()
-               (setq line-spacing 0.2))) ;; Add more line padding for readability
-
   (add-hook 'org-mode-hook 'flyspell-mode)
 
   (add-hook 'org-mode-hook
@@ -1522,7 +1508,7 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
   )
 #+END_SRC
 
-** org-bullets
+** =org-bullets=
 
 #+BEGIN_SRC emacs-lisp
   (use-package org-bullets
@@ -1531,7 +1517,7 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 #+END_SRC
 
-** org-modules
+** =org-modules=
 
  #+BEGIN_SRC emacs-lisp
 (require 'org-install)
@@ -1544,7 +1530,7 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
 (org-load-modules-maybe t)
  #+END_SRC
 
-** org-habits
+** =org-habits=
 
 #+begin_src emacs-lisp
 (setq org-habit-graph-column 48)
@@ -1728,7 +1714,7 @@ Configure paths stuff for pdf-tools
 (pdf-tools-install)
 #+END_SRC
 
-** ox-hugo
+** =ox-hugo=
 
 #+BEGIN_SRC emacs-lisp
 (use-package ox-hugo
@@ -1800,6 +1786,7 @@ Enlarge the current cell horizontally.
 Shrink the current cell horizontally.
 
 * Agenda
+
 ** Configuration
 
 #+begin_src emacs-lisp
@@ -1824,51 +1811,31 @@ Shrink the current cell horizontally.
 (unbind-key "C-c ]")
 #+end_src
 
+
 ** =org-super-agenda=
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (use-package org-super-agenda
   :init
   (org-super-agenda-mode)
-  (defun my-org-super-agenda ()
+  (defun my-org-super-agenda()
     (interactive)
     (let ((org-super-agenda-groups
-           '((:name "Today"
-                    :time-grid t)
-             (:name "Follow-Up" ;; monastery work
-                    :tag "followup")
-             ;; After the last group, the agenda will display items that didn't
-             ;;m atch any of these groups, with the default order position of 99
-             ;; To prevent this, add this code:
-             ;; (:discard (:anything t))
-             )))
-      (org-agenda nil "a")))
-
-  (defun my-org-super-agenda-today ()
-    (interactive)
-    (progn
-      (my-org-super-agenda)
-      (org-agenda-day-view)))
-
-  (bind-keys ("C-c 1" . my-org-super-agenda-today)
-             ("C-c 0" . my-org-super-agenda))
-
-  :config
-
-  ;; Enable folding
-  (use-package origami
-    :bind (:map org-super-agenda-header-map
-                ("TAB" . origami-toggle-node))
-    :hook ((org-agenda-mode . origami-mode))))
-#+end_src
+          '((:auto-group t))))
+     (org-agenda-list)))
+  :bind (("C-c 1" . 'my-org-super-agenda))
+)
+#+END_SRC
 
 ** Agenda Files
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (setq org-agenda-files (list org-directory))
-#+end_src
+#+END_SRC
 
-** Open Org Agenda
+** COMMENT old-org-agenda
+
+*** Open Org Agenda
 
 This function opens the agenda in full screen.
 
@@ -1887,15 +1854,7 @@ This function opens the agenda in full screen.
 (bind-key "<f5>" 'my-org-super-agenda)
 #+end_src
 
-** Close Other Windows
-
-Agendas should be full screen!
-
-#+begin_src emacs-lisp
-(add-hook 'org-agenda-finalize-hook (lambda () (delete-other-windows)))
-#+end_src
-
-** Custom Agendas
+*** Custom Agendas
 Here are some hand-made agenda files.
 
 #+begin_src emacs-lisp
@@ -1924,7 +1883,7 @@ Here are some hand-made agenda files.
 (bind-key "y" 'org-agenda-todo-yesterday org-agenda-mode-map)
 #+end_src
 
-** Timeline
+*** Timeline
 
 The org-timeline functionality was recently removed. This code, adapted from a comment on Reddit, adds similar functionality back.
 
@@ -1937,7 +1896,7 @@ The org-timeline functionality was recently removed. This code, adapted from a c
                   (org-agenda-prefix-format '((agenda . " %1c %?-12t% s"))))))))
 #+end_src
 
-** Unscheduled Tasks
+*** Unscheduled Tasks
 
 #+begin_src emacs-lisp
 (add-to-list 'org-agenda-custom-commands
@@ -1949,7 +1908,7 @@ The org-timeline functionality was recently removed. This code, adapted from a c
                           'timestamp 'todo '("DONE" "CANCELLED" "MAYBE" "WAITING" "SOMEDAY"))))))) t)
 #+end_src
 
-** Capture Templates
+*** Capture Templates
 
 Configure my capture template!
 
@@ -1968,10 +1927,10 @@ When I do the following task, I use =C-c c= to capture it, including:
                "* %?\n%U\n" :clock-in t :clock-resume t))))
 #+END_SRC
 
-** Refile
+*** Refile
 
 #+BEGIN_SRC emacs-lisp
-(setq org-refile-targets '((("~/Documents/megrez/todo.org" "~/Documents/megrez/archive.org") :maxlevel . 3))
+(setq org-refile-targets '((("~/Documents/yizhe/index.org" "~/Documents/yizhe/meeting.org") :maxlevel . 3))
       ;; org-refile-use-cache t
       org-refile-use-outline-path t)
 
@@ -1979,18 +1938,19 @@ When I do the following task, I use =C-c c= to capture it, including:
 
 Exclude completed tasks from refile targets, from Michael Englehorn’s Emacs Configuration.
 
-#+BEGIN_SRC emacs-lisp
-(defun verify-refile-target ()
+#+BEGIN_SRC
+(defun verify-refile-target
+    ()
   "Exclude todo keywords with a done state from refile targets"
   (not (member (nth 2 (org-heading-components)) org-done-keywords)))
 
 (setq org-refile-target-verify-function 'verify-refile-target)
 #+END_SRC
 
-** Clocking
+*** Clocking
 
 Use clocking to track time spend on tasks
-*** Configuration
+**** Configuration
 
 #+BEGIN_SRC emacs-lisp
   (setq org-log-done 'time
@@ -2005,7 +1965,7 @@ Use clocking to track time spend on tasks
         org-log-into-drawer t
         org-clock-into-drawer 1)
 #+END_SRC
-*** Remove Empty Logbook Drawers
+**** Remove Empty Logbook Drawers
 
 Remove empty LOGBOOK drawers on clock out, from [[https://michael.englehorn.com/config.html][Michael Englehorn's
 Emacs Configuration]]. This [[https://stackoverflow.com/questions/21767471/org-capture-and-time-clocking-misbehaving#21797427][Stack Overflow post]] shows the fix to the bug
@@ -2021,7 +1981,7 @@ in the original function (remove the "LOGBOOK" specification).
   (add-hook 'org-clock-out-hook 'bh/remove-empty-drawer-on-clock-out 'append)
 #+END_SRC
 
-*** Key Bindings
+**** Key Bindings
 
 However, there are a *lot* of commands for clocking; this is a perfect instance for a Hydra.
 
@@ -2063,7 +2023,7 @@ However, there are a *lot* of commands for clocking; this is a perfect instance 
              ("C-c w" . hydra-org-agenda-clock/body))
 #+END_SRC
 
-** Easy Bind To Open Todos
+*** Easy Bind To Open Todos
 
 #+begin_src emacs-lisp
 (defun open-todo-file ()
@@ -2073,7 +2033,7 @@ However, there are a *lot* of commands for clocking; this is a perfect instance 
 (bind-key "C-c t" 'open-todo-file)
 #+end_src
 
-** Search
+*** Search
 
 #+BEGIN_SRC emacs-lisp
 
@@ -2246,14 +2206,18 @@ access my configuration. They are adapted from Bozhidar Batsov’s post
 on Emacs Redux.
 
 #+begin_src emacs-lisp
-  (defun find-config-file ()
-    "Edit my emacs config file"
-    (interactive)
-    (let ((config-file "~/.emacs.d/config.org"))
-      (find-file config-file)))
+(defun find-config-file
+    ()
+  "Edit my emacs config file"
+  (interactive)
+  (let ((config-file "~/.emacs.d/config.org"))
+    (find-file config-file)))
 
-  (bind-key "C-c e" 'find-config-file)
+(bind-key "C-c e" 'find-config-file)
 #+end_src
+
+#+RESULTS:
+: find-config-file
 
 I use mwf-init-file rather than user-init-file, because I edit the
   config file in a Git repo.
