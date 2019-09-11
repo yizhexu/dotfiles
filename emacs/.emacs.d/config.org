@@ -1811,8 +1811,6 @@ Shrink the current cell horizontally.
 (unbind-key "C-c ]")
 #+end_src
 
-**
-
 
 ** =org-super-agenda=
 
