@@ -578,9 +578,13 @@ Force emacs to use its own password prompt ([[https://github.com/mwfogleman/.ema
        kept-old-versions 2)   ; and some old ones, too
  #+END_SRC
 
-** Auto Revert
+** COMMENT Auto Revert
 
-Revert buffers automatically when underlying files are changed externally. Auto refreshes every 2 seconds. Don't forget to refresh the version control status as well.
+FIXME: Need to disable this when using tramp
+
+Revert buffers automatically when underlying files are changed
+externally. Auto refreshes every 2 seconds. Don't forget to refresh
+the version control status as well.
 
 #+BEGIN_SRC emacs-lisp
   (use-package autorevert
