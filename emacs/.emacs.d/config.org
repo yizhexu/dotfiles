@@ -1478,7 +1478,7 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
           ("\\.mm\\'" . default)
           ("\\.x?html?\\'" . "firefox %s")
           ("\\.pdf\\'" . "open %s"))
-        org-enforce-todo-dependencies t ;; parent should not be marked as done if children are note
+        ;; org-enforce-todo-dependencies t ;; parent should not be marked as done if children are note
 
         org-completion-use-ido t
         org-default-priority ?B
