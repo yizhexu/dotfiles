@@ -18,6 +18,7 @@ bash/*
 
 emacs/.emacs.d/*
 !/emacs/.emacs.d/config.org
+!/emacs/.emacs.d/config-mobile.org
 !/emacs/.emacs.d/init.el
 !/emacs/.emacs.d/resources/*.el
 

@@ -1,0 +1,15 @@
+# -*- mode: org -*-
+#+PROPERTY: header-args    :results none
+
+* Version
+
+#+BEGIN_SRC emacs-lisp
+emacs-version
+#+END_SRC
+
+#+RESULTS:
+: 26.3
+
+* Package Management
+
+
