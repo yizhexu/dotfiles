@@ -1,3 +1,4 @@
+#    -*- mode: org -*-
 * About me
 
 #+begin_src emacs-lisp
@@ -6,12 +7,6 @@
         calendar-latitude 47.6133788
         calendar-longitude -122.3497462)
 #+end_src
-
-* Debug
-
-#+BEGIN_SRC emacs-lisp
-(setq debug-on-error t)
-#+END_SRC
 
 * Package Management
 
@@ -193,16 +188,18 @@ Maximize screen room
 (set-default-coding-systems 'utf-8)
 #+END_SRC
 
-** Fancy Lambdas
-
-#+BEGIN_SRC emacs-lisp
-(global-prettify-symbols-mode t)
-#+END_SRC
-
 ** Pretty Symbols
 
 #+BEGIN_SRC emacs-lisp
-(global-prettify-symbols-mode +1)
+(global-prettify-symbols-mode 1)
+
+(setq prettify-symbols-alist
+      '(
+        ("lambda" . 955) ; λ
+        ("->" . 8594)    ; →
+        ("=>" . 8658)    ; ⇒
+        ("map" . 8614)    ; ↦
+        ))
 #+END_SRC
 
 ** Neotree
@@ -1498,7 +1495,7 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
         org-tags-column 80
 
         ;; org todos
-        org-todo-keywords '((sequence "TODO(t)" "STARTED(s)" "FOLLOWUP(f)" "WAITING(w)" "|" "DONE(x!)" "CANCELLED(c)"))
+        org-todo-keywords '((sequence "TODO(t)" "STARTED(s)" "FOLLOWUP(f)" "WAITING(w)" "|" "DONE(x!)" "CANCELLED(c)" "|" "MEETING(m)"))
         org-tag-persistent-alist '(("read" . ?r)
                                    ("write" . ?w)
                                    ("idea" . ?i))
@@ -1523,6 +1520,7 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
                (push '("WAITING" . ?⁕) prettify-symbols-alist)
                (push '("DONE"  . ?✓) prettify-symbols-alist)
                (push '("CANCELLED"  . ?✘) prettify-symbols-alist)
+               (push '("MEETING" . ?✐) prettify-symbols-alist)
                (prettify-symbols-mode)
                ))
   )
@@ -1537,32 +1535,52 @@ When I do the following task, I use =C-c c= to capture it, including:
 - a meeting
 - do a journal entry of the day
 
+Capture symbols
+- =%?= test to entry
+- =%U= gets this [2019-09-14 Sat 14:50]
+- =%^U= prompts the schedule selector
+- =%^G= interactively asking for tag
+
 #+BEGIN_SRC emacs-lisp
 (setq org-capture-templates
-      (quote (("t" "Task" entry
-               (file+headline "~/Documents/yizhe/index.org" "new")
-               "* TODO %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"today\"))\n %^{Effort}p \n")
+      (quote (("t" "Task")
+              ("tt" "TODO" entry
+               (file+headline org-default-notes-file "new")
+               "* TODO %?\nSCHEDULED: %^U\n %^{Effort}p \n")
+              ("tf" "FOLLOWUP" entry
+               (file+headline org-default-notes-file "new")
+               "* FOLLOWUP %?\nSCHEDULED: %^U")
+              ("td" "DONE" entry
+               (file+headline org-default-notes-file "new")
+               "* DONE %?\nCLOSED: %U")
+
               ("m" "Meeting" entry
-               (file "~/Documents/yizhe/meeting.org")
-               "* TODO Meet with %? \nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"today\"))")
+               (file org-default-notes-file "meeting")
+               "* MEETING Meet with %? \nSCHEDULED: %^U")
+
               ("r" "Read")
               ("rc" "Important" entry
-               (file+headline "~/Documents/yizhe/index.org" "read")
-               "* TODO [#A] Read %?"
-               :clock-in t :clock-resume t :immediate-finish t)
+               (file+headline org-default-notes-file "read")
+               "* TODO [#A] Read %? \n")
               ("rn" "Normal" entry
                (file+headline "~/Documents/yizhe/index.org" "read")
-               "* TODO Read %?"
-               :clock-in t :clock-resume t :immediate-finish t)
-              ("j" "Journal" entry (file+datetree "~/Documents/yizhe/logbook.org")
-               "* %?\n%U\n"
-               :clock-in t :clock-resume t :empty-lines 1 :tree-type week :unnarrowed t))))
+               "* TODO Read %?")
+
+              ("j" "Journal" entry
+               (file+datetree "~/Documents/yizhe/logbook.org")
+               "* %?\n")
+              )))
+
+
 #+END_SRC
+
+#+RESULTS:
+| t | Task | entry | (file+headline ~/Documents/yizhe/index.org new) | * TODO %? |
 
 ** Refile
 
 #+BEGIN_SRC emacs-lisp
-(setq org-refile-targets '((org-agenda-files . (:maxlevel . 4)))
+(setq org-refile-targets '((org-agenda-files . (:maxlevel . 3)))
       ;; org-refile-use-cache t
       org-refile-use-outline-path t
       org-refile-allow-creating-parent-nodes (quote confirm)) ;; with confirmation, allow to create parent
@@ -1840,7 +1858,7 @@ For scheduling:
 - Never less frequently than every four days, and
 - When completed, start counting again from today.
 
-=++=  means:
+=++= =means:
 
  from the last date completed, count as many 2-day intervals as
  necessary to find a date in the future. This is useful if you want
@@ -2262,7 +2280,7 @@ Relatedly, I often want to reload my init-file. This will actually use the syste
 (bind-key "C-c M-i" 'reload-init-file)
 #+END_SRC
 
-** Debugging
+* Debug
 
 #+BEGIN_SRC emacs-lisp
   ;; activate debugging
