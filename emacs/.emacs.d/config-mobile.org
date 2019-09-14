@@ -61,7 +61,7 @@ I'm switching [[https://stackoverflow.com/questions/21064916/auto-install-emacs-
 (use-package afternoon-theme
   :config
   (load-theme 'afternoon t)
-  (transparency 93)
+  ;; (transparency 93)
   (let ((line (face-attribute 'mode-line :underline)))
     (set-face-attribute 'mode-line          nil :overline   line)
     (set-face-attribute 'mode-line-inactive nil :overline   line)
@@ -216,9 +216,9 @@ Visual indication of matching pairs of parentheses
     :ensure f)
   ;;; FIXME: Symbol’s value as variable is void: toggle-map
   ;; (bind-key "s" 'smartparens-mode toggle-map)
-  (when (is-mac-p)
-    (bind-keys ("<s-right>" . sp-forward-slurp-sexp)
-               ("<s-left>" . sp-forward-barf-sexp)))
+  ;; (when (is-mac-p)
+  ;;   (bind-keys ("<s-right>" . sp-forward-slurp-sexp)
+  ;;              ("<s-left>" . sp-forward-barf-sexp)))
   (sp-with-modes '(markdown-mode gfm-mode)
     (sp-local-pair "*" "*"))
   (sp-with-modes '(org-mode)
@@ -351,7 +351,6 @@ place. The configuration of this mode is very simple as of Emacs 25.1.
 (save-place-mode 1)
 #+END_SRC
 
-
 * Key Bindings`
 ** Lines
 
@@ -454,7 +453,6 @@ have been so useful!
 
 (bind-key "C-h C-l" 'open-interaction-log)
 #+END_SRC
-
 
 * Programming
 ** Path
@@ -603,7 +601,6 @@ function.
 (use-package git-auto-commit-mode
   :delight)
 #+END_SRC
-
 
 * Writing
 ** =org-mode=
