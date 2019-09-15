@@ -1498,7 +1498,8 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
         org-todo-keywords '((sequence "TODO(t)" "STARTED(s)" "FOLLOWUP(f)" "WAITING(w)" "|" "DONE(x!)" "CANCELLED(c)" "|" "MEETING(m)"))
         org-tag-persistent-alist '(("read" . ?r)
                                    ("write" . ?w)
-                                   ("idea" . ?i))
+                                   ("idea" . ?i)
+                                   ("meeting" . ?m))
 
         org-outline-path-complete-in-steps nil
         org-lowest-priority ?C
@@ -1546,7 +1547,7 @@ Capture symbols
       (quote (("t" "Task")
               ("tt" "TODO" entry
                (file+headline org-default-notes-file "new")
-               "* TODO %?\nSCHEDULED: %^U\n %^{Effort}p \n")
+               "* TODO %?\n %^{Effort}p \n")
               ("tf" "FOLLOWUP" entry
                (file+headline org-default-notes-file "new")
                "* FOLLOWUP %?\nSCHEDULED: %^U")
@@ -1555,32 +1556,27 @@ Capture symbols
                "* DONE %?\nCLOSED: %U")
 
               ("m" "Meeting" entry
-               (file org-default-notes-file "meeting")
-               "* MEETING Meet with %? \nSCHEDULED: %^U")
+               (file+headline org-default-notes-file "meeting")
+               "* with %? \nSCHEDULED: %^U")
 
               ("r" "Read")
               ("rc" "Important" entry
                (file+headline org-default-notes-file "read")
                "* TODO [#A] Read %? \n")
               ("rn" "Normal" entry
-               (file+headline "~/Documents/yizhe/index.org" "read")
+               (file+headline org-default-notes-file "read")
                "* TODO Read %?")
 
               ("j" "Journal" entry
                (file+datetree "~/Documents/yizhe/logbook.org")
                "* %?\n")
               )))
-
-
 #+END_SRC
-
-#+RESULTS:
-| t | Task | entry | (file+headline ~/Documents/yizhe/index.org new) | * TODO %? |
 
 ** Refile
 
 #+BEGIN_SRC emacs-lisp
-(setq org-refile-targets '((org-agenda-files . (:maxlevel . 3)))
+(setq org-refile-targets '((org-agenda-files . (:maxlevel . 4)))
       ;; org-refile-use-cache t
       org-refile-use-outline-path t
       org-refile-allow-creating-parent-nodes (quote confirm)) ;; with confirmation, allow to create parent
@@ -1663,18 +1659,21 @@ Highlight current agenda line
                       (org-super-agenda-groups
                        '((:name "Today"
                                 :time-grid t
-                                :habit t
                                 :date today
                                 :scheduled today)
                          (:name "Important"
                                 :date today
                                 :scheduled today
-                                :priority "A")))))
+                                :priority "A")
+                         (:order-multi (8 (:name "Done today"
+                                                 :and (:regexp "State \"DONE\""
+                                                               :log t))
+                                          (:name "Clocked today"
+                                                 :log t)))))))
 
           (alltodo "" ((org-agenda-overriding-header "")
                        (org-super-agenda-groups
-                        '((:auto-group t)
-                          (:name "Important"
+                        '((:name "Important"
                                  :priority "A")
                           (:name "Quick Picks"
                                  :effort< "0:30")
@@ -1687,7 +1686,8 @@ Highlight current agenda line
                           (:name "To write"
                                  :tag "write")
                           (:name "Follow up"
-                                 :todo "FOLLOWUP")))))))))
+                                 :todo "FOLLOWUP")
+                          (:auto-group t)))))))))
 #+END_SRC
 
 ** Clocking
