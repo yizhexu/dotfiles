@@ -1595,7 +1595,6 @@ Exclude completed tasks from refile targets, from Michael Englehorn’s Emacs Co
 #+END_SRC
 
 ** =org-agenda=
-
 *** Configuration
 
 #+begin_src emacs-lisp
