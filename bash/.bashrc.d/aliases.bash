@@ -10,7 +10,7 @@ usage() {
 if ls --color > /dev/null 2>&1; then colorflag="--color"; else colorflag="-G"; fi;
 export CLICOLOR_FORCE=1
 
-# alias ls='ls ${colorflag} --group-directories-first'
+alias ls='ls ${colorflag}'
 alias lsa='ls -lah'
 alias l='ls -lah'
 alias ll='ls -lh'
