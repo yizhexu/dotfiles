@@ -925,29 +925,35 @@ Testing this out
 
 ** Scala
 
-=scala-mode= and =sbt-mode= needs to be installed
+=scala-mode= and =sbt-mode= needs to be installed. Based on [[https://scalameta.org/metals/docs/editors/emacs.html][this]]
 
 #+BEGIN_SRC emacs-lisp
-  (use-package sbt-mode
-    :pin melpa
-    :commands sbt-start sbt-command)
+;; Enable scala-mode and sbt-mode
+(use-package scala-mode
+  :mode "\\.s\\(cala\\|bt\\)$")
 
-  (use-package scala-mode
-    :pin melpa
-    :interpreter ("scala" . scala-mode))
+(use-package sbt-mode
+  :commands sbt-start sbt-command
+  :config
+  ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+  ;; allows using SPACE when in the minibuffer
+  (substitute-key-definition
+   'minibuffer-complete-word
+   'self-insert-command
+   minibuffer-local-completion-map))
+
+;; Enable nice rendering of diagnostics like compile errors.
+(use-package flycheck
+  :init (global-flycheck-mode))
+
+(use-package lsp-mode
+  ;; Optional - enable lsp-mode automatically in scala files
+  :hook (scala-mode . lsp)
+  :config (setq lsp-prefer-flymake nil))
+
+(use-package lsp-ui)
 #+END_SRC
 
-And mute the start-up message
-
-#+BEGIN_SRC emacs-lisp
-(use-package ensime
-  :init
-  (put 'ensime-auto-generate-config 'safe-local-variable #'booleanp)
-  (setq
-    ensime-startup-snapshot-notification nil
-    ensime-startup-notification nil))
-
-#+END_SRC
 ** R
 
 Enable ess
@@ -1040,6 +1046,29 @@ Enable graphical output
 Some inline example SRC_R[:exports results]{round(pi, 2)}
 
 ** Python
+
+*** Install
+
+Install pyenv
+
+#+BEGIN_SRC sh
+curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+#+END_SRC
+
+modify =~/.bashrc= with following:
+
+#+BEGIN_SRC text
+export PATH="/home/yizhe/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+#+END_SRC
+
+Install pipenv
+
+#+BEGIN_SRC sh
+curl https://raw.githubusercontent.com/kennethreitz/pipenv/master/get-pipenv.py | python
+#+END_SRC
+
 *** Config
 
 Add =/opt/anaconda/bin= to load path.
@@ -1654,39 +1683,32 @@ Highlight current agenda line
 #+BEGIN_SRC emacs-lisp
 (setq org-agenda-custom-commands
       '(("z" "Super view"
-         ((agenda "" ((org-agenda-span 'day)
+         (
+          (agenda "" ((org-agenda-span 'day)
                       (org-super-agenda-groups
                        '((:name "Today"
                                 :time-grid t
                                 :date today
                                 :scheduled today)
-                         (:name "Important"
-                                :date today
-                                :scheduled today
-                                :priority "A")
-                         (:order-multi (8 (:name "Done today"
-                                                 :and (:regexp "State \"DONE\""
-                                                               :log t))
-                                          (:name "Clocked today"
-                                                 :log t)))))))
+                         (:name "Done Today"
+                                :regexp "State \"DONE\"")))))
 
-          (alltodo "" ((org-agenda-overriding-header "")
-                       (org-super-agenda-groups
-                        '((:name "Important"
-                                 :priority "A")
-                          (:name "Quick Picks"
-                                 :effort< "0:30")
-                          (:name "Due Soon"
-                                 :deadline future)
-                          (:name "Overdue"
-                                 :deadline past)
-                          (:name "To read"
-                                 :tag "read")
-                          (:name "To write"
-                                 :tag "write")
-                          (:name "Follow up"
-                                 :todo "FOLLOWUP")
-                          (:auto-group t)))))))))
+          (todo "" ((org-agenda-overriding-header "")
+                    (org-super-agenda-groups
+                     '((:auto-group t)
+                       (:name "Quick Picks"
+                              :effort< "0:30")
+                       (:name "Due Soon"
+                              :deadline future)
+                       (:name "Overdue"
+                              :deadline past)
+                       (:name "To read"
+                              :tag "read")
+                       (:name "To write"
+                              :tag "write")
+                       (:name "Follow up"
+                              :todo "FOLLOWUP")
+                       ))))))))
 #+END_SRC
 
 ** Clocking
@@ -1697,7 +1719,6 @@ Use clocking to track time spend on tasks
 
 #+BEGIN_SRC emacs-lisp
 (setq org-expiry-inactive-timestamps t
-      org-log-done t
       org-clock-idle-time nil
       org-clock-continuously nil
       org-clock-persist t
