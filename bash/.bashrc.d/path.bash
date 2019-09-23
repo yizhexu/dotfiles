@@ -15,4 +15,4 @@ pathconcat /usr/local/opt/gnu-getopt/bin after
 export PATH
 
 eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
+# eval "$(pyenv virtualenv-init -)"
