@@ -1040,6 +1040,29 @@ Enable graphical output
 Some inline example SRC_R[:exports results]{round(pi, 2)}
 
 ** Python
+
+*** Install
+
+Install pyenv
+
+#+BEGIN_SRC sh
+curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+#+END_SRC
+
+modify =~/.bashrc= with following:
+
+#+BEGIN_SRC text
+export PATH="/home/yizhe/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+#+END_SRC
+
+Install pipenv
+
+#+BEGIN_SRC sh
+curl https://raw.githubusercontent.com/kennethreitz/pipenv/master/get-pipenv.py | python
+#+END_SRC
+
 *** Config
 
 Add =/opt/anaconda/bin= to load path.
