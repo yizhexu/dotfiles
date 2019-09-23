@@ -677,11 +677,14 @@ This binding comes from Emacs Redux.
   (bind-key "C-x SPC" 'cycle-spacing)
 #+END_SRC
 
-** OS X
+** macOS
+
+Keymods, so it feels more like linux
+
  #+BEGIN_SRC emacs-lisp
  (when (is-mac-p)
-   (setq mac-command-modifier 'meta
-         mac-option-modifier 'super
+   (setq mac-command-modifier 'super
+         mac-option-modifier 'meta
          mac-control-modifier 'control
          ns-function-modifier 'hyper))
  #+END_SRC
