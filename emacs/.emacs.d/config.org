@@ -1692,9 +1692,7 @@ Highlight current agenda line
                        '((:name "Today"
                                 :time-grid t
                                 :date today
-                                :scheduled today)
-                         (:name "Done Today"
-                                :regexp "State \"DONE\"")))))
+                                :scheduled today)))))
 
           (todo "" ((org-agenda-overriding-header "")
                     (org-super-agenda-groups
