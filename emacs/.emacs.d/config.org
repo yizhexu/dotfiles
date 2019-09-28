@@ -1916,7 +1916,8 @@ Source code that =org-babel= wants to evaluate
    (latex . t)
    (julia . t)
    (dot . t)
-   (sql . t)))
+   (sql . t)
+   (ditaa . t)))
 #+END_SRC
 
 Tangle the source block under cursor ([[https://stackoverflow.com/a/39628921][source]])
@@ -1932,6 +1933,16 @@ Tangle the source block under cursor ([[https://stackoverflow.com/a/39628921][so
   '(progn
      (define-key org-mode-map (kbd "C-c b") 'org-babel-tangle-block)
 ))
+#+END_SRC
+
+** ditaa
+
+#+BEGIN_SRC sh
+wcd .emacs.d/elpa && mkdir -p contrib/scripts
+cd scripts
+which ditaa   ## I have mine in /usr/local/bin
+ln -s /usr/local/bin/ditaa0_9.jar ditaa.jar
+ln -s /usr/local/bin/DitaaEps.jar DitaaEps.jar
 #+END_SRC
 
 ** =toc-org=
