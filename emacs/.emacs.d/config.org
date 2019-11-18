@@ -8,6 +8,10 @@
         calendar-longitude -122.3497462)
 #+end_src
 
+* Fun Emacs
+
+Try =M-x doctor=
+
 * Package Management
 
 Emacs and org mode versions
@@ -2134,6 +2138,21 @@ Shrink the current cell horizontally.
 
 #+END_SRC
 * Editing
+
+** Undo
+
+#+BEGIN_SRC emacs-lisp
+(use-package undo-tree
+  :ensure t
+  :commands undo-tree-mode
+  :diminish undo-tree-mode
+  :config
+  (global-undo-tree-mode))
+
+(setq undo-tree-visualizer-timestamps t)
+(setq undo-tree-visualizer-diff t)
+#+END_SRC
+
 ** Expand
 
 #+BEGIN_SRC emacs-lisp
