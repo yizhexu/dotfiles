@@ -51,7 +51,8 @@ package.el is a package manager for emacs modes
 
 ** =use-package=
 
-I'm switching [[https://stackoverflow.com/questions/21064916/auto-install-emacs-packages-with-melpa][too]]
+I'm switching [[https://stackoverflow.com/questions/21064916/auto-install-emacs-packages-with-melpa][too]]. Unless it's already installed, update the packages
+archives, then install the most recent version of "use-package".
 
 #+begin_src emacs-lisp
 (unless (package-installed-p 'use-package)
@@ -326,6 +327,15 @@ Return `default-directory' if no project was found."
                 mode-line-modes
                 ;;mode-line-misc-info
                 mode-line-end-spaces))
+#+END_SRC
+
+** =diminish=
+
+Ability to use =diminish= keyword to indicate mode names that we don't
+want to show in mode line
+
+#+BEGIN_SRC emacs-lisp
+(use-package diminish)
 #+END_SRC
 
 ** Battery
@@ -2127,6 +2137,109 @@ Enlarge the current cell horizontally.
 =M-x table-narrow-cell=
 Shrink the current cell horizontally.
 
+** Spelling
+
+
+Install aspell with english dictionary
+
+#+BEGIN_SRC sh
+brew install aspell
+#+END_SRC
+
+Thanks to [[https://blog.binchen.org/posts/what-s-the-best-spell-check-set-up-in-emacs.html][source]]
+
+#+BEGIN_SRC emacs-lisp
+;; find aspell and hunspell automatically
+(cond
+ ;; try hunspell at first
+  ;; if hunspell does NOT exist, use aspell
+ ((executable-find "hunspell")
+  (setq ispell-program-name "hunspell")
+  (setq ispell-local-dictionary "en_US")
+  (setq ispell-local-dictionary-alist
+        ;; Please note the list `("-d" "en_US")` contains ACTUAL parameters passed to hunspell
+        ;; You could use `("-d" "en_US,en_US-med")` to check with multiple dictionaries
+        '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)
+          )))
+
+ ((executable-find "aspell")
+  (setq ispell-program-name "aspell")
+  ;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
+  (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))))
+#+END_SRC
+
+Check word-spellings in strings and comments
+
+=C-;= Cycle through corrections for word at point
+=M-$= Check an correct spelling of the word at point
+
+#+BEGIN_SRC emacs-lisp
+(use-package flyspell
+  :diminish 'flyspell-mode
+  :hook (
+         (prog-mode . flyspell-prog-mode)
+         (text-mode . flyspell-mode)))
+#+END_SRC
+
+** Synosaurus
+
+With synosaurus, you can choose a synonym to replace a word
+
+This requires wordnet =wn= tool
+
+#+BEGIN_SRC shell
+brew install wordnet
+tar xvzf WordNet-3.0.tar.gz
+./configure
+make
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(use-package synosaurus
+  :diminish synosaurus-mode
+  :init    (synosaurus-mode)
+  :config  (setq synosaurus-choose-method 'popup) ;; 'ido is default.
+           (global-set-key (kbd "M-#") 'synosaurus-choose-and-replace)
+)
+#+END_SRC
+
+Use wordnut to use wordnet as dictionary
+
+#+BEGIN_SRC emacs-lisp
+(use-package wordnut
+ :bind ("M-!" . wordnut-lookup-current-word))
+#+END_SRC
+
+** Flycheck
+
+#+BEGIN_SRC emacs-lisp
+(use-package flycheck
+  :hook (after-init . global-flycheck-mode))
+#+END_SRC
+
+** Language tool
+
+#+BEGIN_SRC shell
+wget https://internal1.languagetool.org/snapshots/LanguageTool-latest-snapshot.zip
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(use-package langtool
+  :config
+  (setq langtool-language-tool-jar
+                                        ; "~/Applications/LanguageTool-4.5/languagetool-commandline.jar")
+        "/usr/local/src/LanguageTool-4.8-SNAPSHOT/languagetool-commandline.jar")
+  )
+
+(add-hook 'langtool-error-exists-hook
+  (lambda ()
+    (langtool-correct-buffer)
+    (langtool-check-done)
+  ))
+
+(global-set-key "\M-^" 'langtool-check)
+#+END_SRC
+
 * Browsing
 ** Browsers
 #+BEGIN_SRC emacs-lisp
@@ -2234,50 +2347,6 @@ Use spaces instead of tab for intentation - 4 spaces
 #+BEGIN_SRC emacs-lisp
 (setq-default indent-tabs-mode nil
               tab-width 4)
-#+END_SRC
-
-** Spell Check
-
-Install aspell with english dictionary
-
-#+BEGIN_SRC sh
-brew install aspell
-#+END_SRC
-
-Thanks to [[https://blog.binchen.org/posts/what-s-the-best-spell-check-set-up-in-emacs.html][source]]
-
-#+BEGIN_SRC emacs-lisp
-;; find aspell and hunspell automatically
-(cond
- ;; try hunspell at first
-  ;; if hunspell does NOT exist, use aspell
- ((executable-find "hunspell")
-  (setq ispell-program-name "hunspell")
-  (setq ispell-local-dictionary "en_US")
-  (setq ispell-local-dictionary-alist
-        ;; Please note the list `("-d" "en_US")` contains ACTUAL parameters passed to hunspell
-        ;; You could use `("-d" "en_US,en_US-med")` to check with multiple dictionaries
-        '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)
-          )))
-
- ((executable-find "aspell")
-  (setq ispell-program-name "aspell")
-  ;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
-  (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))))
-#+END_SRC
-
-Check word-spellings in strings and comments
-
-#+BEGIN_SRC emacs-lisp
-(use-package flyspell
-  :hook (prog-mode . flyspell-prog-mode))
-#+END_SRC
-
-** Flycheck
-
-#+BEGIN_SRC emacs-lisp
-(use-package flycheck
-  :hook (after-init . global-flycheck-mode))
 #+END_SRC
 
 ** Fixme
