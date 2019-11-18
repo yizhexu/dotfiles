@@ -155,11 +155,13 @@ Maximize screen room
  (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
  #+END_SRC
 
- replace the active region just by typing text, just like modern editors
+*** Delete Selection
 
- #+BEGIN_SRC emacs-lisp
- (delete-selection-mode +1)
- #+END_SRC
+replace the active region just by typing text, just like modern editors
+
+#+BEGIN_SRC emacs-lisp
+(delete-selection-mode 1)
+#+END_SRC
 
 *** Startup Message
 
@@ -209,10 +211,12 @@ Maximize screen room
 
 ** Neotree
 
+
 #+BEGIN_SRC emacs-lisp
 (use-package neotree
   :bind ([f8] . neotree-toggle))
 #+END_SRC
+
 
 ** Mode Line
 
@@ -226,9 +230,17 @@ Maximize screen room
         ;; powerline-default-separator 'arrow
     )
   :init
-  (spaceline-helm-mode) ;; When using helm, mode line looks prettier.
-  (spaceline-spacemacs-theme)
-  )
+  (spaceline-spacemacs-theme))
+#+END_SRC
+
+** Date
+#+BEGIN_SRC emacs-lisp
+(setq display-time-day-and-date t
+      display-time-24hr-format t
+      display-time-format "%a, %b %e %R")
+
+(display-time-mode 1)
+(display-time-update)
 #+END_SRC
 
 ** =diminish=
@@ -1348,6 +1360,9 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
         org-startup-indented t
         org-startup-truncated nil
         org-startup-with-inline-images t
+
+        ;; Avoid accidentally editing folded regions, say by adding text after an Org “⋯”.
+        org-catch-invisible-edits 'show
 
         ;; files
         org-directory "~/Documents/yizhe/"
