@@ -480,6 +480,8 @@ Force emacs to use its own password prompt ([[https://github.com/mwfogleman/.ema
 (use-package pass)
 #+END_SRC
 
+Instruction on how to set this up ([[https://gitlab.com/tom.expd/dotfiles/blob/master/password-store/pass-notes.org][link]])
+
 * Saving
 ** Backups
  Store backups and auto-saved files in a fixed location rather in the same directory as the file.
@@ -1355,6 +1357,8 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
   (org-image-actual-width '(600))
   :init
   (setq default-major-mode 'org-mode
+        ;; encryption
+
         ;; startup behavior
         org-startup-folded t
         org-startup-indented t
@@ -1409,10 +1413,7 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
 
         ;; org todos
         org-todo-keywords '((sequence "TODO(t)" "STARTED(s)" "FOLLOWUP(f)" "WAITING(w)" "|" "DONE(x!)" "CANCELLED(c)" "|" "MEETING(m)"))
-        org-tag-persistent-alist '(("read" . ?r)
-                                   ("write" . ?w)
-                                   ("idea" . ?i)
-                                   ("meeting" . ?m))
+        org-tag-persistent-alist '(("work" . ?w))
 
         org-outline-path-complete-in-steps nil
         org-lowest-priority ?C
@@ -2054,17 +2055,30 @@ Check word-spellings in strings and comments
 
 With synosaurus, you can choose a synonym to replace a word
 
-This requires wordnet =wn= tool
+This requires wordnet =wn= tool on mac:
 
 #+BEGIN_SRC shell
 brew cask install xquartz
 brew install wordnet
+#+END_SRC
+
+Linux
+
+#+BEGIN_SRC shell
 tar xvzf WordNet-3.0.tar.gz
 ./configure
+
+# add
+# "#define USE_INTERP_RESULT 1"
+# before #include <tcl.h>
+
 make
+sudo make install
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
+(when (is-linux-p) (yizhe/append-to-path "/usr/local/WordNet-3.0/bin"))
+
 (use-package synosaurus
   :diminish synosaurus-mode
   :init    (synosaurus-mode)
@@ -2087,7 +2101,7 @@ Use wordnut to use wordnet as dictionary
   :hook (after-init . global-flycheck-mode))
 #+END_SRC
 
-** Language tool
+** Language Tool
 
 #+BEGIN_SRC shell
 wget https://internal1.languagetool.org/snapshots/LanguageTool-latest-snapshot.zip
@@ -2144,7 +2158,6 @@ f w/m/y/f/F: Search in all entries of the current week, month, year, all of time
   (org-journal-file-type 'yearly)
   (org-journal-file-format "%Y%m%d.org")
   (org-journal-date-format "%e %b %Y (%A)")
-  (org-journal-time-format "")
   (org-journal-enable-agenda-integration t))
 #+END_SRC
 
