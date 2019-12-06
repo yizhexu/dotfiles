@@ -1517,7 +1517,7 @@ Exclude completed tasks from refile targets, from Michael Englehorn’s Emacs Co
  org-agenda-inhibit-startup t
 
  ;; blocks
- org-agenda-block-separator nil
+ org-agenda-blocks-eparator nil
  org-agenda-compact-blocks t
  org-agenda-show-future-repeats nil
  ;; weekly agenda start on monday
@@ -1862,8 +1862,8 @@ Configure synced drive path
 (use-package org-ref
   :init
   ;; setup org-ref
-  (setq org-ref-default-bibliography "~/Documents/megrez/library.bib"
-        org-ref-bibliography-notes "~/Documents/megrez/note.org"
+  (setq org-ref-default-bibliography '("~/Documents/yizhe/library.bib")
+        org-ref-bibliography-notes "~/Documents/yizhe/index.bib"
         org-ref-pdf-directory keybase-ref
         org-ref-open-pdf-function 'my/org-ref-open-pdf-at-point))
 #+end_src

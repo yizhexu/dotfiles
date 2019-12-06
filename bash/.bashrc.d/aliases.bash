@@ -19,7 +19,7 @@ alias la='ls -lAh'
 # mv, rm, cp
 alias mv='mv -v'
 alias rm='rm -i -v'
-alias cp='cp -v -l'                       # confirm before overwriting something
+#alias cp='cp -v -l'                       # confirm before overwriting something
 alias df='df -h'                          # human-readable sizes
 alias free='free -m'                      # show sizes in MB
 alias np='nano -w PKGBUILD'
