@@ -1371,7 +1371,8 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
         ;; files
         org-directory "~/Documents/yizhe/"
         org-default-notes-file (concat org-directory "index.org")
-        org-agenda-files (list org-directory)
+        org-agenda-files '("~/Documents/yizhe/index.org"
+                           "~/Documents/yizhe/todo.org");(list org-directory)
 
         ;; the look
         org-blank-before-new-entry '((heading . always) (plain-list-item . auto))
@@ -2155,7 +2156,7 @@ f w/m/y/f/F: Search in all entries of the current week, month, year, all of time
   :bind (("C-c j" . org-journal-new-entry))
   :custom
   (org-journal-dir "~/Documents/yizhe/journal")
-  (org-journal-file-type 'yearly)
+  (org-journal-file-type 'weekly)
   (org-journal-file-format "%Y%m%d.org")
   (org-journal-date-format "%e %b %Y (%A)")
   (org-journal-enable-agenda-integration t))
