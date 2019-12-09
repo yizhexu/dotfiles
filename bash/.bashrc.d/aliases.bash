@@ -3,18 +3,35 @@
 
 # list direcory contents
 usage() {
-	du -sch "$@" | sort -h
+    du -sch "$@" | sort -h
 }
 
 # ls
 if ls --color > /dev/null 2>&1; then colorflag="--color"; else colorflag="-G"; fi;
 export CLICOLOR_FORCE=1
 
-alias ls='ls ${colorflag}'
-alias lsa='ls -lah'
-alias l='ls -lah'
-alias ll='ls -lh'
-alias la='ls -lAh'
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+  test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+  alias ls='ls --color=auto'
+  #alias dir='dir --color=auto'
+  #alias vdir='vdir --color=auto'
+
+  alias grep='grep --color=auto'
+  alias fgrep='fgrep --color=auto'
+  alias egrep='egrep --color=auto'
+fi
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias mark="pwd > ~/.sd"
+alias port='cd $(cat ~/.sd)'
 
 # mv, rm, cp
 alias mv='mv -v'
@@ -33,24 +50,24 @@ alias less="less -R" # display colors correctly
 # # usage: ex <file>
 ex ()
 {
-	if [ -f $1 ] ; then
-		case $1 in
-			*.tar.bz2)   tar xjf $1   ;;
-			*.tar.gz)    tar xzf $1   ;;
-			*.bz2)       bunzip2 $1   ;;
-			*.rar)       unrar x $1     ;;
-			*.gz)        gunzip $1    ;;
-			*.tar)       tar xf $1    ;;
-			*.tbz2)      tar xjf $1   ;;
-			*.tgz)       tar xzf $1   ;;
-			*.zip)       unzip $1     ;;
-			*.Z)         uncompress $1;;
-			*.7z)        7z x $1      ;;
-			*)           echo "'$1' cannot be extracted via ex()" ;;
-		esac
-	else
-		echo "'$1' is not a valid file"
-	fi
+    if [ -f $1 ] ; then
+        case $1 in
+            *.tar.bz2)   tar xjf $1   ;;
+            *.tar.gz)    tar xzf $1   ;;
+            *.bz2)       bunzip2 $1   ;;
+            *.rar)       unrar x $1     ;;
+            *.gz)        gunzip $1    ;;
+            *.tar)       tar xf $1    ;;
+            *.tbz2)      tar xjf $1   ;;
+            *.tgz)       tar xzf $1   ;;
+            *.zip)       unzip $1     ;;
+            *.Z)         uncompress $1;;
+            *.7z)        7z x $1      ;;
+            *)           echo "'$1' cannot be extracted via ex()" ;;
+        esac
+    else
+      echo "'$1' is not a valid file"
+    fi
 }
 
 # internet
@@ -61,6 +78,8 @@ alias speedtest='echo "scale=2; `curl  --progress-bar -w "%{speed_download}" htt
 alias whois="whois -h whois-servers.net"
 alias p8="ping 8.8.8.8"
 alias pg="ping google.com"
+
+# Mac Specific aliases
 
 alias update='brew update && brew upgrade; brew cleanup'
 

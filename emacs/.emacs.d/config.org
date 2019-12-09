@@ -174,7 +174,7 @@ replace the active region just by typing text, just like modern editors
 ** Font
 
 #+BEGIN_SRC emacs-lisp
-(set-default-font "Hack")
+(set-default-font "Hack 11")
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -2173,7 +2173,6 @@ f w/m/y/f/F: Search in all entries of the current week, month, year, all of time
 
 #+END_SRC
 * Editing
-
 ** Undo
 
 #+BEGIN_SRC emacs-lisp
