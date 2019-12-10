@@ -835,6 +835,9 @@ Testing this out
   :config (setq lsp-prefer-flymake nil))
 
 (use-package lsp-ui)
+
+;; Add company-lsp backend for metals
+(use-package company-lsp)
 #+END_SRC
 
 ** R
@@ -1414,8 +1417,13 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
 
         ;; org todos
         org-todo-keywords '((sequence "TODO(t)" "STARTED(s)" "FOLLOWUP(f)" "WAITING(w)" "|" "DONE(x!)" "CANCELLED(c)" "|" "MEETING(m)"))
-        org-tag-persistent-alist '(("work" . ?w))
-
+        org-tag-persistent-alist '(("baby" . ?b)
+                                   ("career" . ?c)
+                                   ("errands" . ?e)
+                                   ("fun" . ?f)
+                                   ("grow" . ?g)
+                                   ("learn" . ?l)
+                                   ("work" . ?w))
         org-outline-path-complete-in-steps nil
         org-lowest-priority ?C
         org-yank-adjusted-subtrees t
@@ -1586,12 +1594,10 @@ Highlight current agenda line
                               :deadline future)
                        (:name "Overdue"
                               :deadline past)
-                       (:name "To read"
-                              :tag "read")
-                       (:name "To write"
-                              :tag "write")
-                       (:name "Follow up"
-                              :todo "FOLLOWUP")
+                       (:name "Work"
+                              :tag "work")
+                       (:name "Do It"
+                              :tag "errands")
                        ))))))))
 #+END_SRC
 
@@ -1692,7 +1698,7 @@ However, there are a *lot* of commands for clocking; this is a perfect instance 
 #+begin_src emacs-lisp
 (defun open-todo-file ()
   (interactive)
-  (find-file "~/Documents/yizhe/index.org"))
+  (find-file "~/Documents/yizhe/todo.org"))
 
 (bind-key "C-c t" 'open-todo-file)
 #+end_src
@@ -1818,7 +1824,7 @@ Tangle the source block under cursor ([[https://stackoverflow.com/a/39628921][so
 ))
 #+END_SRC
 
-** ditaa
+** =ditaa=
 
 #+BEGIN_SRC sh
 wcd .emacs.d/elpa && mkdir -p contrib/scripts
@@ -2077,6 +2083,12 @@ make
 sudo make install
 #+END_SRC
 
+Ubuntu
+
+#+BEGIN_SRC shell
+apt get install wordnet
+#+END_SRC
+
 #+BEGIN_SRC emacs-lisp
 (when (is-linux-p) (yizhe/append-to-path "/usr/local/WordNet-3.0/bin"))
 
@@ -2234,13 +2246,6 @@ Actionable URLs in Emacs buffers via [[http://xenodium.com/#actionable-urls-in-e
               ("C-c C-o" . goto-address-at-point))
   :commands (goto-address-prog-mode
              goto-address-mode))
-#+END_SRC
-
-** Emojis
-
-#+BEGIN_SRC emacs-lisp
-(use-package emojify
-  :init (global-emojify-mode))
 #+END_SRC
 
 ** Line Numbering
