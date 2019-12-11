@@ -960,7 +960,7 @@ curl https://raw.githubusercontent.com/kennethreitz/pipenv/master/get-pipenv.py 
 Add =/opt/anaconda/bin= to load path.
 
 #+BEGIN_SRC emacs-lisp
-(when (is-linux-p) (yizhe/append-to-path "/opt/anaconda/bin"))
+;;(when (is-linux-p) (yizhe/append-to-path "/opt/anaconda/bin"))
 (when (is-mac-p) (yizhe/append-to-path "~/.pyenv/shims/python"))
 #+END_SRC
 
@@ -968,7 +968,7 @@ Configure my coda environments
 
 #+BEGIN_SRC emacs-lisp
 ; where to look for environments
-(when (is-linux-p)(setenv "WORKON_HOME" "/home/yizhe/.conda/envs"))
+(when (is-linux-p)(setenv "WORKON_HOME" "/home/yizhe/.local/share/virtualenvs"))
 (when (is-mac-p)(setenv "WORKON_HOME" "~/.local/share/virtualenvs"))
 
 (use-package pyvenv
@@ -984,7 +984,7 @@ Configure python mode
 (use-package python
   :defer t
   :mode ("\\.py\\'" . python-mode)
-  :interpreter ("python" . python-mode)
+  ;;:interpreter ("python" . python-mode)
   :init
   (setq-default indent-tabs-mode nil)
   :config
@@ -1093,7 +1093,9 @@ x=numpy.linspace(-15,15)
 plt.plot(numpy.sin(x)/x)
 fig.tight_layout()
 plt.savefig('python-matplot-fig.png')
-return 'python-matplot-fig.png' # return filename to org-mode
+plt.close()
+
+'python-matplot-fig.png' # return filename to org-mode
 #+end_src
 
 #+RESULTS:
