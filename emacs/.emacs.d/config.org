@@ -1381,9 +1381,8 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
 
         ;; files
         org-directory "~/Documents/yizhe/"
-        org-default-notes-file (concat org-directory "inbox.org")
-        org-agenda-files '("~/Documents/yizhe/inbox.org"
-                           "~/Documents/yizhe/todo.org");(list org-directory)
+        org-default-notes-file (concat org-directory "todo.org")
+        org-agenda-files '("~/Documents/yizhe/todo.org");(list org-directory)
 
         ;; the look
         org-blank-before-new-entry '((heading . always) (plain-list-item . auto))
@@ -1420,7 +1419,7 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
         org-image-actual-width '(300)
         org-imenu-depth 5
         org-show-notification-handler 'message
-        org-src-window-setup 'current-window
+        org-src-window-setup 'other-window
         org-tags-column 80
 
         ;; org todos
@@ -1507,7 +1506,7 @@ Capture symbols
 ** Refile
 
 #+BEGIN_SRC emacs-lisp
-(setq org-refile-targets '((org-agenda-files . (:maxlevel . 4)))
+(setq org-refile-targets '((org-agenda-files . (:maxlevel . 2)))
       ;; org-refile-use-cache t
       org-refile-use-outline-path t
       org-refile-allow-creating-parent-nodes (quote confirm)) ;; with confirmation, allow to create parent
