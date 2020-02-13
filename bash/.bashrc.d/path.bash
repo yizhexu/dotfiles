@@ -10,6 +10,7 @@ pathconcat $HOME/.pyenv/bin after
 pathconcat /usr/local/opt/gettext/bin after
 pathconcat /usr/local/opt/sqlite/bin after
 pathconcat /usr/local/opt/gnu-getopt/bin after
+pathconcat /usr/local/go/bin after
 
 pathconcat /apollo/env/SDETools/bin
 pathconcat ~/.toolbox/bin

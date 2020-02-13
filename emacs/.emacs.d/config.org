@@ -1149,8 +1149,14 @@ Now any calls to call_uncachedFunction() will get the cached value from cachedFu
 ** Julia
 *** With OSX
 #+BEGIN_SRC emacs-lisp
-  (when (is-mac-p)
-    (yizhe/append-to-path "/Applications/Julia-1.0.app/Contents/Resources/julia/bin"))
+(when (is-mac-p)
+  (yizhe/append-to-path "/Applications/Julia-1.0.app/Contents/Resources/julia/bin"))
+#+END_SRC
+
+*** With Ubuntu
+#+BEGIN_SRC emacs-lisp
+(when (is-linux-p)
+  (yizhe/append-to-path "/usr/local/julia/julia-current/bin"))
 #+END_SRC
 
 *** Julia Repl
@@ -1375,8 +1381,8 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
 
         ;; files
         org-directory "~/Documents/yizhe/"
-        org-default-notes-file (concat org-directory "index.org")
-        org-agenda-files '("~/Documents/yizhe/index.org"
+        org-default-notes-file (concat org-directory "inbox.org")
+        org-agenda-files '("~/Documents/yizhe/inbox.org"
                            "~/Documents/yizhe/todo.org");(list org-directory)
 
         ;; the look
@@ -2167,13 +2173,45 @@ f w/m/y/f/F: Search in all entries of the current week, month, year, all of time
 
 #+BEGIN_SRC emacs-lisp
 (use-package org-journal
-  :bind (("C-c j" . org-journal-new-entry))
+  :bind
+  ("C-c n j" . org-journal-new-entry)
   :custom
   (org-journal-dir "~/Documents/yizhe/journal")
-  (org-journal-file-type 'weekly)
-  (org-journal-file-format "%Y%m%d.org")
+  (org-journal-file-type 'yearly)
+  (org-journal-file-format "%Y.org")
   (org-journal-date-format "%e %b %Y (%A)")
+  (org-journal-date-prefix "#+TITLE: ")
   (org-journal-enable-agenda-integration t))
+#+END_SRC
+
+** =org-roam=
+
+Testing out [[https://github.com/jethrokuan/org-roam][org-roam]]
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-roam
+      :after org
+      :hook (org-mode . org-roam-mode)
+      :straight (:host github :repo "jethrokuan/org-roam")
+      :custom
+      (org-roam-directory org-directory)
+      :bind
+      ("C-c n l" . org-roam)
+      ("C-c n t" . org-roam-today)
+      ("C-c n f" . org-roam-find-file)
+      ("C-c n i" . org-roam-insert)
+      ("C-c n g" . org-roam-show-graph))
+
+(use-package deft
+  :after org
+  :bind
+  ("C-c n d" . deft)
+  :custom
+  (deft-recursive t)
+  (deft-use-filter-string-for-filename t)
+  (deft-default-extension "org")
+  (deft-directory org-directory)
+  (deft-use-filename-as-title t))
 #+END_SRC
 
 * Browsing
