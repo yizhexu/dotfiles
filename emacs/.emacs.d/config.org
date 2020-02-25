@@ -1893,7 +1893,7 @@ Configure synced drive path
 (use-package org-ref
   :after org
   :config
-  (setq org-ref-default-bibliography "~/Documents/org/bibliography/default.bib"
+  (setq org-ref-default-bibliography'("~/Documents/org/bibliography/default.bib")
         org-ref-bibliography-notes "~/Documents/org/todo.org"
         org-ref-pdf-directory ref-dir
         org-ref-open-pdf-function 'my/org-ref-open-pdf-at-point))
