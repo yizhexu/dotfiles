@@ -1332,6 +1332,12 @@ upper case SQL keywords from [[https://www.emacswiki.org/emacs/SqlMode][here]]
 (when (is-mac-p) (yizhe/append-to-path "/Library/TeX/texbin/"))
 #+END_SRC
 
+Latex packages
+
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'org-latex-packages-alist '("listings" "algorithm2e"))
+#+END_SRC
+
 ** graphviz
 #+BEGIN_SRC emacs-lisp
 (use-package graphviz-dot-mode)
