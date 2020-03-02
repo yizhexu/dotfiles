@@ -932,7 +932,6 @@ Enable graphical output
 Some inline example SRC_R[:exports results]{round(pi, 2)}
 
 ** Python
-
 *** Install
 
 Install pyenv
@@ -968,7 +967,7 @@ Configure my coda environments
 
 #+BEGIN_SRC emacs-lisp
 ; where to look for environments
-(when (is-linux-p)(setenv "WORKON_HOME" "/home/yizhe/.local/share/virtualenvs"))
+(when (is-linux-p)(setenv "WORKON_HOME" "~/.local/share/virtualenvs"))
 (when (is-mac-p)(setenv "WORKON_HOME" "~/.local/share/virtualenvs"))
 
 (use-package pyvenv
