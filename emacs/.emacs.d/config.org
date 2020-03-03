@@ -1387,7 +1387,7 @@ Latex packages
 
         ;; files
         org-directory "~/Documents/org/"
-        org-default-notes-file (concat org-directory "random.org")
+        org-default-notes-file (concat org-directory "todo.org")
 
         ;; the look
         org-blank-before-new-entry '((heading . always) (plain-list-item . auto))
@@ -1502,7 +1502,7 @@ Capture symbols
                "* with %? \nSCHEDULED: %^U")
 
               ("n" "Notes" entry
-               (file+headline (concat org-directory "quotes.org") "new")
+               (file+headline (concat org-directory org-default-notes-file) "new")
                "%?")
 
               ("r" "Read")
