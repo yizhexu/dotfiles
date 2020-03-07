@@ -959,7 +959,7 @@ curl https://raw.githubusercontent.com/kennethreitz/pipenv/master/get-pipenv.py 
 Add =/opt/anaconda/bin= to load path.
 
 #+BEGIN_SRC emacs-lisp
-;;(when (is-linux-p) (yizhe/append-to-path "/opt/anaconda/bin"))
+(when (is-linux-p) (yizhe/append-to-path "~/.pyenv/shims/python"))
 (when (is-mac-p) (yizhe/append-to-path "~/.pyenv/shims/python"))
 #+END_SRC
 
@@ -983,7 +983,7 @@ Configure python mode
 (use-package python
   :defer t
   :mode ("\\.py\\'" . python-mode)
-  ;;:interpreter ("python" . python-mode)
+  :interpreter ("python" . python-mode)
   :init
   (setq-default indent-tabs-mode nil)
   :config
@@ -1024,8 +1024,9 @@ Use =ipython= interpreter with elpy
 
 #+BEGIN_SRC emacs-lisp
 ;; ipython interpreter
-(setq python-shell-interpreter "ipython"
-      python-shell-interpreter-args "-i --simple-prompt")
+(when (executable-find "ipython")
+  (setq python-shell-interpreter "ipython")
+  python-shell-interpreter-args "-i --simple-prompt")
 #+END_SRC
 
 Format code according to =PEP8= when save:
@@ -1079,7 +1080,36 @@ Format code according to =PEP8= when save:
     (setq company-jedi-python-bin "python")))
 #+END_SRC
 
-*** Example of use
+*** COMMENT Example of use
+
+**** remote
+
+#+BEGIN_SRC emacs-lisp :results none
+(setenv "WORKON_HOME" "/sshx:manx:/home/ec2-user/.local/share/virtualenvs")
+(set 'pyvenv-workon "ec2-user-zzkNbF-x")
+#+END_SRC
+
+#+BEGIN_SRC shell
+python -V 2>&1
+#+END_SRC
+
+#+BEGIN_SRC text :tangle ~/Downloads/remote-python
+#!/usr/bin/env bash
+ssh manx -t "/home/ec2-user/.local/share/virtualenvs/ec2-user-zzkNbF-x/bin/ipython $@"
+#+END_SRC
+
+Append executable to path
+
+#+BEGIN_SRC emacs-lisp
+(when (is-linux-p) (yizhe/append-to-path "~/Downloads/remote-python"))
+#+END_SRC
+
+#+RESULTS:
+| ~/Downloads/remote-python | /sshx:manx:/home/ec2-user/.local/share/virtualenvs/ec2-user-zzkNbF-x/bin | /usr/local/WordNet-3.0/bin | /usr/local/julia/julia-current/bin | ~/.pyenv/shims/python | /home/ANT.AMAZON.COM/yizhx/.local/share/umake/bin | /usr/local/sbin | /usr/local/bin | /usr/sbin | /usr/bin | /sbin | /bin | /usr/games | /usr/local/games | /snap/bin | /usr/lib/x86_64-linux-gnu/emacs/26.3/x86_64-linux-gnu |
+
+#+BEGIN_SRC emacs-lisp
+(setq python-shell-interpreter "~/Downloads/remote-python" python-shell-interpreter-args "--simple-prompt -i")
+#+END_SRC
 
 **** plots
 
