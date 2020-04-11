@@ -298,16 +298,14 @@ This will actually use the system-wide user-init-file variable.
   :bind
   ("<f7>" . deft)
   :init
-  (setq deft-file-naming-rules
-        '((noslash . "-")
-          (nospace . "-")
-          (case-fn . downcase)))
-  :custom
-  (deft-recursive t)
-  (deft-use-filename-as-title t)
-  (deft-use-filter-string-for-filename t)
-  (deft-default-extension "org")
-  (deft-directory (concat org-directory "zettelkasten")))
+  (setq
+   deft-use-filter-string-for-filename t
+   deft-extensions '("org" "md")
+   deft-text-mode 'org-mode
+   deft-recursive t
+   deft-file-naming-rules '((noslash . "-") (nospace . "-") (case-fn . downcase))
+   deft-org-mode-title-prefix t
+   deft-directory org-directory))
 #+END_SRC
 
 * Security
