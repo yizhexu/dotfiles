@@ -624,7 +624,7 @@ replace the active region just by typing text, just like modern editors
 
           ;; files
           org-directory "~/Documents/org/"
-          org-default-notes-file (concat org-directory "index.org")
+          org-default-notes-file (concat org-directory "notes.org")
 
           ;; the look
           org-blank-before-new-entry '((heading . always) (plain-list-item . auto))
@@ -732,7 +732,7 @@ Use org-noter
 (use-package org-noter
   :after org
   :config
-  (setq org-noter-default-notes-file-names '("index.org")
+  (setq org-noter-default-notes-file-names '("notes.org")
         org-noter-notes-search-path '("~/Documents/org")
         org-noter-separate-notes-from-heading t))
 #+END_SRC
