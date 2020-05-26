@@ -952,6 +952,12 @@ ln -s /usr/local/bin/ditaa0_9.jar ditaa.jar
 ln -s /usr/local/bin/DitaaEps.jar DitaaEps.jar
 #+END_SRC
 
+** PlantUML
+
+#+BEGIN_SRC emacs-lisp
+(use-package plantuml-mode)
+#+END_SRC
+
 ** Company Mode
 
 #+BEGIN_SRC emacs-lisp
@@ -1268,7 +1274,7 @@ list. Native completions have been disabled locally.
 
 Use =ipython= interpreter with elpy
 
-#+BEGIN_SRC emacs-lis
+#+BEGIN_SRC emacs-lisp
 ;; ipython interpreter
 (when (executable-find "ipython")
   (setq python-shell-interpreter "ipython")
@@ -1343,7 +1349,7 @@ python -V 2>&1
 
 #+BEGIN_SRC text :tangle ~/Downloads/remote-python
 #!/usr/bin/env bash
-ssh manx -t "/home/ec2-user/.local/share/virtualenvs/ec2-user-zzkNbF-x/bin/ipython $@"
+ssh lynx -t "/home/ubuntu/.local/share/virtualenvs/sandbox/bin/ipython $@"
 #+END_SRC
 
 Append executable to path
