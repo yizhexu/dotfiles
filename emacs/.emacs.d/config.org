@@ -455,7 +455,8 @@ Always full screen
 ** Font
 
 #+BEGIN_SRC emacs-lisp
-;;(set-default-font "Hack 11")
+(set-default-font "Hack")
+(set-face-attribute 'default nil :height 110)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
