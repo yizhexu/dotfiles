@@ -1445,6 +1445,12 @@ Now any calls to call_uncachedFunction() will get the cached value from cachedFu
 (use-package julia-repl)
 #+END_SRC
 
+*** Julia Mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package julia-mode)
+#+END_SRC
+
 *** ob-julia
 
 #+BEGIN_SRC shell
@@ -1682,6 +1688,10 @@ Tangle the source block under cursor ([[https://stackoverflow.com/a/39628921][so
      (define-key org-mode-map (kbd "C-c b") 'org-babel-tangle-block)
 ))
 #+END_SRC
+
+*** Literate.jl
+
+https://github.com/fredrikekre/Literate.jl
 
 * Debug
 
