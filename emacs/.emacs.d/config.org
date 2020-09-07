@@ -390,7 +390,7 @@ place. The configuration of this mode is very simple as of Emacs 25.1.
 
 #+BEGIN_SRC emacs-lisp
 
-(setq-default save-place t)
+(setq-default save-place-mode t)
 (setq save-place-file (expand-file-name ".places" user-emacs-directory))
 
 (save-place-mode 1)
@@ -455,8 +455,12 @@ Always full screen
 ** Font
 
 #+BEGIN_SRC emacs-lisp
-(set-default-font "Hack")
-(set-face-attribute 'default nil :height 110)
+(custom-set-faces
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+  '(default ((t (:stipple nil :background nil :foreground nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 120 :width normal :family "Hack")))))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -1431,6 +1435,12 @@ return int(x)
 Now any calls to call_uncachedFunction() will get the cached value from cachedFunction.
 
 ** Julia
+
+*** Get Julia
+#+BEGIN_SRC sh
+wget https://julialang-s3.julialang.org/bin/linux/x64/1.5/julia-1.5.0-linux-x86_64.tar.gz
+tar -xvf julia-1.5.0-linux-x86_64.tar.gz
+#+END_SRC
 *** With OSX
 
 #+BEGIN_SRC emacs-lisp
